@@ -33,17 +33,19 @@ Lemma eps_ex (P:nat->Prop) :
 Proof.
   unfold dec.  
   intros.
-  specialize (H ).
-  destruct H.
+  case (H (eps P)); intro H1.
   left.
-  exists 42.
-  apply H.
+  exists (eps P).
+  assumption.
   right.
-  
-  unfold not.
-  
-  intro.
-  
+  intro H2.
+  apply H1.
+  destruct H2 as [x HP].
+  apply (eps_p P x).
+  assumption.
+Qed.
+
+
 
 Lemma eps_all (P:nat->Prop) :
   (forall i, dec (P i))->

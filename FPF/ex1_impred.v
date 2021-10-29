@@ -69,10 +69,6 @@ Definition Acc (T:Type)(R : T->T->Prop) :=
   fun x => forall P : T->Prop,
              (forall z, (forall y, R z y -> P y) -> P z) -> P x.
 
-Lemma contra : forall  (P Q : Prop), P -> Q = ~(P) \/ Q.  
-Proof.
-Admitted.
-
 
 Lemma eqnwf : forall n, ~(Acc nat eq n).
 Proof.
