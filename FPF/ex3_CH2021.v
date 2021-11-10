@@ -18,32 +18,44 @@ Parameter A B C : Prop.
 
 (* Prove *)
 Definition e1 : 
-  A -> A :=...
+  A -> A := fun a =>a.
 
 Definition e2 : 
   (A -> B) -> (B -> C) -> A -> C :=
-...
+  fun ab bc a => bc (ab a). 
 
 Definition e3 : 
   A -> B -> A :=
-...
+  fun a b => a.
 
 Definition e4 : 
   (A -> B -> C) -> (A -> B) -> A -> C :=
-...
+  fun abc ab a => abc a (ab a).
 
 
 (* Negation : remember ~A is an abrevation for A -> False *)
 (* Prove the following, possibly using False_ind *)
 Definition e5 : A -> ~~A :=
-...
+  fun a na => na a.
+
+Definition e5b : A -> (A -> False) -> False :=
+  fun a na => na a.
 
 Definition e6 :       
   (A -> B) -> (~B -> ~A) :=
-...
+  fun ab nb a => nb (ab a).
+
+Definition e6b :       
+  (A -> B) -> (B -> False) -> (A -> False) :=
+  fun ab nb a => nb (ab a).
+
+Definition e7 : 
+  ((((A -> False) -> False) -> A) -> False) -> False :=
+  fun nna 
 
 Definition e7 : 
   ~~(~~A -> A) :=
+
 ...
 
 
