@@ -23,6 +23,9 @@ Proof.
   contradiction.
 Qed.
 
+Require Import ZArith.
+Eval cbv in (1 =? 0).
+
 (* We assume the existence of the epsilon operator *)                                             
 Parameter eps : (nat -> Prop) -> nat.
 
