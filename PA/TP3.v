@@ -53,11 +53,12 @@ Qed.
 
 Lemma even_is_double' n : 
 (even n -> exists m, n=m+m) /\
-(even (S n) -> exists m, n=S(m+m)).
+(even (S n) -> exists m, S n=m+m).
 Proof.
-	induction n.
+	
+ 	induction n; simpl;split;intros.
 	split.
-	intro.
+	intros.
 	exists 0.
 	
 	reflexivity.
@@ -67,7 +68,7 @@ Proof.
 	destruct IHn.
 	split.
 	destruct H0.
-	
+	inversion_clear H.
 	
 	
 	
