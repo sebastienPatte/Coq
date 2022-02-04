@@ -110,7 +110,7 @@ Qed.
    by induction on the proof of (acc_nat n). *)
 Lemma find_ex : forall n : nat, acc_nat n -> {m | P m = true}.
 Proof.
-(* fix 2. *)
+fix find_ex 2.
 Show Proof.
 (* we could be tempted to cheat using the seamingly correct
    correct:
@@ -123,13 +123,20 @@ Show Proof.
       fix f n := f n
    which cannot be accepted without risking consistency troubles... *)
    intros n accn.
-
+   
+   case (Bool.bool_dec (P n) true); intros Heq.
+   exists n. assumption.
+   apply (find_ex (S n)).
+   destruct accn.
+   - contradiction.
+   - apply accn.
 Qed.
 
 (* We are done: *)
 Theorem Markov : {m | P m = true}.
 Proof.
-  apply todo.
+  
+apply todo.
 Qed.
 
 End Markov.
