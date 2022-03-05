@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{fullpage}
+\usepackage{bussproofs}
+
+
+\title{Deciding intuitionistic propositional tautologies \\  Proof Assistants}
+
+\author{Sébastien Patte}
+\date{February 2022}
+
+\begin{document}
+\maketitle
+
+\section{Previous experience with Coq}
+J'ai suivi le cours 2.7.1 (Foundations of Proof Systems) cette année, on y a fait quelques execices pratiques en Coq. 
+Je n'avais jamais fait de Coq avant, mais ai suivi un cours d'introduction à l'assistant de preuve Isabelle.
+
+\section{Implementing the decision procedure}
+La règle la plus compliquée a implémenter est celle d'elimination de l'implication
+
+\begin{prooftree}
+	\AxiomC{$\Delta, B \vdash C$}
+	\AxiomC{$\Delta \vdash A$}
+  \RightLabel{($\Rightarrow$-E)}
+	\BinaryInfC{$\Delta, A \Rightarrow B \vdash C$}
+\end{prooftree}
+
+\noindent Il n'existe pas de tactic en Coq permettant de faire $\Rightarrow$-E directement, mais on peut le faire en combinant un cut et $\Rightarrow$-I :
+
+\begin{prooftree}
+	\AxiomC{$\Delta, B \vdash C$}
+  \RightLabel{(clear)}
+  \UnaryInfC{$\Delta, A, A \Rightarrow B \vdash C$} 
+  \LeftLabel{($\Rightarrow$-I)}
+  \UnaryInfC{$\Delta, A \Rightarrow B \vdash A \Rightarrow C$} 
+  \AxiomC{$\Delta \vdash A$}
+  \RightLabel{(cut-A)}
+	\BinaryInfC{$\Delta, A \Rightarrow B \vdash C$}
+\end{prooftree}
+
+\section{Formalizing the tactic}
+\subsection{Step}
+
+\subsection{Size criterion}
+We choose the number of operators in a formula to be the size criterion.
+The rules $Ax$, $\bot$-E, and $\top$-I don't have premises, in the other rules there is on more operator in the conclusion than in each premise.
+Therefore, for each rule, the size of each premise is smaller than the size of the conclusion. 
+
+\subsection{Termination}
+
+We need to prove that any sequent is smaller than each of the subgoals reachable in one step. i.e. :
+
+$$
+\forall (\Delta' \vdash C') \in \text{concat}(\text{step}(\Delta \vdash C)),\;\;\;  |\Delta' \vdash C'| < |\Delta \vdash C|
+$$
+
+We prove it by induction on $\Delta$ and $C$.
+
+\subsection{Soundness}
+\subsubsection{Semantics}
+\begin{verbatim}
+Fixpoint sem (f:form) : Prop := 
+  match f with
+    | f_true    => True
+    | f_false   => False
+    | f_var x   => prop_of_nat x
+    | f_or A B  => (sem A) /\ (sem B)
+    | f_and A B => (sem A) \/ (sem B)
+    | f_imp A B => (sem A) -> (sem B)
+  end.
+\end{verbatim}
+Où \textbf{prop\_of\_nat} est n'importe quelle fonction renvoyant une \textbf{Prop} à partir d'un \textbf{nat}.
+
+\subsubsection{leaf case}
+On prouve $\textbf{is\_leaf\_prop } (H \vdash C) \implies \textbf{valid\_seq } (H \vdash C)$, par induction sur C.
+
+\end{document}
