@@ -18,16 +18,13 @@ Parameter A B C : Prop.
 
 (* Prove *)
 Definition e1 : 
-  A -> A := fun a =>a.
-
+ A -> A := fun a => a.
 Definition e2 : 
   (A -> B) -> (B -> C) -> A -> C :=
-  fun ab bc a => bc (ab a). 
-
+  fun ab bc a => bc (ab a).
 Definition e3 : 
   A -> B -> A :=
   fun a b => a.
-
 Definition e4 : 
   (A -> B -> C) -> (A -> B) -> A -> C :=
   fun abc ab a => abc a (ab a).
@@ -36,63 +33,55 @@ Definition e4 :
 (* Negation : remember ~A is an abrevation for A -> False *)
 (* Prove the following, possibly using False_ind *)
 Definition e5 : A -> ~~A :=
-  fun a na => na a.
+   fun a na => na a.
 
-Definition e5b : A -> (A -> False) -> False :=
-  fun a na => na a.
 
 Definition e6 :       
   (A -> B) -> (~B -> ~A) :=
-  fun ab nb a => nb (ab a).
-
-Definition e6b :       
-  (A -> B) -> (B -> False) -> (A -> False) :=
-  fun ab nb a => nb (ab a).
-
-Definition e7 : 
-  ((((A -> False) -> False) -> A) -> False) -> False :=
-  fun nna 
+  fun ab nb a => (nb (ab a)).
 
 Definition e7 : 
   ~~(~~A -> A) :=
-
-...
-
+  fun naa : ~(~~A -> A)  => naa
+                              (fun na : ~~A =>
+ False_ind A (na (fun a =>  (naa (fun _ => a) )))).
+                                 
 
 
 (* forall quantification *)
-Parameter P Q R: A -> Prop.
 
+Parameter P Q R: A -> Prop.
 Definition e8 : 
   (forall x, P x -> Q x) -> (forall x, P x) -> (forall x, Q x)
-  := ...
+  :=
+    fun apq ap x => (apq x (ap x)).
 
 Definition e9 : 
-  (forall x, P x -> Q x) -> (forall x, Q x -> R x) -> (forall x, P x -> R x) := ...
+  (forall x, P x -> Q x) -> (forall x, Q x -> R x) -> (forall x, P x -> R x) :=
+fun apq aqr x px => (aqr x (apq x px)).
 
 Parameter f : A -> A.
 Parameter c : A.
-
 Definition e10 :
-  (forall x , P x -> P (f x)) -> (forall x, P x -> P (f(f x))) :=  ...
+  (forall x , P x -> P (f x)) -> (forall x, P x -> P (f(f x))) :=
+fun appf x px => (appf (f x) (appf x px)).
 
 Definition e11 :
   (forall x, P x -> Q x) -> ~Q c -> ~(forall x, P x)  :=
-...
+  fun apq nqc apx => nqc (apq c (apx c)).
+
 
 (* existantial quantification *)
 Check ex_intro.
 
-(* Possibly use @ex_intro instead of ex_intro to prevent
-  the system to guess implicit arguments *)
-
 Definition al_ex : forall A : Type, forall P : A -> Prop,
       A -> (forall x, P x) -> (exists x, P x) :=
-...  
+fun A P a ap => (@ex_intro A P a (ap a)).
+  
 
 Definition ex_al : forall A : Type, forall P : A -> Prop,
       ~(exists x, P x) -> forall x, ~(P x) :=
-...
+  fun A P nex x px => (nex (@ex_intro A P x px)).
 
 
 (* Induction  / recursion *)
@@ -114,24 +103,16 @@ rewrite <- plus_n_Sm, ey.
 simpl; trivial.
 Defined.
 
-
-(* this one is easier without tactics *)
 Definition d0 : (d 0).
-...
+ exists 0.
+ left.
+ reflexivity.
 Defined.
 
-(* For writing the proof-terms explicitly, you
-  may check the types of or_introl, or_intror and 
-  refl_equal.
-
-(* Here you build a recursive proof as a term - 
-  this will be studied next week *)
 Fixpoint dn (n : nat) : (d n) :=
   match n with
-    0 => ...
-  | (S m) => ...
-  end.
+    0 => d0
+  | (S m) => (dS m (dn m))
+               end.
 
 Eval compute in (dn 3).
-
-
