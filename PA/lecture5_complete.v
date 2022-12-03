@@ -1,5 +1,15 @@
 Require Import Arith Extraction.
 
+Check (True).
+Check (unit).
+Check (True_rect).
+Check (unit_rect).
+Check (True_rec).
+Check (unit_rec).
+Check (True_ind).
+Check (unit_ind).
+Eval compute in (unit_ind).
+
 Axiom todo : forall {A}, A.
 
 (* The proof of easy_implication consists in breaking the pair of data

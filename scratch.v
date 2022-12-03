@@ -20,11 +20,18 @@ Fail Check Type@{j} : Type@{i}.
 Check Type@{i} -> Type@{i}.
 
 Check ((forall (P : Prop), nat -> P) : Prop).
+(* 
+Parameter (A : Type@{i}).
+Parameter (B: A -> Type@{i}).
 
+Check ((forall (x:A), B x) ).
+Check (Type@{i} -> Type@{i}).
+ *)
+
+Check(Type@{i}).
 Check ((forall (A : Type), A -> False) : Prop).
 
 Fail Check ((forall (A : Type), A -> Empty_set) : Set).
-
 Universes k l.
 
 Check ((forall (A : Type@{k}), A -> Empty_set) : Type@{l}).
