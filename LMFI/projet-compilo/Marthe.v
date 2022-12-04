@@ -4,6 +4,8 @@
 (******               Pierre Letouzey                      *******)
 (*****************************************************************)
 
+ 
+
 Require Import String Datatypes Arith List Lia.
 Import ListNotations.
 Open Scope string_scope.
@@ -199,11 +201,6 @@ Definition eval_op o :=
 
 Check eval_op.
 
-Definition set_l {A} (l:list A) n e : list A := 
-  match list_set l n e with 
-  |None => l 
-  |Some r => l
-  end.
 
 Fixpoint eval (env:list (string*nat)) e :=
   match e with
@@ -214,7 +211,7 @@ Fixpoint eval (env:list (string*nat)) e :=
   end.
 
 
-Compute (eval nil (EOp Plus (EInt 37) (EInt 5) )).
+Compute (eval nil (EOp Plus (EInt 37) (EInt 5) )). (* 37+5=42 *)
 Compute (eval nil test1). (* 385 attendu: n(n+1)(2n+1)/6 pour n=10 *)
 Compute (eval nil test2). (* 1705 attendu *)
 
@@ -334,7 +331,7 @@ Proof.
   intros.
   induction H.
   - apply H0.
-  - apply IHSteps in H0. constructor 2 with m2; [apply H | apply H0].     
+  - apply IHSteps in H0. constructor 2 with m2; [apply H | apply H0].
 Qed.
 
 Lemma OneStep code st st' : Step code st st' -> Steps code st st'.
@@ -343,6 +340,7 @@ Proof.
   - apply H.
   - constructor 1.
 Qed.
+
 
 (** Décalage de pc dans une machine *)
 
@@ -356,26 +354,16 @@ Proof.
 Qed.
 
 (** Ajout de code devant / derriere la zone intéressante *)
-
 Lemma Step_extend code code' m m' :
  Step code m m' -> Step (code++code') m m'.
 Proof.
-  intro.
-  unfold Step .
-  rewrite get_app_l.
-  unfold Step in H.
-  - apply H.
-  - unfold Step in H.
-  erewrite <- get_app_r in H.
-  rewrite get_app_r in H.
- 
-    (* rewrite <- get_None.
-  apply OneStep in H.
-  
-  induction code'.
-  - rewrite <- List.app_nil_end with instr code. apply H.
-  -  *)
-Admitted.
+  unfold Step.
+  elim (le_or_lt (List.length code) (pc m));intros.
+  - rewrite <- get_None in H.
+    rewrite H in H0.
+    contradiction.
+  - rewrite get_app_l; assumption.
+Qed.
 
 Lemma Steps_extend code code' m m' :
  Steps code m m' -> Steps (code++code') m m'.
@@ -388,38 +376,74 @@ Proof.
     * apply IHSteps.
 Qed.
 
+Check (Stepi_ind).
+Check (eq_S).
+
+
 Lemma Stepi_shift instr n m m' :
  Stepi instr m m' ->
  Stepi instr (shift_pc n m) (shift_pc n m').
 Proof.
-  induction instr.
-  intros.
-  
-  rewrite pc_shift.
+  intro.
+  induction H;simpl; auto;try rewrite Nat.add_succ_r; try constructor; try assumption.
+   - remember (n+pc0) as pc. 
+      replace (n+(pc0-off)) with (pc-off).
+      + constructor.
+        * lia.
+        * assumption.
+      + lia.     
+Qed.
 
-Admitted.
+Search ( ?n + _ = ?m + _).
 
 Lemma Step_shift code0 code m m' (n := List.length code0) :
  Step code m m' ->
  Step (code0 ++ code) (shift_pc n m) (shift_pc n m').
 Proof.
-Admitted.
+  unfold Step.
+  intro.
+  elim (le_or_lt (List.length code) (pc m));intros.
+  (* Hypothesis list_get outside code *)
+  - rewrite <- get_None in H0.
+    rewrite H0 in H.
+    contradiction.
+  (* Hypothesis list_get inside code *)
+  - rewrite pc_shift in *; unfold n in *.
+    rewrite get_app_r; (destruct list_get; [apply Stepi_shift; assumption | contradiction]).
+Qed.
 
 Lemma Steps_shift code0 code  m m' (n := List.length code0) :
  Steps code m m' ->
  Steps (code0 ++ code) (shift_pc n m) (shift_pc n m').
 Proof.
-Admitted.
+  intro.
+  induction H.
+  - destruct m . constructor 1.
+  - unfold n in *. econstructor 2 with (shift_pc (length code0) m2). 
+     + apply Step_shift. apply H.
+     + assumption. 
+Qed.
 
 (** Composition d'exécutions complètes *)
+
+Search (_ + 0).
 
 Lemma Exec_trans code1 code2 stk1 vars1 stk2 vars2 stk3 vars3 :
  Exec code1 (stk1, vars1) (stk2, vars2) ->
  Exec code2 (stk2, vars2) (stk3, vars3) ->
  Exec (code1 ++ code2) (stk1, vars1) (stk3, vars3).
 Proof.
-Admitted.
-
+  unfold Exec.
+  intros. 
+  apply Steps_trans with ({| pc := length code1; stack := stk2; vars := vars2 |}).
+  - apply Steps_extend. assumption.
+  - eapply Steps_shift in H0.
+    instantiate (1:= code1) in H0.
+    simpl in H0.
+    rewrite app_length. 
+    rewrite <- plus_n_O in H0. 
+    assumption.
+Qed.
 
 (** Correction des sauts lors d'une boucle
 
@@ -438,6 +462,8 @@ Admitted.
 
 Global Hint Resolve le_n_S le_plus_r : core.
 
+Search (?n + ?m = ?m + ?n).
+Check (plus_minus).
 Lemma Steps_jump code n (f:nat->nat) stk vars b :
   length code = n ->
   (forall a acc,
@@ -451,6 +477,9 @@ Lemma Steps_jump code n (f:nat->nat) stk vars b :
           (Mach 0 (b::stk) (a::acc::vars))
           (Mach (S n) (b::stk) ((S b)::(acc + sum f a N)::vars)).
 Proof.
+  intros.
+  rewrite Nat.add_comm in H1.
+  rewrite  plus_minus with b a N in H1 .
 Admitted.
 
 (** Version spécialisée du résultat précédent, avec des
