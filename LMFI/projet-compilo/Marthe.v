@@ -11,6 +11,7 @@ Import ListNotations.
 Open Scope string_scope.
 Open Scope list_scope.
 
+
 (** Travail demandé :
     a) Enlever l'axiome TODO et remplacer ses usages par du code
        convenable.
@@ -28,7 +29,7 @@ Axiom TODO : forall {A:Type}, A.
     booléenne a <=? b (correspondant à la constante Nat.leb).
     Voici le lien entre ces deux notions,  *)
 
-Lemma leb_le x y : (x <=? y) = true <-> x <= y.
+(* Lemma leb_le x y : (x <=? y) = true <-> x <= y.
 Proof.
  apply Nat.leb_le.
 Qed.
@@ -36,7 +37,7 @@ Qed.
 Lemma leb_gt x y : (x <=? y) = false <-> y < x.
 Proof.
  apply Nat.leb_gt.
-Qed.
+Qed. *)
 
 (** Une soustraction sans arrondi.
 
@@ -353,6 +354,15 @@ Proof.
  now destruct m.
 Qed.
 
+
+
+Lemma pc_shift' n m stk vars : shift_pc n {|pc := 0+m; stack := stk; vars := vars|} =  {|pc := n+m; stack := stk; vars := vars|}.
+Proof.
+  unfold shift_pc.
+  rewrite Nat.add_0_l.
+  reflexivity.
+Qed.
+
 (** Ajout de code devant / derriere la zone intéressante *)
 Lemma Step_extend code code' m m' :
  Step code m m' -> Step (code++code') m m'.
@@ -437,8 +447,7 @@ Proof.
   intros. 
   apply Steps_trans with ({| pc := length code1; stack := stk2; vars := vars2 |}).
   - apply Steps_extend. assumption.
-  - eapply Steps_shift in H0.
-    instantiate (1:= code1) in H0.
+  - apply Steps_shift with (code0:= code1) in H0.
     simpl in H0.
     rewrite app_length. 
     rewrite <- plus_n_O in H0. 
@@ -462,7 +471,10 @@ Qed.
 
 Global Hint Resolve le_n_S le_plus_r : core.
 
-Search (?n + ?m = ?m + ?n).
+Check le_n_S.
+Check le_plus_r.
+
+Search (?n + 1 = S ?n). 
 Check (plus_minus).
 Lemma Steps_jump code n (f:nat->nat) stk vars b :
   length code = n ->
@@ -478,13 +490,60 @@ Lemma Steps_jump code n (f:nat->nat) stk vars b :
           (Mach (S n) (b::stk) ((S b)::(acc + sum f a N)::vars)).
 Proof.
   intros.
-  rewrite Nat.add_comm in H1.
-  rewrite  plus_minus with b a N in H1 .
+  eapply Steps_trans.
+  instantiate (1:= {| pc := n; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
+  apply Steps_extend.
+  apply H0.
+  rewrite <- Nat.add_1_r with n.
+
+  rewrite <- H.
+  
+  eapply Steps_trans.
+
+  instantiate (1:={| pc := n; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
+  apply Steps_extend.
+  rewrite <- H.
+  econstructor.
+  
+  - elim (le_or_lt a b).
+    + intro.
+      eapply Step_trans.
+      
+      (* rewrite <- Nat.add_0_r with (n:=length code).
+      rewrite <- pc_shift' with (n:= length code +0).
+      rewrite <- pc_shift'.
+      rewrite Nat.add_0_r with (n:=0).
+      rewrite Nat.add_0_r with (n:=length code).
+      rewrite Nat.add_0_l.
+      apply Step_shift. *)
+      unfold Step.
+      simpl.
+      rewrite get_app_r0; [|auto].
+      simpl.
+      
+      econstructor.
+  - constructor 1.
+  
+  rewrite  pc_shift.
+  
+
+
+
+  apply Steps_extend.
+
+  
+  
+  destruct H0 with a acc.
+  replace {| pc := 0; stack := b :: stk; vars := a :: acc :: vars |} with m.
+  replace {| pc := length code; stack := b :: stk; vars := S a :: acc + f a :: vars |} with (shift_pc (length code) m).
+  
 Admitted.
 
 (** Version spécialisée du résultat précédent, avec des
     Exec au lieu de Step, et 0 comme valeur initiale des variables
     de boucle et d'accumulateurs. *)
+
+Search (length _ = _).
 
 Lemma Exec_jump code (f:nat->nat) stk vars b :
   (forall a acc,
@@ -495,7 +554,15 @@ Lemma Exec_jump code (f:nat->nat) stk vars b :
       (b::stk, 0::0::vars)
       (b::stk, (S b)::(sum f 0 b)::vars).
 Proof.
-Admitted.
+  intros.
+  unfold Exec in *.
+  eapply Steps_jump with (b:=b) (a:=0) (acc:=0) in H.
+  - simpl in *.
+    rewrite last_length.
+    eassumption.
+  - trivial.
+  - trivial.
+Qed.
 
 
 (** IV) Le compilateur
@@ -515,27 +582,275 @@ Admitted.
 Fixpoint comp (cenv:list string) e :=
   match e with
     | EInt n => Push n :: nil
-    | EVar v => TODO
-    | EOp o e1 e2 => TODO
+    | EVar v => 
+      let x := (index v cenv * 2) in
+      GetVar x::nil 
+    | EOp o e1 e2 => 
+      let x1 := comp cenv e1 in
+      let x2 := comp cenv e2 in
+      x1++x2++(Op o::nil)
     | ESum v efin ecorps =>
-      let prologue := TODO in
-      let corps := TODO in
-      let boucle := corps ++ Jump TODO :: nil in
-      let epilogue := TODO in
+      let prologue := (comp cenv efin)++(NewVar::NewVar::nil) in
+      let corps := comp (v::cenv) ecorps in
+      let it := GetVar 1::Op Plus::SetVar 1::Push 1::GetVar 0::Op Plus::SetVar 0:: nil in 
+      let boucle := corps ++ it ++ Jump (length corps + length it):: nil in
+      let epilogue := Pop::GetVar 1::DelVar::DelVar::nil in
       prologue ++ boucle ++ epilogue
   end.
 
 Definition compile e := comp nil e.
 
+Eval compute in (compile (EOp Plus (EInt 37) (EInt 5) )).
+Eval compute in (Run (compile (EOp Plus (EInt 37) (EInt 5) )) 42).
+
+Lemma  test_42 : (Run (compile (EOp Plus (EInt 37) (EInt 5) )) 42).
+Proof.
+  unfold compile.
+  unfold comp.
+  simpl.
+  unfold Run.
+  unfold Exec.
+  simpl.
+
+  econstructor.
+  instantiate (1:= {| pc := 1; stack := [37]; vars := [] |}).
+  constructor.
+
+  econstructor.
+  instantiate (1:= {| pc := 2; stack := [5;37]; vars := [] |}).
+  constructor.
+  
+  econstructor.
+  instantiate (1:= {| pc := 3; stack := [42]; vars := [] |}).
+  constructor.
+  
+  constructor.
+Qed.
+
+Eval compute in (Run (compile test1) 385).
+
+
+(* 385 attendu: n(n+1)(2n+1)/6 pour n=10 *)
+(* 5 attendu: (6)(5)/6 pour n=2 *)
+(* test1:  . *)
+Lemma  test_385 : (Run (compile (ESum "x" (EInt 2) (EOp Mult (EVar "x") (EVar "x")))) 5).
+Proof.
+  unfold compile.
+  unfold comp.
+  simpl.
+  unfold Run.
+  unfold Exec.
+  simpl.
+
+  (* replace [NewVar; NewVar; GetVar 0; GetVar 0; Op Mult; Jump 3; DelVar; DelVar] 
+  with ([NewVar] ++ [NewVar; GetVar 0; GetVar 0; Op Mult; Jump 3; DelVar; DelVar]).
+  2: apply eq_refl. *)
+
+  (* NewVar *)
+  econstructor.
+  instantiate (1:= {| pc := 1; stack := []; vars := [0] |}).
+  constructor.
+
+  (* NewVar *)
+  econstructor.
+  instantiate (1:= {| pc := 2; stack := []; vars := [0;0] |}).
+  constructor.
+  
+  (* Push 10 *)
+  econstructor.
+  instantiate (1:= {| pc := 3; stack := [2]; vars := [0;0] |}).
+  constructor.
+
+  (* GetVar 0 *)
+  econstructor.
+  instantiate (1:= {| pc := 4; stack := [0;2]; vars := [0;0] |}).
+  constructor 6.
+  trivial.
+
+  (* GetVar 0 *)
+  econstructor.
+  instantiate (1:= {| pc := 5; stack := [0;0;2]; vars := [0;0] |}).
+  constructor 6.
+  trivial.
+
+  (* Op Mult *)
+  econstructor.
+  instantiate (1:= {| pc := 6; stack := [0;2]; vars := [0;0] |}).
+  constructor.
+
+  (* GetVar 1 (acc) *)
+  econstructor.
+  instantiate (1:= {| pc := 7; stack := [0;0;2]; vars := [0;0] |}).
+  constructor; auto.
+  (* Op Plus *)
+  econstructor.
+  instantiate (1:= {| pc := 8; stack := [0;2]; vars := [0;0] |}).
+  constructor; auto.
+  (* SetVar 1 (acc) *)
+  econstructor.
+  instantiate (1:= {| pc := 9; stack := [2]; vars := [0;0] |}).
+  constructor; auto.
+  
+  (* Push 1 *)
+  econstructor.
+  instantiate (1:= {| pc := 10; stack := [1;2]; vars := [0;0] |}).
+  constructor. 
+
+  (* GetVar 0 *)
+  econstructor.
+  instantiate (1:= {| pc := 11; stack := [0;1;2]; vars := [0;0] |}).
+  constructor; auto.
+
+  (* Op Plus *)
+  econstructor.
+  instantiate (1:= {| pc := 12; stack := [1;2]; vars := [0;0] |}).
+  constructor; auto.
+
+  (* SetVar 0 *)
+  econstructor.
+  instantiate (1:= {| pc := 13; stack := [2]; vars := [1;0] |}).
+  constructor; auto.
+  
+  (* Jump 10 *)
+  econstructor.
+  instantiate (1:= {| pc := 3; stack := [2]; vars := [1;0] |}).
+  constructor; intuition.
+  
+  
+  
+  (* GetVar 0 (x) *)
+  econstructor.
+  instantiate (1:= {| pc := 4; stack := [1;2]; vars := [1;0] |}).
+  constructor;auto.
+  (* GetVar 0 (x) *)
+  econstructor.
+  instantiate (1:= {| pc := 5; stack := [1;1;2]; vars := [1;0] |}).
+  constructor;auto.
+  (* Op Mult *)
+  econstructor.
+  instantiate (1:= {| pc := 6; stack := [1;2]; vars := [1;0] |}).
+  constructor.
+  (* GetVar 1 (acc) *)
+  econstructor.
+  instantiate (1:= {| pc := 7; stack := [0;1;2]; vars := [1;0] |}).
+  constructor; auto.
+  (* Op Plus *)
+  econstructor.
+  instantiate (1:= {| pc := 8; stack := [1;2]; vars := [1;0] |}).
+  constructor; auto.
+  (* SetVar 1 (acc) *)
+  econstructor.
+  instantiate (1:= {| pc := 9; stack := [2]; vars := [1;1] |}).
+  constructor; auto.
+  (* Push 1 *)
+  econstructor.
+  instantiate (1:= {| pc := 10; stack := [1;2]; vars := [1;1] |}).
+  constructor. 
+  (* GetVar 0 (x) *)
+  econstructor.
+  instantiate (1:= {| pc := 11; stack := [1;1;2]; vars := [1;1] |}).
+  constructor; auto.
+  (* Op Plus *)
+  econstructor.
+  instantiate (1:= {| pc := 12; stack := [2;2]; vars := [1;1] |}).
+  constructor; auto.
+  (* SetVar 0 (x) *)
+  econstructor.
+  instantiate (1:= {| pc := 13; stack := [2]; vars := [2;1] |}).
+  constructor; auto.
+  (* Jump 8 *)
+  econstructor.
+  instantiate (1:= {| pc := 3; stack := [2]; vars := [2;1] |}).
+  constructor; intuition.
+
+
+
+  (* GetVar 0 (x) *)
+  econstructor.
+  instantiate (1:= {| pc := 4; stack := [2;2]; vars := [2;1] |}).
+  constructor;auto.
+  (* GetVar 0 (x) *)
+  econstructor.
+  instantiate (1:= {| pc := 5; stack := [2;2;2]; vars := [2;1] |}).
+  constructor;auto.
+  (* Op Mult *)
+  econstructor.
+  instantiate (1:= {| pc := 6; stack := [4;2]; vars := [2;1] |}).
+  constructor.
+  (* GetVar 1 (acc) *)
+  econstructor.
+  instantiate (1:= {| pc := 7; stack := [1;4;2]; vars := [2;1] |}).
+  constructor; auto.
+  (* Op Plus *)
+  econstructor.
+  instantiate (1:= {| pc := 8; stack := [5;2]; vars := [2;1] |}).
+  constructor; auto.
+  (* SetVar 1 (acc) *)
+  econstructor.
+  instantiate (1:= {| pc := 9; stack := [2]; vars := [2;5] |}).
+  constructor; intuition.
+  (* Push 1 *)
+  econstructor.
+  instantiate (1:= {| pc := 10; stack := [1;2]; vars := [2;5] |}).
+  constructor. 
+  (* GetVar 0 (x) *)
+  econstructor.
+  instantiate (1:= {| pc := 11; stack := [2;1;2]; vars := [2;5] |}).
+  constructor; auto.
+  (* Op Plus *)
+  econstructor.
+  instantiate (1:= {| pc := 12; stack := [3;2]; vars := [2;5] |}).
+  constructor; auto.
+  (* SetVar 0 (x) *)
+  econstructor.
+  instantiate (1:= {| pc := 13; stack := [2]; vars := [3;5] |}).
+  constructor; auto.
+  (* NO Jump *)
+  econstructor.
+  instantiate (1:= {| pc := 14; stack := [2]; vars := [3;5] |}).
+  constructor; intuition.
+  
+  (* Pop *)
+  econstructor.
+  instantiate (1:= {| pc := 15; stack := []; vars := [3;5] |}).
+  constructor; intuition.
+  (* GetVar 1 (acc) *)
+  econstructor.
+  instantiate (1:= {| pc := 16; stack := [5]; vars := [3;5] |}).
+  constructor; intuition.
+  (* DelVar (x) *)
+  econstructor.
+  instantiate (1:= {| pc := 17; stack := [5]; vars := [5] |}).
+  constructor; intuition.
+  (* DelVar (acc) *)
+  econstructor.
+  instantiate (1:= {| pc := 18; stack := [5]; vars := [] |}).
+  constructor; intuition.
+  constructor.
+Qed.
+
+
 (** Variables libres d'une expression *)
 
 Inductive FV (v:var) : expr -> Prop :=
-| FVVar : FV v (EVar v).
+| FVVar : FV v (EVar v)
+| FVOpL (o:op) (e1 e2 : expr) : FV v e1 -> FV v (EOp o e1 e2)
+| FVOpR (o:op) (e1 e2 : expr) : FV v e2 -> FV v (EOp o e1 e2)
+| FVSumFin (v' :var) (efin ecorps : expr) :  FV v efin -> FV v (ESum v' efin ecorps)
+| FVSumCorps (v' :var) (efin ecorps : expr) : FV v ecorps -> FV v (ESum v' efin ecorps)
+.
 (* TODO : ajouter les règles manquantes... *)
 
 Global Hint Constructors FV : core.
 
 Definition Closed e := forall v, ~ FV v e.
+
+Eval compute in (FV "x" (EOp Mult (EVar "x") (EVar "x"))).
+
+Lemma myttt : (FV "x" (EOp Mult (EOp Mult (EVar "x") (EInt 1)) (EInt 1))).
+Proof.
+  repeat econstructor.
+Qed.
 
 (** Invariants sur les environnements.
     env : environnement d'evaluation (list (string*nat))
@@ -553,8 +868,33 @@ Lemma EnvsOk_ESum v e1 e2 env cenv vars a b :
   EnvsOk (ESum v e1 e2) env cenv vars ->
   EnvsOk e2 ((v,a)::env) (v::cenv) (a::b::vars).
 Proof.
-Admitted.
+  intros.
+  unfold EnvsOk in *.
+  intros.
+  elim (string_dec v0 v); intro; split.
+  - rewrite a0. constructor. reflexivity.
+  - rewrite a0. unfold index. rewrite eqb_refl. simpl. rewrite eqb_refl. reflexivity.
+  - simpl. right. apply H. constructor 5; assumption.
+  - unfold index. rewrite <- eqb_neq in b0. rewrite b0. simpl. rewrite b0. 
+    rewrite eqb_neq in b0. apply H. constructor 5; assumption.
+Qed.
 
+Lemma EnvsOk_ESumFin v e1 e2 env cenv vars  :
+  EnvsOk (ESum v e1 e2) env cenv vars ->
+  EnvsOk e1 env cenv vars.
+Proof.
+  intro.
+  constructor.
+  unfold EnvsOk in H.
+  destruct H with v0.
+  econstructor.
+  assumption.
+  assumption.
+  unfold EnvsOk in H.
+  apply H.
+  econstructor.
+  assumption.
+Qed.
 
 (** Correction du compilateur *)
 
@@ -564,6 +904,64 @@ Ltac basic_exec :=
   unfold Exec; repeat (eapply SomeSteps; [constructor|]);
    try apply NoStep; try reflexivity.
 
+
+Ltac step_step :=
+  (eapply SomeSteps; [constructor|]; try apply NoStep; try reflexivity; auto; simpl).
+Ltac step_endloop :=
+  (eapply SomeSteps; [constructor 9|]; auto;step_step;step_step;step_step;step_step).
+
+Lemma test_42' : (Run (compile (EOp Plus (EInt 37) (EInt 5) )) 42).
+Proof.
+  unfold Run.
+  basic_exec.
+Qed.
+
+Lemma test_385' : (Run (compile (ESum "x" (EInt 2) (EOp Mult (EVar "x") (EVar "x")))) 5).
+Proof.
+  unfold Run.
+  unfold Exec.
+  step_step. 
+  step_step.
+  step_step.
+  step_step. 
+  step_step.
+  step_step.
+  step_step. 
+  step_step.
+  step_step.
+  step_step. 
+  step_step.
+  step_step.
+  step_step. 
+  step_step.
+  step_step.
+  step_step. 
+  step_step.
+  step_step.
+  step_step. 
+  step_step.
+  step_step.
+  step_step. 
+  step_step.
+  step_step.
+  step_step. 
+  step_step.
+  step_step.
+  step_step. 
+  step_step.
+  step_step.
+  step_step. 
+  step_step.
+  step_step.
+  step_step.
+  step_step.
+  step_endloop.
+Qed.
+  
+Search (length (_::_) = S length _).
+
+
+Print Steps_shift.
 (* Si vous avez l'impression de prouver quelque chose d'impossible,
    peut-être est-ce le signe que vous vous êtes trompé dans la définition
    de comp. *)
@@ -572,11 +970,106 @@ Theorem comp_ok e env cenv vars stk :
  EnvsOk e env cenv vars ->
  Exec (comp cenv e) (stk,vars) (eval env e :: stk, vars).
 Proof.
-Admitted.
+  revert stk.
+  revert vars.
+  revert cenv.
+  revert env.
+  (* intro. *)
+  
+  induction e; intros.  
+  
+  - basic_exec.
+  - basic_exec.
+    unfold EnvsOk in H.
+    unfold eval.
+    apply H.
+    constructor.
+  - basic_exec.
+    simpl.
+    eapply Exec_trans with (stk2:= eval env e1::stk) (vars2:= vars0).
+    + apply IHe1. auto.
+    + eapply Exec_trans with (stk2:= eval env e2::eval env e1::stk) (vars2:= vars0).
+      * eapply IHe2 with (stk:=eval env e1::stk).
+        auto.
+      * simpl.
+        constructor 2 with (m2:= {|pc := 1;stack := eval_op o (eval env e1) (eval env e2) :: stk;vars := vars0|}).
+        econstructor 3.
+        econstructor.
+  - 
+
+    simpl.
+    rewrite app_assoc.
+    basic_exec.
+    eapply Exec_trans.
+    eapply Exec_trans.
+    +eapply Exec_trans.
+     basic_exec.
+      simpl.
+    
+      instantiate (1:= vars0).
+      instantiate (1:= eval env e1::stk).
+      apply IHe1 with (stk:=stk) (vars:= vars0).
+      eapply EnvsOk_ESumFin with (v:=v) (e2:=e2).
+      assumption.
+    
+      instantiate (1:=0::0::vars0).
+      instantiate (1:=eval env e1::stk).
+      basic_exec.
+
+    + 
+    instantiate (1:= S (eval env e1) :: sum (fun i : nat => eval ((v, i) :: env) e2) 0 (eval env e1)::vars0).
+    instantiate (1:=(eval env e1)::stk).
+
+    replace ([GetVar 1; Op Plus; SetVar 1; Push 1; GetVar 0; 
+    Op Plus; SetVar 0; Jump (length (comp (v :: cenv) e2) + 7)])
+    with ([GetVar 1; Op Plus; SetVar 1; Push 1; GetVar 0; 
+    Op Plus; SetVar 0]++[Jump (length (comp (v :: cenv) e2) + 7)]); [|auto].
+
+
+    replace (comp (v :: cenv) e2 ++
+    [GetVar 1; Op Plus; SetVar 1; Push 1; GetVar 0; Op Plus; SetVar 0] ++
+    [Jump (length (comp (v :: cenv) e2) + 7)])
+    with ((comp (v :: cenv) e2 ++
+    [GetVar 1; Op Plus; SetVar 1; Push 1; GetVar 0; Op Plus; SetVar 0]) ++
+    [Jump (length (comp (v :: cenv) e2) + 7)]); [|intuition].
+    
+    replace ([Jump (length (comp (v :: cenv) e2) + 7)])
+    with ([Jump (length ((comp (v :: cenv) e2 ++
+    [GetVar 1; Op Plus; SetVar 1; Push 1; GetVar 0; Op Plus; SetVar 0])))]); [|rewrite app_length;
+    auto].
+
+
+    eapply Exec_jump.
+
+    (* loop *)
+    intros.
+    (* body *)
+    eapply Exec_trans with (stk2:= eval ((v,a)::env) e2::eval env e1::stk) (vars2:= a::acc::vars0).
+    apply IHe2 .
+    apply EnvsOk_ESum with (a:=a) (b:=acc) in H.
+    assumption.
+    (* epilogue *)
+    basic_exec.
+    unfold eval_op.
+    unfold list_set.
+    simpl.
+    rewrite Nat.add_comm.
+    reflexivity.    
+
+    + basic_exec.
+Qed.
 
 Theorem compile_ok e : Closed e -> Run (compile e) (eval nil e).
 Proof.
-Admitted.
+  unfold Closed.
+  unfold Run.
+  intro.
+  apply comp_ok.
+  unfold EnvsOk.
+  intros.
+  elim H with v.
+  assumption.
+Qed.
 
 (** V) Sémantique exécutable
 
@@ -671,3 +1164,4 @@ Theorem run_compile e :
  exists count, run count (compile e) = Some (eval nil e).
 Proof.
 Admitted.
+

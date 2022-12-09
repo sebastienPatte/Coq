@@ -114,7 +114,6 @@ Qed.
 Parameter EM : forall P, ~~ P -> P.
 
 
-
 Lemma drinker : exists p:Person, ~ Mortal p -> forall q:Person, ~ (Mortal q).
 Proof.
 	apply EM.
