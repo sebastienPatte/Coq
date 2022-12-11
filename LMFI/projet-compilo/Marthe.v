@@ -474,6 +474,23 @@ Global Hint Resolve le_n_S le_plus_r : core.
 Check le_n_S.
 Check le_plus_r.
 
+Lemma add_dec_0 (a b : nat) : 0 = a + b -> 0 = a /\ 0 = b.
+Proof.
+  intro.
+  rewrite Nat.eq_sym_iff in H.
+  split.
+  - apply Nat.add_sub_eq_r in H. simpl in H. assumption.
+  - apply Nat.add_sub_eq_l in H. simpl in H. assumption.
+Qed.
+
+Lemma add_to_leq (a b N : nat) : b = S N + a -> S a <= b.
+Proof.
+  intro.
+    eapply Nat.lt_le_trans with (m:= a+S N).
+    admit.
+    admit.
+Admitted.
+
 Search (?n + 1 = S ?n). 
 Check (plus_minus).
 Lemma Steps_jump code n (f:nat->nat) stk vars b :
@@ -489,11 +506,179 @@ Lemma Steps_jump code n (f:nat->nat) stk vars b :
           (Mach 0 (b::stk) (a::acc::vars))
           (Mach (S n) (b::stk) ((S b)::(acc + sum f a N)::vars)).
 Proof.
-  intros.
-  eapply Steps_trans.
+intro.
+  intro.
+    
+   induction N; intros.
+   
+  - 
+    rewrite Nat.add_0_l in H1.
+    unfold sum.
+    eapply Steps_trans with (m2:= {| pc := n; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
+    + apply Steps_extend.
+      apply H0.
+    + apply OneStep.
+      unfold Step.
+      rewrite <- H.
+      simpl.
+
+      rewrite get_app_r0.
+      simpl.
+      rewrite H1.
+      econstructor.
+      auto.
+      reflexivity.
+  - eapply IHN with (a:= a) (acc:= sum f a N).
+  
+    eapply Steps_trans with (m2:= {| pc := n; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
+    
+    + apply Steps_extend.
+      apply H0.
+    + eapply Steps_trans with (m2:= {| pc := 0; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
+      
+      apply OneStep.
+
+      (* replace (S N) with (b-a); [|rewrite H1]. *)
+      rewrite <- H.
+      unfold Step.
+      rewrite get_app_r0.
+      simpl.
+      apply add_to_leq in H1.
+      replace ({| pc := 0; stack := b :: stk; vars := S 0 :: acc + f 0 :: vars |})
+      with ({| pc := length code - length code; stack := b :: stk; vars := S 0 :: acc + f 0 :: vars |}).
+      econstructor 8.
+      auto.
+      assumption.
+      admit.
+      admit.
+      replace (S N + a) with (N + S a) in H1.
+      replace (acc + sum f a (S N)) with ((acc + f a) + sum f a N ).
+      eapply Steps_trans.
+      
+      apply H0 with (a:= a) (acc := acc + f a).
+(*  *)
+  
+intro.
+intro.
+induction b.  
+  
+  - intros. apply add_dec_0 in H1.
+    destruct H1.
+    eapply Steps_trans with (m2:= {| pc := n; stack := 0 :: stk; vars := S a :: acc + sum f a N :: vars |}).
+    
+    + apply Steps_extend.
+      rewrite <- H1.
+      rewrite <- H2. 
+      apply H0 with (a:=0) (acc:=acc).
+    + rewrite <- H1.
+      rewrite <- H2.
+      simpl.
+      apply OneStep.
+      unfold Step.
+      rewrite <- H.
+      rewrite get_app_r0; [|auto].
+      simpl.
+      econstructor. 
+      auto.
+        
+  - 
+    intros.
+    (* b=N+a-1 
+       b= (N-1) + a
+    *)
+    
+
+    replace (S b = N + a) with (b = (N-1) + a) in H1.
+    apply IHb with (N:=N-1) (a:=a).
+    eapply Steps_trans with ({| pc := n; stack := S b :: stk; vars := S a :: acc + sum f a N :: vars |}).
+    + apply Steps_extend.
+      apply H0 with (a:= a) (acc:=acc).
+    + rewrite <- H. 
+      apply OneStep.
+      unfold Step.
+      rewrite get_app_r0.
+      simpl.
+      
+      
+      simpl.
+      rewrite Nat.add_0_r in H1.
+        
+      rewrite <- H1.
+      simpl.
+      econstructor.
+      auto.
+      reflexivity.
+  - intros.
+  rewrite Nat.add_0_r in H1.
+    rewrite <- H1.
+    rewrite <- H.
+    
+    
+    simpl.
+
+   eapply Steps_trans with (m2:= {| pc := n; stack := S b :: stk; vars := S 0 :: acc + f 0 :: vars |}).
+    + apply Steps_extend. apply H0 with (a:=0).
+    + 
+      replace (acc + (f 0 + sum f 1 b)) with ((acc + sum f 1 b) + f 0).
+      apply OneStep.
+      unfold Step.
+      rewrite get_app_r0.
+      simpl.
+      rewrite <- H.
+      
+      
+      apply H0 with (a:=0) (acc:=acc + sum f 1 b).
+      replace (S N) with (b-a); [|rewrite H1].
+      
+      unfold Step.
+      rewrite get_app_r0.
+      simpl.
+      
+
+      econstructor.
+
+      rewrite <- get_Some.
+      simpl.
+      rewrite <- H.
+      (* replace (match list_get (code ++ [Jump (length code)]) (length code) with
+      | Some instr0 =>
+          Stepi instr0
+            {|
+              pc := length code;
+              stack := b :: stk;
+              vars := S a :: acc + f a :: vars
+            |}
+            {|
+              pc := S (length code);
+              stack := b :: stk;
+              vars := S b :: acc + f a :: vars
+            |}
+      | None => False
+      end)
+      with (Stepi (Jump (length code))
+      {|
+        pc := length code;
+        stack := b :: stk;
+        vars := S a :: acc + f a :: vars
+      |}
+      {|
+        pc := S (length code);
+        stack := b :: stk;
+        vars := S b :: acc + f a :: vars
+      |}). *)
+
+      
+      
+        
+  - 
+
+
   instantiate (1:= {| pc := n; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
   apply Steps_extend.
   apply H0.
+
+
+
   rewrite <- Nat.add_1_r with n.
 
   rewrite <- H.
@@ -507,7 +692,11 @@ Proof.
   
   - elim (le_or_lt a b).
     + intro.
-      eapply Step_trans.
+     econstructor 2 with (m2:= {|pc := length code + 1;stack := b :: stk;vars := S b :: acc + sum f a N :: vars|}).
+
+      (* intro.
+
+      eapply Step_trans. *)
       
       (* rewrite <- Nat.add_0_r with (n:=length code).
       rewrite <- pc_shift' with (n:= length code +0).
@@ -518,10 +707,10 @@ Proof.
       apply Step_shift. *)
       unfold Step.
       simpl.
-      rewrite get_app_r0; [|auto].
-      simpl.
-      
-      econstructor.
+      (* rewrite get_app_r0; [|auto].
+      simpl. *)
+      unfold list_get.
+      econstructor code.
   - constructor 1.
   
   rewrite  pc_shift.
