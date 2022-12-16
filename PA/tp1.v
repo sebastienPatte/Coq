@@ -156,6 +156,7 @@ Proof.
   assumption.
 Qed.
 
+Print socrateMortal.
 
 (* 3.2 Drinkers paradox *)
 (* Modelization using axioms + classical logic *)

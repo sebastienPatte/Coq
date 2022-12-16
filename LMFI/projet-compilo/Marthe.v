@@ -506,9 +506,11 @@ Lemma Steps_jump code n (f:nat->nat) stk vars b :
           (Mach 0 (b::stk) (a::acc::vars))
           (Mach (S n) (b::stk) ((S b)::(acc + sum f a N)::vars)).
 Proof.
+
+
 intro.
   intro.
-    
+
    induction N; intros.
    
   - 
@@ -528,13 +530,16 @@ intro.
       econstructor.
       auto.
       reflexivity.
-  - eapply IHN with (a:= a) (acc:= sum f a N).
+  - (* induction b. 
+    admit. (* 0=N=a *) *)
   
     eapply Steps_trans with (m2:= {| pc := n; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
     
     + apply Steps_extend.
       apply H0.
-    + eapply Steps_trans with (m2:= {| pc := 0; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
+    +
+    
+    eapply Steps_trans with (m2:= {| pc := 0; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
       
       apply OneStep.
 
@@ -544,15 +549,21 @@ intro.
       rewrite get_app_r0.
       simpl.
       apply add_to_leq in H1.
-      replace ({| pc := 0; stack := b :: stk; vars := S 0 :: acc + f 0 :: vars |})
-      with ({| pc := length code - length code; stack := b :: stk; vars := S 0 :: acc + f 0 :: vars |}).
+      replace ({|pc := 0; stack := b :: stk; vars := S a :: acc + f a :: vars|})
+    with ({|pc := length code - length code; stack := b :: stk; vars := S a :: (acc + f a :: vars)|}).
       econstructor 8.
       auto.
       assumption.
       admit.
       admit.
+      induction a.
+      admit.
+      
       replace (S N + a) with (N + S a) in H1.
       replace (acc + sum f a (S N)) with ((acc + f a) + sum f a N ).
+      
+      admit.
+      replace (S N + S a) with (N + S S a) in H1.
       eapply Steps_trans.
       
       apply H0 with (a:= a) (acc := acc + f a).
