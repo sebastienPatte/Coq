@@ -29,15 +29,16 @@ Axiom TODO : forall {A:Type}, A.
     booléenne a <=? b (correspondant à la constante Nat.leb).
     Voici le lien entre ces deux notions,  *)
 
-(* Lemma leb_le x y : (x <=? y) = true <-> x <= y.
+
+Lemma leb_le x y : (x <=? y)%nat = true <-> x <= y.
 Proof.
  apply Nat.leb_le.
 Qed.
 
-Lemma leb_gt x y : (x <=? y) = false <-> y < x.
+Lemma leb_gt x y : (x <=? y)%nat = false <-> y < x.
 Proof.
  apply Nat.leb_gt.
-Qed. *)
+Qed.
 
 (** Une soustraction sans arrondi.
 
@@ -471,9 +472,6 @@ Qed.
 
 Global Hint Resolve le_n_S le_plus_r : core.
 
-Check le_n_S.
-Check le_plus_r.
-
 Lemma add_to_leq (a b N : nat) : b = S N + a -> S a <= b.
 Proof.
   intro.
@@ -578,7 +576,9 @@ Fixpoint comp (cenv:list string) e :=
       let prologue := (comp cenv efin)++(NewVar::NewVar::nil) in
       let corps := comp (v::cenv) ecorps in
       let it := GetVar 1::Op Plus::SetVar 1::Push 1::GetVar 0::Op Plus::SetVar 0:: nil in 
-      let boucle := corps ++ it ++ Jump (length corps + length it):: nil in
+      
+      let boucle := (corps ++ it) ++ ((Jump (length (corps ++ it)))::nil)  in
+      
       let epilogue := Pop::GetVar 1::DelVar::DelVar::nil in
       prologue ++ boucle ++ epilogue
   end.
@@ -615,204 +615,6 @@ Qed.
 Eval compute in (Run (compile test1) 385).
 
 
-(* 385 attendu: n(n+1)(2n+1)/6 pour n=10 *)
-(* 5 attendu: (6)(5)/6 pour n=2 *)
-(* test1:  . *)
-Lemma  test_385 : (Run (compile (ESum "x" (EInt 2) (EOp Mult (EVar "x") (EVar "x")))) 5).
-Proof.
-  unfold compile.
-  unfold comp.
-  simpl.
-  unfold Run.
-  unfold Exec.
-  simpl.
-
-  (* replace [NewVar; NewVar; GetVar 0; GetVar 0; Op Mult; Jump 3; DelVar; DelVar] 
-  with ([NewVar] ++ [NewVar; GetVar 0; GetVar 0; Op Mult; Jump 3; DelVar; DelVar]).
-  2: apply eq_refl. *)
-
-  (* NewVar *)
-  econstructor.
-  instantiate (1:= {| pc := 1; stack := []; vars := [0] |}).
-  constructor.
-
-  (* NewVar *)
-  econstructor.
-  instantiate (1:= {| pc := 2; stack := []; vars := [0;0] |}).
-  constructor.
-  
-  (* Push 10 *)
-  econstructor.
-  instantiate (1:= {| pc := 3; stack := [2]; vars := [0;0] |}).
-  constructor.
-
-  (* GetVar 0 *)
-  econstructor.
-  instantiate (1:= {| pc := 4; stack := [0;2]; vars := [0;0] |}).
-  constructor 6.
-  trivial.
-
-  (* GetVar 0 *)
-  econstructor.
-  instantiate (1:= {| pc := 5; stack := [0;0;2]; vars := [0;0] |}).
-  constructor 6.
-  trivial.
-
-  (* Op Mult *)
-  econstructor.
-  instantiate (1:= {| pc := 6; stack := [0;2]; vars := [0;0] |}).
-  constructor.
-
-  (* GetVar 1 (acc) *)
-  econstructor.
-  instantiate (1:= {| pc := 7; stack := [0;0;2]; vars := [0;0] |}).
-  constructor; auto.
-  (* Op Plus *)
-  econstructor.
-  instantiate (1:= {| pc := 8; stack := [0;2]; vars := [0;0] |}).
-  constructor; auto.
-  (* SetVar 1 (acc) *)
-  econstructor.
-  instantiate (1:= {| pc := 9; stack := [2]; vars := [0;0] |}).
-  constructor; auto.
-  
-  (* Push 1 *)
-  econstructor.
-  instantiate (1:= {| pc := 10; stack := [1;2]; vars := [0;0] |}).
-  constructor. 
-
-  (* GetVar 0 *)
-  econstructor.
-  instantiate (1:= {| pc := 11; stack := [0;1;2]; vars := [0;0] |}).
-  constructor; auto.
-
-  (* Op Plus *)
-  econstructor.
-  instantiate (1:= {| pc := 12; stack := [1;2]; vars := [0;0] |}).
-  constructor; auto.
-
-  (* SetVar 0 *)
-  econstructor.
-  instantiate (1:= {| pc := 13; stack := [2]; vars := [1;0] |}).
-  constructor; auto.
-  
-  (* Jump 10 *)
-  econstructor.
-  instantiate (1:= {| pc := 3; stack := [2]; vars := [1;0] |}).
-  constructor; intuition.
-  
-  
-  
-  (* GetVar 0 (x) *)
-  econstructor.
-  instantiate (1:= {| pc := 4; stack := [1;2]; vars := [1;0] |}).
-  constructor;auto.
-  (* GetVar 0 (x) *)
-  econstructor.
-  instantiate (1:= {| pc := 5; stack := [1;1;2]; vars := [1;0] |}).
-  constructor;auto.
-  (* Op Mult *)
-  econstructor.
-  instantiate (1:= {| pc := 6; stack := [1;2]; vars := [1;0] |}).
-  constructor.
-  (* GetVar 1 (acc) *)
-  econstructor.
-  instantiate (1:= {| pc := 7; stack := [0;1;2]; vars := [1;0] |}).
-  constructor; auto.
-  (* Op Plus *)
-  econstructor.
-  instantiate (1:= {| pc := 8; stack := [1;2]; vars := [1;0] |}).
-  constructor; auto.
-  (* SetVar 1 (acc) *)
-  econstructor.
-  instantiate (1:= {| pc := 9; stack := [2]; vars := [1;1] |}).
-  constructor; auto.
-  (* Push 1 *)
-  econstructor.
-  instantiate (1:= {| pc := 10; stack := [1;2]; vars := [1;1] |}).
-  constructor. 
-  (* GetVar 0 (x) *)
-  econstructor.
-  instantiate (1:= {| pc := 11; stack := [1;1;2]; vars := [1;1] |}).
-  constructor; auto.
-  (* Op Plus *)
-  econstructor.
-  instantiate (1:= {| pc := 12; stack := [2;2]; vars := [1;1] |}).
-  constructor; auto.
-  (* SetVar 0 (x) *)
-  econstructor.
-  instantiate (1:= {| pc := 13; stack := [2]; vars := [2;1] |}).
-  constructor; auto.
-  (* Jump 8 *)
-  econstructor.
-  instantiate (1:= {| pc := 3; stack := [2]; vars := [2;1] |}).
-  constructor; intuition.
-
-
-
-  (* GetVar 0 (x) *)
-  econstructor.
-  instantiate (1:= {| pc := 4; stack := [2;2]; vars := [2;1] |}).
-  constructor;auto.
-  (* GetVar 0 (x) *)
-  econstructor.
-  instantiate (1:= {| pc := 5; stack := [2;2;2]; vars := [2;1] |}).
-  constructor;auto.
-  (* Op Mult *)
-  econstructor.
-  instantiate (1:= {| pc := 6; stack := [4;2]; vars := [2;1] |}).
-  constructor.
-  (* GetVar 1 (acc) *)
-  econstructor.
-  instantiate (1:= {| pc := 7; stack := [1;4;2]; vars := [2;1] |}).
-  constructor; auto.
-  (* Op Plus *)
-  econstructor.
-  instantiate (1:= {| pc := 8; stack := [5;2]; vars := [2;1] |}).
-  constructor; auto.
-  (* SetVar 1 (acc) *)
-  econstructor.
-  instantiate (1:= {| pc := 9; stack := [2]; vars := [2;5] |}).
-  constructor; intuition.
-  (* Push 1 *)
-  econstructor.
-  instantiate (1:= {| pc := 10; stack := [1;2]; vars := [2;5] |}).
-  constructor. 
-  (* GetVar 0 (x) *)
-  econstructor.
-  instantiate (1:= {| pc := 11; stack := [2;1;2]; vars := [2;5] |}).
-  constructor; auto.
-  (* Op Plus *)
-  econstructor.
-  instantiate (1:= {| pc := 12; stack := [3;2]; vars := [2;5] |}).
-  constructor; auto.
-  (* SetVar 0 (x) *)
-  econstructor.
-  instantiate (1:= {| pc := 13; stack := [2]; vars := [3;5] |}).
-  constructor; auto.
-  (* NO Jump *)
-  econstructor.
-  instantiate (1:= {| pc := 14; stack := [2]; vars := [3;5] |}).
-  constructor; intuition.
-  
-  (* Pop *)
-  econstructor.
-  instantiate (1:= {| pc := 15; stack := []; vars := [3;5] |}).
-  constructor; intuition.
-  (* GetVar 1 (acc) *)
-  econstructor.
-  instantiate (1:= {| pc := 16; stack := [5]; vars := [3;5] |}).
-  constructor; intuition.
-  (* DelVar (x) *)
-  econstructor.
-  instantiate (1:= {| pc := 17; stack := [5]; vars := [5] |}).
-  constructor; intuition.
-  (* DelVar (acc) *)
-  econstructor.
-  instantiate (1:= {| pc := 18; stack := [5]; vars := [] |}).
-  constructor; intuition.
-  constructor.
-Qed.
 
 
 (** Variables libres d'une expression *)
@@ -901,55 +703,11 @@ Proof.
   basic_exec.
 Qed.
 
-Lemma test_385' : (Run (compile (ESum "x" (EInt 2) (EOp Mult (EVar "x") (EVar "x")))) 5).
-Proof.
-  unfold Run.
-  unfold Exec.
-  step_step. 
-  step_step.
-  step_step.
-  step_step. 
-  step_step.
-  step_step.
-  step_step. 
-  step_step.
-  step_step.
-  step_step. 
-  step_step.
-  step_step.
-  step_step. 
-  step_step.
-  step_step.
-  step_step. 
-  step_step.
-  step_step.
-  step_step. 
-  step_step.
-  step_step.
-  step_step. 
-  step_step.
-  step_step.
-  step_step. 
-  step_step.
-  step_step.
-  step_step. 
-  step_step.
-  step_step.
-  step_step. 
-  step_step.
-  step_step.
-  step_step.
-  step_step.
-  step_endloop.
-Qed.
   
-Search (length (_::_) = S length _).
-
-
-Print Steps_shift.
 (* Si vous avez l'impression de prouver quelque chose d'impossible,
    peut-être est-ce le signe que vous vous êtes trompé dans la définition
    de comp. *)
+
 
 Theorem comp_ok e env cenv vars stk :
  EnvsOk e env cenv vars ->
@@ -959,88 +717,44 @@ Proof.
   revert vars.
   revert cenv.
   revert env.
-  (* intro. *)
   
-  induction e; intros.  
-  
-  - basic_exec.
-  - basic_exec.
-    unfold EnvsOk in H.
+  induction e; intros;basic_exec; simpl.
+  - unfold EnvsOk in H.
     unfold eval.
     apply H.
     constructor.
-  - basic_exec.
-    simpl.
-    eapply Exec_trans with (stk2:= eval env e1::stk) (vars2:= vars0).
+  - eapply Exec_trans with (stk2:= eval env e1::stk) (vars2:= vars0).
     + apply IHe1. auto.
-    + eapply Exec_trans with (stk2:= eval env e2::eval env e1::stk) (vars2:= vars0).
-      * eapply IHe2 with (stk:=eval env e1::stk).
+    + apply Exec_trans with (stk2:= eval env e2::eval env e1::stk) (vars2:= vars0).
+      * apply IHe2 with (stk:=eval env e1::stk).
         auto.
       * simpl.
-        constructor 2 with (m2:= {|pc := 1;stack := eval_op o (eval env e1) (eval env e2) :: stk;vars := vars0|}).
-        econstructor 3.
-        econstructor.
-  - 
+        apply OneStep.
+        constructor.
+  - rewrite app_assoc.
+    apply Exec_trans with (stk2:=(eval env e1)::stk) (vars2:= S (eval env e1) :: sum (fun i => eval ((v, i) :: env) e2) 0 (eval env e1)::vars0).
+    apply Exec_trans with (vars2:=0::0::vars0) (stk2:=eval env e1::stk).
+    + apply Exec_trans with (vars2:= vars0) (stk2:= eval env e1::stk).
+      * apply IHe1 with (stk:=stk) (vars:= vars0).
+        eapply EnvsOk_ESumFin with (v:=v) (e2:=e2).
+        assumption.
+      * basic_exec.
 
-    simpl.
-    rewrite app_assoc.
-    basic_exec.
-    eapply Exec_trans.
-    eapply Exec_trans.
-    +eapply Exec_trans.
-     basic_exec.
-      simpl.
-    
-      instantiate (1:= vars0).
-      instantiate (1:= eval env e1::stk).
-      apply IHe1 with (stk:=stk) (vars:= vars0).
-      eapply EnvsOk_ESumFin with (v:=v) (e2:=e2).
-      assumption.
-    
-      instantiate (1:=0::0::vars0).
-      instantiate (1:=eval env e1::stk).
-      basic_exec.
-
-    + 
-    instantiate (1:= S (eval env e1) :: sum (fun i : nat => eval ((v, i) :: env) e2) 0 (eval env e1)::vars0).
-    instantiate (1:=(eval env e1)::stk).
-
-    replace ([GetVar 1; Op Plus; SetVar 1; Push 1; GetVar 0; 
-    Op Plus; SetVar 0; Jump (length (comp (v :: cenv) e2) + 7)])
-    with ([GetVar 1; Op Plus; SetVar 1; Push 1; GetVar 0; 
-    Op Plus; SetVar 0]++[Jump (length (comp (v :: cenv) e2) + 7)]); [|auto].
-
-
-    replace (comp (v :: cenv) e2 ++
-    [GetVar 1; Op Plus; SetVar 1; Push 1; GetVar 0; Op Plus; SetVar 0] ++
-    [Jump (length (comp (v :: cenv) e2) + 7)])
-    with ((comp (v :: cenv) e2 ++
-    [GetVar 1; Op Plus; SetVar 1; Push 1; GetVar 0; Op Plus; SetVar 0]) ++
-    [Jump (length (comp (v :: cenv) e2) + 7)]); [|intuition].
-    
-    replace ([Jump (length (comp (v :: cenv) e2) + 7)])
-    with ([Jump (length ((comp (v :: cenv) e2 ++
-    [GetVar 1; Op Plus; SetVar 1; Push 1; GetVar 0; Op Plus; SetVar 0])))]); [|rewrite app_length;
-    auto].
-
-
-    eapply Exec_jump.
-
-    (* loop *)
-    intros.
-    (* body *)
-    eapply Exec_trans with (stk2:= eval ((v,a)::env) e2::eval env e1::stk) (vars2:= a::acc::vars0).
-    apply IHe2 .
-    apply EnvsOk_ESum with (a:=a) (b:=acc) in H.
-    assumption.
-    (* epilogue *)
-    basic_exec.
-    unfold eval_op.
-    unfold list_set.
-    simpl.
-    rewrite Nat.add_comm.
-    reflexivity.    
-
+    + apply Exec_jump.
+      (* loop *)
+      intros.
+      (* body *)
+      eapply Exec_trans with (stk2:= eval ((v,a)::env) e2::eval env e1::stk) (vars2:= a::acc::vars0).
+      * apply IHe2 .
+        apply EnvsOk_ESum with (a:=a) (b:=acc) in H.
+        assumption.
+      (* epilogue *)
+      * basic_exec.
+        unfold eval_op.
+        unfold list_set.
+        simpl.
+        rewrite Nat.add_comm.
+        reflexivity.
     + basic_exec.
 Qed.
 
