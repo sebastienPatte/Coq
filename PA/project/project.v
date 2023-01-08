@@ -44,12 +44,12 @@ match pol with
   match p,q with 
 | _, (Cst 0) => false 
 | (Cst _), (Cst _) => true 
-| (Poly p1 j1 q1), (Cst _) => 
+| (Poly _ j1 _), (Cst _) => 
 	Nat.ltb i j1 
-  && valid_bool p 
+  && valid_b p 
 | (Cst _),  (Poly p2 j2 q2) => 
 	Nat.leb i j2 
-  && valid_bool q 
+  && valid_b q 
 |(Poly p1 j1 q1),  (Poly p2 j2 q2) => 
   Nat.ltb i j1 && Nat.leb i j2 
   && valid_b p 
@@ -326,25 +326,215 @@ Require Import
   Module P := WProperties_fun Nat_as_OT NatMap.
   Module F := P.F.
 
+(* Lemma posCoeff (p q : poly) (i:nat) : 
+  valid_b (Poly p i q) = true -> 
+  exists (m : monoid), (get_coefficient_ (Poly p i q) m) <> 0%Z .
+Proof.
+  intro.
+  induction q.
+  unfold get_coefficient_.
+  - elim (Z.eq_dec z 0%Z ); intro.
+    + simpl in H.
+      destruct p.
+      rewrite a in H.
+      intuition.
+      rewrite a in H.
+      intuition.
+    + 
+      fold get_coefficient_.
+      elim (Z.eq_dec (get_coefficient_ p (add i 1 empty_mono)) 0); intro.
+      exists (add i 1 empty_mono).
+      rewrite a.
+      simpl.
+      erewrite F.add_eq_o; [|reflexivity].
+      simpl.
+      erewrite P.fold_Equal with (m2:= add i 0 empty_mono).
+      erewrite P.fold_add with (k:=i) (e:=0).
+      erewrite P.fold_Empty.
+      simpl.
+      assumption.
 
+
+
+      intuition.
+      apply empty_1.
+      intuition.
+      intuition.
+      unfold P.transpose_neqkey; intuition.
+      admit.
+      intro.
+      admit.
+      intuition.
+      intuition.
+      unfold P.transpose_neqkey; intuition.
+      admit.
+      unfold Equal.
+      intro.
+      elim (Nat.eq_dec i y); intro.
+      rewrite a0.
+      erewrite F.add_eq_o; [|reflexivity].
+      erewrite F.add_eq_o; [|reflexivity].
+      reflexivity.
+
+      erewrite F.add_neq_o; [|assumption].
+      erewrite F.add_neq_o; [|assumption].
+      erewrite F.add_neq_o; [|assumption].
+      reflexivity.
+
+      induction p.
+      exists (empty_mono).
+      simpl.
+      intuition.
+
+      exists (add i 1 empty_mono).
+      erewrite F.add_eq_o; [|reflexivity].
+      
+      
+      erewrite P.fold_Equal with (m2:= add i 0 empty_mono).
+      erewrite P.fold_add with (k:=i) (e:=0).
+      erewrite P.fold_Empty.
+      simpl. with (k:=i) (e:=0).
+      intuition.
+      intuition.
+      intuition.
+      intuition.
+      unfold P.transpose_neqkey; intuition.
+      admit.
+      intro.
+      admit.
+      intuition.
+      intuition.
+      unfold P.transpose_neqkey; intuition.
+      admit.
+      unfold get_coefficient_.
+
+      unfold NatMap.In.
+      
+      fold get_coefficient_.
+      
+      
+
+Admitted. *)
   
 Lemma all_coeff_eq (p q : valid_pol) : (forall (m : monoid), get_coefficient p m = get_coefficient q m) -> p = q.
 Proof.
-
-
   unfold get_coefficient.
   destruct p,q.
   simpl.
   intro.
   apply leibniz.
-  (* induction VP_value0, VP_value1; simpl in *. *)
 
-  induction VP_value0; induction VP_value1; simpl; simpl in H.
+  induction VP_value0; induction VP_value1; simpl.
 
   - specialize (H empty_mono). simpl in H. f_equal. assumption.
-  - inversion VP_prop1.
-    replace VP_value1_1 with (Cst z) in IHVP_value1_1.
-    specialize (IHVP_value1_1 VP_prop0).
+  - unfold VP_value in IHVP_value1_1.
+    unfold VP_value in IHVP_value1_2.
+    simpl in H.
+    destruct VP_value1_1. 
+    
+    
+    assert (validV1 : valid_b (Cst z) = true); [intuition|].
+        specialize (IHVP_value1_1 validV1).
+        assert (validV2 : valid_b VP_value1_2 = true).
+          unfold valid_b in VP_prop1.
+          destruct VP_value1_2; intros.
+          intuition.
+          rewrite andb_true_iff in VP_prop1.
+          intuition.
+    specialize (IHVP_value1_2 validV2).
+        
+
+    + elim (Z.eq_dec z z0); intro.
+      * rewrite <- a in IHVP_value1_1. 
+        unfold VP_value in IHVP_value1_1.
+        unfold VP_value in IHVP_value1_2.
+
+        specialize (H (empty_mono)) as Hempty.
+        erewrite P.fold_Empty in Hempty; [ | intuition |apply empty_1  ].
+        erewrite F.empty_o in Hempty.
+
+        specialize (H (add n 1 empty_mono)) as Hn1.
+        erewrite F.add_eq_o in Hn1; [|reflexivity].
+        simpl in Hn1.
+        
+        specialize (H (add n 2 empty_mono)) as Hn2.
+        erewrite F.add_eq_o in Hn2; [|reflexivity].
+        simpl in Hn2.
+        
+        
+        
+
+        
+
+
+        induction VP_value1_2.
+        
+      -- specialize (H (add n 1 empty_mono)).
+        simpl in H.
+        erewrite F.add_eq_o in H; intuition; simpl in H.
+        erewrite P.fold_Equal with (m2:= add n 0 (empty nat)) in H. 
+        erewrite P.fold_add with (k:=n ) (e:=0) in H; intuition; simpl in H.
+        ++ admit. (* z1 can't be 0%Z *) 
+        ++ unfold P.transpose_neqkey.
+        intuition. admit. (* reorder boolean equalities *)
+        ++ admit. (* z1 can't be 0%Z *) 
+        ++ intuition.
+        ++ intuition.
+        ++ unfold P.transpose_neqkey.
+        intuition. admit. (* reorder boolean equalities *)
+        ++ unfold Equal.
+        intuition.
+        elim (Nat.eq_dec y n); intro.
+        erewrite F.add_eq_o ; intuition.
+        erewrite F.add_eq_o ; intuition.
+        erewrite F.add_neq_o ; intuition.
+        erewrite F.add_neq_o ; intuition.
+        erewrite F.add_neq_o ; intuition.
+      -- assert (validV21 : valid_b (Poly (Cst z0) n VP_value1_2_1) =true).
+        admit. 
+      specialize (IHVP_value1_2_1 validV21).
+      assert (validV22 : valid_b (Poly (Cst z0) n VP_value1_2_2) =true).
+        admit. 
+      specialize (IHVP_value1_2_2 validV22).
+      simpl in H.      
+
+      admit.
+    * 
+
+    specialize (H (empty_mono)) as Hempty.
+    erewrite P.fold_Empty in Hempty; [ | intuition |apply empty_1  ].
+    erewrite F.empty_o in Hempty.
+    intuition.
+  + 
+  (* unfold VP_value in IHVP_value1_1.
+  unfold VP_value in IHVP_value1_2.
+        specialize (H (add n 1 empty_mono)) as mn1.
+        simpl in mn1.
+        erewrite F.add_eq_o in mn1.
+        simpl in mn1.
+        erewrite F.add_eq_o in mn1.
+        simpl in mn1.
+        erewrite P.fold_Equal with (m2:= add n 0 (empty_mono)) in mn1. 
+        erewrite P.fold_add with (k:=n ) (e:=0) in H; intuition; simpl in H.
+        specialize (H2 (add n 1 empty_mono)).
+        admit.
+        admit.
+        admit.
+        admit.
+        admit.
+        admit.
+        admit.
+        admit.
+        
+    + 
+    specialize (H ( empty_mono)). 
+    simpl in H.
+
+    erewrite F.add_eq_o in H; intuition.
+    erewrite P.find_add with (k:=n ) (e:=2) in H; intuition.
+    destruct VP_value1_2.
+  
+    inversion VP_prop1.
     (* destruct VP_value1_1, VP_value1_2; simpl in IHVP_value1_1, IHVP_value1_2, H .
     + Check poly_equivalence.
       (* rewrite poly_equivalence in IHVP_value1_1.
@@ -406,7 +596,7 @@ Proof.
     + rewrite andb_true_iff in H1.
       destruct H1. 
       specialize (IHVP_value1_2 H1).
-      simpl in IHVP_value1_1.
+      simpl in IHVP_value1_1.dv
       
       erewrite H in IHVP_value1_2.
      (***********************************************************************)
@@ -420,9 +610,7 @@ Proof.
            erewrite P.fold_Empty in H; intuition.
            simpl in H.
  
-         erewrite fold_1 in H.
-         
- 
+      erewrite fold_1 in H.
  
        eapply elements_1 in H.
        
@@ -551,3 +739,148 @@ Proof.
       rewrite <- Nat_as_OT.eq_dec in H.
     unfold empty in H. erewrite empty_1 in H.
   
+ *)
+
+ Admitted.
+
+
+
+
+Require Import Program.
+
+Lemma valid_b_more (p q : poly) (i:nat) : 
+  valid_b (Poly p i q) = true -> valid_b p = true /\ valid_b q = true.
+Proof.
+  intro.
+  split.
+  induction p.
+  simpl in H; intuition.
+  simpl in H; intuition.
+  destruct q.
+  elim (Z.eq_dec z 0); intro; destruct z; intuition.
+  rewrite andb_true_iff in H.
+  destruct H.
+  intuition.
+  rewrite andb_true_iff in H.
+  intuition.
+  rewrite andb_true_iff in H.
+  destruct H.
+  rewrite andb_true_iff in H.
+  destruct H.
+  intuition.
+  induction q.
+  simpl in H; intuition.
+  simpl in H; intuition.
+  destruct p.
+  rewrite andb_true_iff in H.
+  destruct H.
+  intuition.
+
+  rewrite andb_true_iff in H.
+  destruct H.
+  rewrite andb_true_iff in H.
+  destruct H.
+  intuition.
+Qed.
+(* 
+Lemma valid_b_moreP (p q : poly) (i:nat) : 
+  valid_b (Poly p i q) = true -> valid_b p = true.
+Proof.
+  intro.
+  
+  induction p.
+  simpl in H; intuition.
+  simpl in H; intuition.
+  destruct q.
+  elim (Z.eq_dec z 0); intro; destruct z; intuition.
+  rewrite andb_true_iff in H.
+  destruct H.
+  intuition.
+  rewrite andb_true_iff in H.
+  intuition.
+  rewrite andb_true_iff in H.
+  destruct H.
+  rewrite andb_true_iff in H.
+  destruct H.
+  intuition.
+  Qed.
+
+Lemma valid_b_moreQ (p q : poly) (i:nat) : 
+  valid_b (Poly p i q) = true -> valid_b q = true.
+Proof.
+  intro.
+  induction q.
+  simpl in H; intuition.
+  simpl in H; intuition.
+  destruct p.
+  rewrite andb_true_iff in H.
+  destruct H.
+  intuition.
+
+  rewrite andb_true_iff in H.
+  destruct H.
+  rewrite andb_true_iff in H.
+  destruct H.
+  intuition.
+Qed.
+
+
+
+Lemma valid_b_more_ (pol : poly) : 
+  valid_b pol = true -> 
+    match pol with 
+    |Cst z => valid_b (Cst z) = true
+    |Poly p i q => valid_b p = true /\ valid_b q = true
+    end.
+Proof.
+  intro.
+  destruct pol.
+  assumption.
+  apply valid_b_more in H.
+  assumption.
+Qed.
+
+
+Print valid_b_more.
+Check eq_rect.
+
+Require Import Program.
+
+Program Definition valid_b_mo_ (pol : poly) (p q:poly) (i:nat) (pr : valid_b pol = true) (preq : pol = (Poly p i q))  := _ :
+valid_b (Poly p i q) = true.
+
+Print valid_b_mo_.
+
+Fixpoint poly_val (pol:valid_pol) (f : nat -> Z) := 
+  match VP_value pol as x0 return (VP_value pol = x0) -> Z with 
+  | Cst z => fun (e: (VP_value pol) = (Cst z)) => z
+  | Poly p i q => 
+    fun (e: (VP_value pol) = Poly p i q) =>
+    let pr := valid_b_mo_ (VP_value pol) p q i (VP_prop pol) e in 
+    let pr1 := valid_b_moreP p q i pr in 
+    let pr2 := valid_b_moreQ p q i pr in 
+    Z.add (poly_val {| VP_value := p ; VP_prop := pr1|} f) (Z.mul (f i) (poly_val {| VP_value := q ; VP_prop := pr2|}  f))
+  end
+  eq_refl *)
+
+Fixpoint poly_val_ (pol:poly) (f : nat -> Z) := 
+  match pol with 
+  | Cst z => z
+  | Poly p i q => 
+    Z.add (poly_val_ p f) (Z.mul (f i) (poly_val_ p f))
+end.
+
+Definition poly_val (pol:valid_pol) (f : nat -> Z) := 
+match VP_value pol with 
+| Cst z => z
+| Poly p i q => 
+  Z.add (poly_val_ p f) (Z.mul (f i) (poly_val_ q f))
+end.
+
+Lemma val_coeff (p q : valid_pol) : (forall (f:nat -> Z), poly_val p f = poly_val q f) -> (forall (m: monoid ), get_coefficient p m = get_coefficient q m).
+Proof.
+  intros.
+  destruct p,q.
+  induction VP_value0, VP_value1.
+Admitted.
+
