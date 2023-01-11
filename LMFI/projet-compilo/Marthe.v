@@ -4,8 +4,6 @@
 (******               Pierre Letouzey                      *******)
 (*****************************************************************)
 
- 
-
 Require Import String Datatypes Arith List Lia.
 Import ListNotations.
 Open Scope string_scope.
@@ -322,14 +320,15 @@ Proof.
   intros.
   induction H.
   - apply H0.
-  - apply IHSteps in H0. constructor 2 with m2; [apply H | apply H0].
+  - apply IHSteps in H0. apply SomeSteps with m2; [apply H | apply H0].
 Qed.
 
 Lemma OneStep code st st' : Step code st st' -> Steps code st st'.
 Proof.
-  econstructor 2 with st'.
+  intro.
+  apply SomeSteps with st'.
   - apply H.
-  - constructor 1.
+  - apply NoStep.
 Qed.
 
 
@@ -346,12 +345,12 @@ Qed.
 
 
 
-Lemma pc_shift' n m stk vars : shift_pc n {|pc := 0+m; stack := stk; vars := vars|} =  {|pc := n+m; stack := stk; vars := vars|}.
+(* Lemma pc_shift' n m stk vars : shift_pc n {|pc := 0+m; stack := stk; vars := vars|} =  {|pc := n+m; stack := stk; vars := vars|}.
 Proof.
   unfold shift_pc.
   rewrite Nat.add_0_l.
   reflexivity.
-Qed.
+Qed. *)
 
 (** Ajout de code devant / derriere la zone intéressante *)
 
@@ -371,11 +370,12 @@ Lemma Steps_extend code code' m m' :
 Proof.
   intro.
   induction H.
-  - econstructor 1.
+  - apply NoStep.
   - apply Steps_trans with m2.  
     * apply OneStep. apply Step_extend. apply H.
     * apply IHSteps.
 Qed.
+
 
 
 Lemma Stepi_shift instr n m m' :
@@ -383,7 +383,8 @@ Lemma Stepi_shift instr n m m' :
  Stepi instr (shift_pc n m) (shift_pc n m').
 Proof.
   intro.
-  induction H;simpl; auto;try rewrite Nat.add_succ_r; try constructor; try assumption.
+  Check Nat.add_succ_r.
+  induction H;simpl; try rewrite Nat.add_succ_r; auto.
    - remember (n+pc0) as pc. 
       replace (n+(pc0-off)) with (pc-off).
       + constructor.
@@ -405,7 +406,9 @@ Proof.
     contradiction.
   (* Hypothesis list_get inside code *)
   - rewrite pc_shift in *; unfold n in *.
-    rewrite get_app_r; (destruct list_get; [apply Stepi_shift; assumption | contradiction]).
+    rewrite get_app_r; destruct list_get.
+     * apply Stepi_shift. assumption. 
+     * contradiction.
 Qed.
 
 Lemma Steps_shift code0 code  m m' (n := List.length code0) :
@@ -414,8 +417,8 @@ Lemma Steps_shift code0 code  m m' (n := List.length code0) :
 Proof.
   intro.
   induction H.
-  - destruct m . constructor 1.
-  - unfold n in *. econstructor 2 with (shift_pc (length code0) m2). 
+  - destruct m . apply NoStep.
+  - unfold n in *. apply SomeSteps with (shift_pc (length code0) m2). 
      + apply Step_shift. apply H.
      + assumption. 
 Qed.
@@ -455,10 +458,10 @@ Qed.
 
 Global Hint Resolve le_n_S le_plus_r : core.
 
-Lemma add_to_leq (a b N : nat) : b = S N + a -> S a <= b.
+Lemma eqAddS_to_leq (a b N : nat) : b = S N + a -> S a <= b.
 Proof.
   intro.
-  eapply Nat.lt_le_trans with (m:= a+S N);lia.
+  apply Nat.lt_le_trans with (m:= a+S N);lia.
 Qed.
 
 Lemma Steps_jump code n (f:nat->nat) stk vars b :
@@ -474,8 +477,7 @@ Lemma Steps_jump code n (f:nat->nat) stk vars b :
           (Mach 0 (b::stk) (a::acc::vars))
           (Mach (S n) (b::stk) ((S b)::(acc + sum f a N)::vars)).
 Proof.
-  intro.
-  intro.
+  intro. intro.
   induction N; intros.
   - apply Steps_trans with (m2:= {| pc := n; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
     + apply Steps_extend.
@@ -489,11 +491,10 @@ Proof.
   - apply Steps_trans with (m2:= {| pc := n; stack := b :: stk; vars := S a :: acc + f a :: vars |}).
     + apply Steps_extend.
       apply H0.
-    + apply Steps_trans with (m2:= {|pc := n - n; stack := b :: stk; vars := S a :: (acc + f a :: vars)|}).
-      
+    + apply Steps_trans with (m2:= {|pc := n - n; stack := b :: stk; vars := S a :: (acc + f a :: vars)|}).  
       * apply OneStep.
         unfold Step; simpl.
-        apply add_to_leq in H1.
+        apply eqAddS_to_leq in H1.
         (* [Jump n] goes from [pc = n ] to [pc = 0] since [S a <= b] *) 
         rewrite get_app_r0; simpl; auto.
       * simpl.
@@ -520,10 +521,10 @@ Lemma Exec_jump code (f:nat->nat) stk vars b :
 Proof.
   intros.
   unfold Exec in *.
-  eapply Steps_jump with (b:=b) (a:=0) (acc:=0) in H.
+  apply Steps_jump with (b:=b) (a:=0) (acc:=0) (N:=b) in H.
   - simpl in *.
     rewrite last_length.
-    eassumption.
+    assumption.
   - trivial.
   - trivial.
 Qed.
@@ -599,12 +600,12 @@ Proof.
   intros.
   unfold EnvsOk in *.
   intros.
-  elim (string_dec v0 v); intro; [rewrite a0|]; split.
-  - constructor. reflexivity.
-  - simpl. rewrite eqb_refl. simpl. reflexivity.
-  - simpl. right. apply H. constructor 5. assumption.
-  - simpl. rewrite <- eqb_neq in b0. rewrite b0. simpl.  
-    apply H. constructor 5. assumption.
+  elim (string_dec v0 v); intro; [rewrite a0|]; split; simpl.
+  - left. reflexivity.
+  - rewrite eqb_refl. simpl. reflexivity.
+  - right. apply H. apply FVSumCorps. assumption.
+  - rewrite <- eqb_neq in b0. rewrite b0. simpl.  
+    apply H. apply FVSumCorps. assumption.
 Qed.
 
 
@@ -634,7 +635,7 @@ Proof.
     unfold eval.
     apply H.
     constructor.
-  - eapply Exec_trans with (stk2:= eval env e1::stk) (vars2:= vars0).
+  - apply Exec_trans with (stk2:= eval env e1::stk) (vars2:= vars0).
     + apply IHe1. auto.
     + apply Exec_trans with (stk2:= eval env e2::eval env e1::stk) (vars2:= vars0).
       * apply IHe2 with (stk:=eval env e1::stk).
@@ -653,7 +654,7 @@ Proof.
     (* boucle *)
     + apply Exec_jump.
       intros.
-      eapply Exec_trans with (stk2:= eval ((v,a)::env) e2::eval env e1::stk) (vars2:= a::acc::vars0).
+      apply Exec_trans with (stk2:= eval ((v,a)::env) e2::eval env e1::stk) (vars2:= a::acc::vars0).
       * apply IHe2 .
         apply EnvsOk_ESum with (a:=a) (b:=acc) in H.
         assumption.
