@@ -746,8 +746,115 @@ Abort .
 
 Definition cst_poly (z:Z) := {| VP_value := (Cst z); VP_prop := eq_refl |}.
 
+Require Import Program.
 
-Definition sum_poly (p q:valid_pol) := p.
+Fixpoint length (p:poly) := 
+  match p with 
+  |Cst _ => 1 
+  |Poly p _ q => 1 + length p + length q 
+  end.
+
+Program Fixpoint sum_poly (p q:poly) {measure (length p + length q) } := 
+  match p,q with 
+  |Cst z1, Cst z2 => Cst (Z.add z1 z2)
+  |Poly p1 i q1, Cst z2 => 
+    Poly (sum_poly p1 (Cst z2)) i q1
+  |Cst z1, Poly p2 j q2 => 
+  Poly (sum_poly p2 (Cst z1)) j q2
+  |Poly p1 i q1, Poly p2 j q2 => 
+    if i =? j 
+    then Poly (sum_poly p1 p2) i (sum_poly q1 q2)
+    else Poly (sum_poly p1 (Poly p2 j q2)) i q1
+  end.
+Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+Defined.
+
+Definition pol1 := (Poly (Cst 1%Z) 1 (Poly (Cst 1%Z) 2 (Cst 1%Z))).
+Definition pol2 := (Poly (Cst 2%Z) 2 (Poly (Cst 2%Z) 3 (Cst 2%Z))).
+
+Eval compute in (sum_poly pol1 pol2).
+
+
+Program Fixpoint mul_poly (p q:poly) {measure (length p + length q) } := 
+  match p,q with 
+  |Cst z1, Cst z2 => Cst (Z.mul z1 z2)
+  |Poly p1 i q1, Cst z2 => 
+    Poly (mul_poly p1 (Cst z2)) i (mul_poly q1 (Cst z2))
+  |Cst z1, Poly p2 j q2 => 
+  Poly (mul_poly p2 (Cst z1)) j (mul_poly q2 (Cst z1))
+  |Poly p1 i q1, Poly p2 j q2 => 
+    match Nat.compare i j with 
+    |Lt => Poly (mul_poly p1 (Poly p2 j q2)) i (mul_poly q1 (Poly p2 j q2))
+    |Gt => Poly (mul_poly p2 (Poly p1 i q1)) j (mul_poly q2 (Poly p1 i q1))
+    |Eq => Poly (mul_poly p1 p2) i (Poly (mul_poly p1 q2) j (mul_poly q1 q2)) 
+     end
+  end.
+Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+  Qed.
+  Next Obligation.
+  simpl.
+  intuition.
+Defined.
+
+Eval compute in (mul_poly pol1 pol2).
+
+
 
 (* 
 Fixpoint mpplus n (c : Z) (m : monom n) (p : poly n) : poly n :=

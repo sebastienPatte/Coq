@@ -90,7 +90,7 @@ Qed.
 Fixpoint skip (l : list nat) : list nat := 
   match l with 
   |x::(y::ll) => x:: skip (ll)
-  |_=> l
+  |_=> []
 end.
 
 Parameter (x y z : nat).
@@ -102,9 +102,46 @@ Require Import Lia.
 Lemma length_skip :
 forall l, 2 * length (skip l) <= length l.
 Proof.
+  fix H 1.
   intro.
-  induction l. 
-  - simpl. trivial.
-  - destruct l; intuition. lia.
-     
+  destruct l; simpl. 
+  - trivial.
+  - destruct l; simpl. 
+    * auto.
+    * specialize (H l).
+      lia.
+Qed.
+    
+Fixpoint prodn (A:Type) (n:nat) : Type := 
+  match n with 
+  |0 => unit
+  |1 => A
+  |S n => prod A (prodn A n)
+  end.
+
+Eval compute in (prodn nat 10).
+
+Fixpoint length {A:Type} (l:list A) : nat := 
+  match l with 
+  |[] => 0
+  |h::t => S (length t)
+  end.
+
+Fixpoint embed {A:Type} (l:list A) : prodn A (length l) :=
+  match l return prodn A (length l) with 
+  |[] => tt
+  |x::l' => 
+    let p' : prodn A (length l') := embed l' in
+    let h : prodn A (length l') -> prodn A (length (x::l')) :=
+      match l' with 
+      |[] => fun _:unit => x
+      |x2::ll => 
+        fun p' : prodn A (length (x2::ll)) => 
+        (x,p')
+      end
+    in 
+    h p' 
+  end.
+
+Eval compute in (embed [1;5;6;8;7;6;3;4]).
 
