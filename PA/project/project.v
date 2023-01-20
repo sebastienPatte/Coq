@@ -651,7 +651,7 @@ Inductive form : Set :=
 | f_and 	: form -> form -> form 
 | f_or  	: form -> form -> form
 | f_not 	: form -> form
-| f_imp 	: form -> form -> form
+(* | f_imp 	: form -> form -> form *)
 .
 Fixpoint eval_form (f:form) (val : nat -> bool) : bool := 
   match f with 
@@ -661,14 +661,14 @@ Fixpoint eval_form (f:form) (val : nat -> bool) : bool :=
   | f_and f1 f2 => eval_form f1 val && eval_form f2 val
   | f_or f1 f2 => eval_form f1 val || eval_form f2 val
   | f_not f1 => negb (eval_form f1 val	)
-  | f_imp f1 f2 => impb (eval_form f1 val) (eval_form f2 val)
+  (* | f_imp f1 f2 => impb (eval_form f1 val) (eval_form f2 val) *)
   end.  
 
 
 Hint Constructors form : core.
 Notation "A ∧ B" := (f_and A B) (at level 30, right associativity).
 Notation "A ∨ B" := (f_or A B) (at level 35, right associativity).
-Notation "A → B" := (f_imp A B) (at level 49, right associativity, B at level 50).
+(* Notation "A → B" := (f_imp A B) (at level 49, right associativity, B at level 50). *)
 Notation "⊤" := (f_true) (at level 5).
 Notation "⊥" := (f_false) (at level 5).
 Notation "# x" := (f_var x) (at level 10).
@@ -714,11 +714,11 @@ match f with
   |(?x' , ?l') => match read_term y l' with
     |(?y' , ?l'') => constr:(( f_or x' y' , l''))
   end end
-|impb ?x ?y => 
+(* |impb ?x ?y => 
   match read_term x l with
   |(?x' , ?l') => match read_term y l' with
     |(?y' , ?l'') => constr:(( f_imp x' y' , l''))
-  end end
+  end end *)
 |false => constr:((f_false , l))
 |true => constr:((f_true , l))
 
@@ -754,17 +754,17 @@ Fixpoint length (p:poly) :=
   |Poly p _ q => 1 + length p + length q 
   end.
 
-Program Fixpoint sum_poly (p q:poly) {measure (length p + length q) } := 
+Program Fixpoint sum_poly_ (p q:poly) {measure (length p + length q) } := 
   match p,q with 
   |Cst z1, Cst z2 => Cst (Z.add z1 z2)
   |Poly p1 i q1, Cst z2 => 
-    Poly (sum_poly p1 (Cst z2)) i q1
+    Poly (sum_poly_ p1 (Cst z2)) i q1
   |Cst z1, Poly p2 j q2 => 
-  Poly (sum_poly p2 (Cst z1)) j q2
+  Poly (sum_poly_ p2 (Cst z1)) j q2
   |Poly p1 i q1, Poly p2 j q2 => 
     if i =? j 
-    then Poly (sum_poly p1 p2) i (sum_poly q1 q2)
-    else Poly (sum_poly p1 (Poly p2 j q2)) i q1
+    then Poly (sum_poly_ p1 p2) i (sum_poly_ q1 q2)
+    else Poly (sum_poly_ p1 (Poly p2 j q2)) i q1
   end.
 Next Obligation.
   simpl.
@@ -790,22 +790,30 @@ Defined.
 Definition pol1 := (Poly (Cst 1%Z) 1 (Poly (Cst 1%Z) 2 (Cst 1%Z))).
 Definition pol2 := (Poly (Cst 2%Z) 2 (Poly (Cst 2%Z) 3 (Cst 2%Z))).
 
-Eval compute in (sum_poly pol1 pol2).
+Eval compute in (sum_poly_ pol1 pol2).
+
+Program Definition sum_poly (p q:valid_pol) := {|VP_value := sum_poly_ (VP_value p) (VP_value q) ; VP_prop := _ |}.
+Admit Obligations.
 
 
-Program Fixpoint mul_poly (p q:poly) {measure (length p + length q) } := 
-  match p,q with 
-  |Cst z1, Cst z2 => Cst (Z.mul z1 z2)
-  |Poly p1 i q1, Cst z2 => 
-    Poly (mul_poly p1 (Cst z2)) i (mul_poly q1 (Cst z2))
-  |Cst z1, Poly p2 j q2 => 
-  Poly (mul_poly p2 (Cst z1)) j (mul_poly q2 (Cst z1))
-  |Poly p1 i q1, Poly p2 j q2 => 
-    match Nat.compare i j with 
-    |Lt => Poly (mul_poly p1 (Poly p2 j q2)) i (mul_poly q1 (Poly p2 j q2))
-    |Gt => Poly (mul_poly p2 (Poly p1 i q1)) j (mul_poly q2 (Poly p1 i q1))
-    |Eq => Poly (mul_poly p1 p2) i (Poly (mul_poly p1 q2) j (mul_poly q1 q2)) 
-     end
+
+Program Fixpoint mul_poly_ (p q:poly) {measure (length p + length q) } := 
+  match p with 
+  |Cst z1 => 
+    match q with 
+    |Cst z2 => Cst (Z.mul z1 z2)
+    |Poly p2 j q2 => Poly (mul_poly_ (Cst z1) p2 ) j (mul_poly_ (Cst z1) q2 )
+    end 
+  |Poly p1 i q1 => 
+    match q with 
+    | Cst z2 => Poly (mul_poly_ (Cst z2) p1) i (mul_poly_ (Cst z2) q1 )
+    | Poly p2 j q2 => 
+      match Nat.compare i j with 
+      |Lt => Poly (mul_poly_ p1 (Poly p2 j q2)) i (mul_poly_ q1 (Poly p2 j q2))
+      |Gt => Poly (mul_poly_ p2 (Poly p1 i q1)) j (mul_poly_ q2 (Poly p1 i q1))
+      |Eq => Poly (mul_poly_ p1 p2) i (Poly (mul_poly_ p1 q2) j (mul_poly_ q1 q2)) 
+      end
+    end
   end.
 Next Obligation.
   simpl.
@@ -852,71 +860,516 @@ Next Obligation.
   intuition.
 Defined.
 
-Eval compute in (mul_poly pol1 pol2).
 
-
-
-(* 
-Fixpoint mpplus n (c : Z) (m : monom n) (p : poly n) : poly n :=
-  match p with
-    | nil => (c,m) :: nil
-    | cons (c',m') p' =>
-      match monom_eq_dec m m' with
-	| left _ => (c+c',m) :: p'
-	| right _ => (c',m') :: mpplus c m p'
+Lemma mul_eq (p q:poly) : mul_poly_ p q = 
+match p with 
+  |Cst z1 => 
+    match q with 
+    |Cst z2 => Cst (Z.mul z1 z2)
+    |Poly p2 j q2 => Poly (mul_poly_ (Cst z1) p2 ) j (mul_poly_ (Cst z1) q2 )
+    end 
+  |Poly p1 i q1 => 
+    match q with 
+    | Cst z2 => Poly (mul_poly_ (Cst z2) p1) i (mul_poly_ (Cst z2) q1 )
+    | Poly p2 j q2 => 
+      match Nat.compare i j with 
+      |Lt => Poly (mul_poly_ p1 (Poly p2 j q2)) i (mul_poly_ q1 (Poly p2 j q2))
+      |Gt => Poly (mul_poly_ p2 (Poly p1 i q1)) j (mul_poly_ q2 (Poly p1 i q1))
+      |Eq => Poly (mul_poly_ p1 p2) i (Poly (mul_poly_ p1 q2) j (mul_poly_ q1 q2)) 
       end
+    end
   end.
+Proof.
+Admitted.
 
-Fixpoint pplus n (p1 p2 : poly n) : poly n :=
-  match p1 with
-    | nil => p2
-    | cons (c,m) p' => mpplus c m (pplus p' p2)
-  end.
-  
-Definition mmult n (m1 m2 : monom n) := Vmap2 plus m1 m2.
+Eval compute in (mul_poly_ pol1 pol2).
 
-Definition mpmult n c (m : monom n) (p : poly n) :=
-  map (fun cm => (c * fst cm, mmult m (snd cm))) p.
-
-Fixpoint pmult n (p1 p2 : poly n) : poly n :=
-  match p1 with
-    | nil => nil
-    | cons (c,m) p' => mpmult c m p2 + pmult p' p2
-  end.
-  
-*)
-
-
-Definition mul_poly (p q:valid_pol) := p.
+Program Definition mul_poly (p q:valid_pol) := {|VP_value := mul_poly_ (VP_value p) (VP_value q) ; VP_prop := _ |}.
+Admit Obligations.
 
 Definition sub_poly (p q:valid_pol) := sum_poly p (mul_poly (cst_poly (-1)%Z) q).
 
 Fixpoint to_poly (f:form) (val:nat->bool) := 
-match f with 
-|f_true => cst_poly 1%Z
-|f_false => cst_poly 0%Z
-|f_and a b => mul_poly (to_poly a val) (to_poly b val)
-|f_or a b => sub_poly (sum_poly (to_poly a val) (to_poly b val)) (mul_poly (to_poly a val) (to_poly b val))
-|f_not a =>  sub_poly (cst_poly 1%Z) (to_poly a val)
-|f_var n => if (val n) then cst_poly 1%Z else cst_poly 0%Z 
-|f_imp a b => sub_poly (sum_poly (sub_poly (cst_poly 1%Z) (to_poly a val)) (to_poly b val)) (mul_poly (sub_poly (cst_poly 1%Z) (to_poly a val)) (to_poly b val))
+  match f with 
+  |f_true => cst_poly 1%Z
+  |f_false => cst_poly 0%Z
+  |f_and a b => mul_poly (to_poly a val) (to_poly b val)
+  |f_or a b => sub_poly (sum_poly (to_poly a val) (to_poly b val)) (mul_poly (to_poly a val) (to_poly b val))
+  |f_not a =>  sub_poly (cst_poly 1%Z) (to_poly a val)
+  |f_var n => if (val n) then cst_poly 1%Z else cst_poly 0%Z 
+(* |f_imp a b => sub_poly (sum_poly (sub_poly (cst_poly 1%Z) (to_poly a val)) (to_poly b val)) (mul_poly (sub_poly (cst_poly 1%Z) (to_poly a val)) (to_poly b val)) *)
 end.
 
 
+Lemma mul_pol_1 : forall (p:poly),  (mul_poly_ (Cst 1) p)  = p .
+Proof.
+intros.
+induction  p.
+- simpl. destruct z; trivial.
+- rewrite mul_eq. 
+  simpl.
+  rewrite IHp1.
+  rewrite IHp2.
+  reflexivity.
+Qed. 
+
+Lemma mul_pol_0 : forall (p:poly) (val:nat -> Z), Z.eq (poly_val_ (mul_poly_ (Cst 0) p) val)  0%Z .
+Proof.
+intros.
+induction  p.
+- simpl. intuition.
+- rewrite mul_eq. 
+  simpl.
+  rewrite IHp1.
+  rewrite IHp2.
+  simpl.
+  rewrite Z.mul_0_r.
+  intuition.
+Qed. 
 
 
+Lemma mul_pol_1_r : forall (p:poly),  (mul_poly_ p (Cst 1))  = p .
+Proof.
+intros.
+induction  p.
+- simpl. rewrite mul_eq. rewrite Z.mul_1_r. reflexivity.
+- rewrite mul_eq.
+  rewrite mul_pol_1.
+  rewrite mul_pol_1.
+  reflexivity.
+Qed.
+
+
+Lemma mul_pol_0_r : forall (p:poly) (val:nat -> Z), Z.eq (poly_val_ (mul_poly_ p (Cst 0)) val)  0%Z .
+Proof.
+intros.
+induction  p.
+- simpl. rewrite Z.mul_0_r. reflexivity.
+- rewrite mul_eq.
+  simpl.
+  rewrite mul_pol_0.
+  rewrite mul_pol_0.
+  simpl.
+  rewrite Z.mul_0_r.
+  reflexivity.
+Qed.
+
+(* Goal  forall (val:nat->bool) (f1 f2:form), (poly_val (to_poly f1 val) (fun x : nat => if val x then 1 else 0) =? 1)%Z &&
+(poly_val (to_poly f2 val) (fun x : nat => if val x then 1 else 0) =? 1)%Z =
+(poly_val (mul_poly (to_poly f1 val) (to_poly f2 val))
+   (fun x : nat => if val x then 1 else 0) =? 1)%Z.
+
+  intros.
+  
+  induction f1; induction f2.
+  - simpl. trivial.
+  - simpl. trivial.
+  - simpl. destruct (val n); intuition.
+  - simpl in *.
+    unfold poly_val.
+    simpl.
+    rewrite mul_pol_1.
+    
+    
+    unfold poly_val in *.
+    simpl in *.
+    
+    induction ((mul_poly_ (VP_value (to_poly f2_1 val)) (VP_value (to_poly f2_2 val)))).
+  
+    + simpl. destruct z; intuition.
+    + unfold poly_val_. destruct (val n). fold poly_val_.  
+      
+      * rewrite Z.mul_1_l.
+
+
+        simpl in IHp1. rewrite IHp1.
+    simpl.
+    fold mul_poly.
+    
+
+   rewrite IHf2_1.
+Abort *)
+
+
+Hint Rewrite Z.mul_0_r : core.
+
+Require Import Lia.
+
+Definition z_of_bool := (fun x : bool => if x then 1%Z else 0%Z).
+
+(* Lemma mul_poly_comm (p q : valid_pol) : (mul_poly p q) = (mul_poly q p).
+Proof.
+  destruct p as ( p & ? ).
+  destruct q as ( q & ? ).
+  unfold mul_poly.
+  apply leibniz. 
+  simpl.
+  induction p.
+  - induction q. 
+    + rewrite mul_eq. 
+      rewrite mul_eq.
+      rewrite Z.mul_comm.
+      reflexivity.
+    + apply valid_b_more in VP_prop1. destruct VP_prop1 as (validq1 & validq2).
+    specialize (IHq1 validq1).
+    specialize (IHq2 validq2).
+    rewrite mul_eq. 
+    rewrite IHq1.
+    rewrite IHq2.
+    rewrite mul_eq.
+    rewrite mul_eq.
+    rewrite mul_eq.
+    rewrite mul_eq.
+    rewrite mul_eq.
+    destruct q1,q2; intuition.
+    * rewrite Z.mul_comm.
+    rewrite Z.mul_comm with (n:= z1).
+    reflexivity.
+
+    * rewrite Z.mul_comm. reflexivity.
+    * rewrite Z.mul_comm. reflexivity.
+  - apply valid_b_more in VP_prop0. destruct VP_prop0 as (validp1 & validp2).
+    specialize (IHp1 validp1).
+    specialize (IHp2 validp2).
+    induction q.
+    rewrite mul_eq. 
+    rewrite mul_eq.
+    rewrite mul_eq.
+    rewrite mul_eq.
+    rewrite mul_eq.
+    rewrite mul_eq.
+    induction p2; induction p3; intuition. 
+    apply valid_b_more in VP_prop1. destruct VP_prop1 as (validq1 & validq2).
+    specialize (IHq1 validq1).
+    specialize (IHq2 validq2).
+
+    rewrite mul_eq.
+    elim (Nat.eq_dec n n0); intro.
+    * rewrite a. rewrite Nat.compare_refl.
+      rewrite mul_eq with (p:= Poly q1 n0 q2).
+      rewrite Nat.compare_refl.
+
+
+    rewrite mul_eq in IHp1.
+    rewrite mul_eq in IHp1.
+    destruct p2.
+    rewrite mul_eq.
+    rewrite mul_eq.
+    
+    rewrite IHq1.
+    rewrite IHq2.
+    rewrite Z.mul_comm.
+    rewrite Z.mul_comm with (n:= z1).
+    reflexivity. *)
+    
+
+Lemma mul_poly_val_comm (p q : valid_pol) (val:nat->Z) : 
+(poly_val (mul_poly p q) val)%Z  = (poly_val (mul_poly q p) val)%Z.
+Proof.
+  destruct p as ( p & ? ).
+  destruct q as ( q & ? ).
+  unfold poly_val.
+  unfold mul_poly.
+  simpl.
+  induction p.
+  - unfold poly_val. simpl. induction q. simpl. 
+    + rewrite Z.mul_comm. reflexivity.
+    + apply valid_b_more in VP_prop1.
+      destruct VP_prop1 as (validq1 & validq2).
+      specialize (IHq1 validq1).
+      specialize (IHq2 validq2).
+      rewrite mul_eq.
+      rewrite mul_eq with (p:=(Poly q1 n q2) ).
+      reflexivity.
+    
+  - apply valid_b_more in VP_prop0.
+    destruct VP_prop0 as (validp1 & validp2).
+    specialize (IHp1 validp1).
+    specialize (IHp2 validp2).
+    simpl.
+    
+    induction q.
+    + rewrite mul_eq.
+    rewrite mul_eq with (p:=Cst z) (q:=(Poly p2 n p3)). reflexivity.
+    +  
+      apply valid_b_more in VP_prop1.
+      destruct VP_prop1 as (validq1 & validq2).
+      specialize (IHq1 validq1).
+      specialize (IHq2 validq2).
+      rewrite mul_eq.
+      (* rewrite mul_eq with (p:=(Poly q1 n0 q2)). *)
+      
+      elim (Nat.eq_dec n n0); intro.
+      * rewrite <- a. rewrite Nat.compare_refl. 
+        (* simpl poly_val_.
+        rewrite mul_eq with (p:=(Poly q1 n q2)).
+        rewrite Nat.compare_refl.
+        simpl poly_val_. *)
+
+        rewrite <- a in IHp1.
+        rewrite <- a in IHp2.
+
+        (* rewrite mul_eq in IHp1.
+        rewrite mul_eq with (p:=(Poly q1 n q2)) in IHp1. *)
+
+        (* rewrite mul_eq.
+        rewrite Z.mul_add_distr_l.
+        rewrite Z.mul_add_distr_l.
+        
+        rewrite Z.add_assoc. *)
+
+        destruct p2,p3.
+        rewrite mul_eq in IHp1.
+        (* rewrite mul_eq with (q:= Cst z) in IHp1. *)
+        rewrite mul_eq in IHp2.
+        (* rewrite mul_eq with (q:= Cst z0) in IHp2. *)
+        
+        -- rewrite mul_eq in IHp1. 
+          simpl poly_val_ at 1 in IHp1.
+          rewrite Z.mul_add_distr_l.
+          rewrite Z.mul_add_distr_l.
+          rewrite Z.add_assoc.
+          rewrite IHp1.
+
+          
+          destruct p3.
+          ++ rewrite mul_eq in IHp2. 
+          simpl poly_val_ at 1 in IHp2.
+          rewrite Z.add_assoc.
+
+          
+          rewrite Z.mul_add_distr_l.
+          rewrite Z.add_assoc.
+            rewrite IHp2.
+
+        rewrite Z.add_comm.
+
+        rewrite mul_eq in IHp1.
+        rewrite mul_eq with (q:=p2) in IHp1.
+         
+        
+
+      rewrite <- IHp2.
+      rewrite <- IHp1.
+      
+  
+      rewrite Z.mul_add_distr_r.
+      rewrite <- Z.mul_assoc.
+
+Lemma mul_poly_val (p q : valid_pol) (val:nat->Z) : 
+(poly_val (mul_poly p q) val)%Z  = ((poly_val p val) * (poly_val q val))%Z.
+Proof.
+  destruct p as ( p & ? ).
+  destruct q as ( q & ? ).
+  unfold poly_val.
+  unfold mul_poly.
+  simpl.
+  induction p.
+  - unfold poly_val. simpl. induction q. simpl. 
+    + reflexivity.
+    + apply valid_b_more in VP_prop1.
+      destruct VP_prop1 as (validq1 & validq2).
+      specialize (IHq1 validq1).
+      specialize (IHq2 validq2).
+      rewrite mul_eq. simpl. 
+      rewrite IHq1.
+      rewrite IHq2.
+      intuition.
+  - apply valid_b_more in VP_prop0.
+    destruct VP_prop0 as (validp1 & validp2).
+    specialize (IHp1 validp1).
+    specialize (IHp2 validp2).
+    simpl.
+    rewrite mul_eq.
+    induction q.
+    + 
+      rewrite Z.mul_add_distr_r.
+      rewrite <- Z.mul_assoc.
+      
+      
+      rewrite <- IHp2.
+      rewrite <- IHp1.
+      
+      
+      simpl.
+      rewrite Z.mul_comm with (n:= ).
+      rewrite Z.mul_comm.
+      rewrite IHp2.
+      reflexivity.
+    rewrite IHp2.
+    + 
+    
+
+    
+    
+    
+    intuition.
+      rewrite mul_eq in IHq1,IHq2. destruct q1, q2. simpl in *. 
+      
+      rewrite IHq1.
+      
+  - simpl. unfold poly_val. unfold mul_poly. simpl. rewrite mul_pol_0. reflexivity.
+  - simpl. unfold poly_val.  unfold mul_poly. simpl. destruct (val n); unfold cst_poly; simpl VP_value; [rewrite mul_pol_1|rewrite mul_pol_0]; intuition. 
+  - 
+  -
+  - 
+
+Lemma to_poly_dec (f:form) (val:nat-> bool) : Z.eq (poly_val (to_poly f val) (fun x : nat => if val x then 1%Z else 0%Z)) 1%Z \/ Z.eq (poly_val (to_poly f val) (fun x : nat => if val x then 1%Z else 0%Z)) 0%Z.
+Proof.
+  induction f.
+  - simpl. unfold poly_val. simpl. intuition.
+  - simpl. unfold poly_val. simpl. intuition.
+  - simpl. unfold poly_val. destruct (val n);  simpl; intuition.
+  - simpl. 
+
+    induction f1; unfold poly_val; simpl.
+    + rewrite mul_pol_1. assumption.
+    + rewrite mul_pol_0. assumption.
+    + destruct (val n); simpl; [rewrite mul_pol_1|rewrite mul_pol_0]; intuition.
+    + destruct IHf1.
+    destruct (to_poly f1 val). simpl.  destruct (to_poly f2 val). simpl. 
+    unfold poly_val in IHf1,IHf2. unfold VP_value in IHf1,IHf2. 
+    induction VP_value0, VP_value1; destruct IHf1,IHf2. 
+      * simpl in *.
+        rewrite H.
+        rewrite H0.
+        rewrite Z.mul_1_l.
+        unfold Z.eq. 
+        left.
+        reflexivity.
+      * right.
+        rewrite H.  
+        rewrite mul_pol_1. 
+        assumption.
+      *  rewrite H.
+        right. 
+        rewrite mul_pol_0. 
+        intuition.
+      * rewrite H. rewrite H0.
+        right.
+        simpl.
+        intuition.
+      * rewrite H. 
+        rewrite mul_pol_1.
+        intuition.
+      * rewrite H.
+        rewrite mul_pol_1.
+        intuition.
+      * rewrite H.
+        rewrite mul_pol_0.
+        intuition.
+      * rewrite H.
+        rewrite mul_pol_0.
+        intuition.
+      * rewrite H0.
+        (* unfold poly_val_ in H,H0. fold poly_val_ in H,H0. *)
+        rewrite mul_pol_1_r. left. assumption.
+      * rewrite H0.
+        rewrite mul_pol_0_r. right. reflexivity.
+      * rewrite H0.
+        rewrite mul_pol_1_r. right. assumption.
+      * rewrite H0.
+        rewrite mul_pol_0_r. right. reflexivity.
+      * rewrite mul_eq.
+        
+       (*  unfold poly_val_ in H0.   fold poly_val_ in H0. unfold poly_val_ in H. fold poly_val_ in H. *)
+
+        elim (Nat.eq_dec n n0); intro.
+        -- rewrite <- a. rewrite Nat.compare_refl. 
+          unfold poly_val_ in H,H0.   fold poly_val_ in H,H0.
+          unfold poly_val_. fold poly_val_.
+          
+          rewrite <- a in H0.
+          destruct (val n).
+          rewrite Z.mul_1_l. rewrite Z.mul_1_l.
+          rewrite Z.mul_1_l in H. rewrite Z.mul_1_l in H0.
+          unfold poly_val_. unfold poly_val_. fold poly_val_.
+          ++ admit.
+          ++ admit.
+Abort.
+
+
+Goal forall (f1 f2 : form) (val : nat -> bool),  (poly_val (to_poly f1 val) (fun x : nat => if val x then 1 else 0) =? 1)%Z &&
+(poly_val (to_poly f2 val) (fun x : nat => if val x then 1 else 0) =? 1)%Z =
+(poly_val (mul_poly (to_poly f1 val) (to_poly f2 val))
+   (fun x : nat => if val x then 1 else 0) =? 1)%Z.
+intros.
+  induction f1; simpl.
+  - unfold poly_val. unfold mul_poly. simpl. rewrite mul_pol_1. reflexivity.
+  - unfold poly_val. unfold mul_poly. simpl. rewrite mul_pol_0. reflexivity.
+  - destruct (val n).
+    + unfold poly_val. unfold mul_poly. simpl. rewrite mul_pol_1. reflexivity.
+    + unfold poly_val. unfold mul_poly. simpl. rewrite mul_pol_0. reflexivity.
+  - 
 
 (* Eval compute in (poly_val (to_poly (⊤ ∨ ⊥)) (fun x => 0%Z)). *)
 
 Goal forall (f:form), forall (val:nat -> bool),  eval_form f val = Z.eqb (poly_val (to_poly f val) (fun x => if val x then 1%Z else 0%Z)) 1.
 intro.
 
-induction f; intro.  
+intro.
+induction f.  
 - intuition.
 - intuition.
 - simpl. destruct val; intuition.
-- simpl. 
+- simpl.
+
+  rewrite (IHf1 ).
+  rewrite (IHf2 ).
+  (* unfold poly_val. simpl. rewrite mul_eq.
+  destruct ( (to_poly f1 val)).
+  simpl.
+  destruct (to_poly f2 val).
+  simpl.
+  destruct VP_value0.
+  + destruct VP_value1.
+
+  rewrite mul_eq.
+  
+
+  induction f1;  simpl.
+  + unfold poly_val. simpl. 
+    rewrite mul_pol_1.   reflexivity.
+
+  + unfold poly_val. simpl. rewrite mul_pol_0. intuition. 
+  + unfold poly_val. simpl.  destruct (val n); simpl.
+    * rewrite mul_pol_1.  reflexivity.
+    * rewrite mul_pol_0. intuition.
+
+  +  *)
+
+    
+  induction f1.
+  + simpl in *.
+    unfold poly_val.
+    unfold mul_poly.
+    simpl.  
+    rewrite mul_pol_1.
+    reflexivity.
+  + simpl in *.
+    unfold poly_val.
+    unfold mul_poly.
+    simpl.  
+    rewrite mul_pol_0.
+    reflexivity.
+  + simpl in *.
+    unfold poly_val.
+    unfold mul_poly.
+    simpl.  
+    destruct (val n).
+    * simpl. rewrite mul_pol_1. reflexivity.
+    * simpl. rewrite mul_pol_0. reflexivity.
+  + simpl in *.
+    unfold poly_val.
+    unfold mul_poly.
+    simpl.  
+
+- admit.
+- simpl.
+  rewrite (IHf val).
+  
 Abort.
 
 
 End BTauto.
+ 
