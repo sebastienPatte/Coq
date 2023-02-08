@@ -47,16 +47,38 @@ match pol with
 end.
 
 Ltac andb_destr H := 
-  repeat let H' := fresh H in apply andb_true_iff in H as [H H'].
+  repeat (let H' := fresh H in apply andb_true_iff in H as [H H']; try andb_destr H').
 
 Ltac andb_split := 
   repeat (apply andb_true_iff; split).
 
-Definition option_dec {A}(n: option A): {n' | n = Some n'} + {n = None}.
-  destruct n; eauto.
-Defined.
+Lemma ltb_correct (a b:nat) : a < b -> a<? b = true.
+  apply Nat.ltb_lt; assumption.
+Qed.
+Lemma ltb_complete (a b:nat) : a<? b = true -> a < b.
+  apply Nat.ltb_lt; assumption.
+Qed.
 
-(* valid_b (Poly (Poly p2 n p3) i q) *)
+Hint Resolve leb_complete : core. 
+Hint Resolve leb_correct : core. 
+Hint Resolve ltb_correct : core. 
+Hint Resolve ltb_complete : core.
+Hint Resolve Nat.ltb_lt : core.
+
+Lemma option_dec {A}: 
+  forall (el: option A),
+    el = None \/ exists w: A, el = Some w.
+Proof.
+  intros.
+  destruct el.
+  right; exists a; trivial.
+  left; trivial.
+Qed.
+
+(* Lemma option_dec {A} (n: option A) : {n' | n = Some n'} + {n=None}.
+Proof.
+  destruct n; eauto.
+Defined. *)
 
 Lemma ltb_trans (i j n :nat) : (i <? j) = true /\ (j <? n) = true -> (i <? n) = true.
 Proof.
@@ -68,8 +90,27 @@ Proof.
   eapply Nat.lt_trans with (m:= j); assumption.
 Qed.
 
+Lemma leb_trans (i j n :nat) : (i <=? j) = true /\ (j <=? n) = true -> (i <=? n) = true.
+Proof.
+  intros.
+  destruct H.
+  rewrite Nat.leb_le in H.
+  rewrite Nat.leb_le in H0.
+  rewrite Nat.leb_le.
+  eapply Nat.le_trans with (m:= j); assumption.
+Qed.
 
+Lemma ltb_leb_trans (i j n :nat) : (i <? j) = true /\ (j <=? n) = true -> (i <? n) = true.
+Proof.
+  intros.
+  destruct H.
+  rewrite Nat.ltb_lt in H.
+  rewrite Nat.leb_le in H0.
+  rewrite Nat.ltb_lt.
+  apply Nat.lt_le_trans with (m:= j); assumption.
+Qed.
 
+Hint Resolve ltb_trans leb_trans ltb_leb_trans : core.
 
 Lemma valid_b_more (p q : poly) (i:nat) : 
   valid_b (Poly p i q) = true -> valid_b p = true /\ valid_b q = true.
@@ -85,295 +126,144 @@ Proof.
   - destruct p,q; simpl in H; intuition; andb_destr H; simpl; assumption.
 Qed.
 
-
-Lemma valid_b_tr (p q : poly) (z:Z) (n n0:nat) : 
-  valid_b (Poly (Cst z) n (Poly p n0 q)) = true -> valid_b (Poly (Cst z) n q) = true.
+Lemma valid_b_more_r (p q1 q2 : poly) (n n0:nat) : 
+  valid_b (Poly p n (Poly q1 n0 q2)) = true -> valid_b (Poly p n q2) = true.
 Proof.
   intro.
   simpl in H.
-  andb_destr H.
-  induction p; induction q.
-  - simpl; assumption.
-  - andb_destr H0.
-    simpl in H1.
-    simpl.
-    andb_split.
-    Search (_ <=? _ -> _ <=? _ -> _ <=? _ ).
-    apply leb_iff in H.
-    apply leb_iff in H0.
-    apply leb_iff.
-    eapply le_trans with n0; assumption.
-    assumption.
-  - simpl. destruct z0; intuition.
-  - andb_destr H0.
-    simpl in H1.
-    simpl.
-    andb_split.
-    apply leb_iff in H.
-    apply leb_iff in H3.
-    apply leb_iff.
-    eapply le_trans with n0; assumption.
-    assumption.
+  destruct p; destruct q2; andb_destr H.
+  - destruct q1; destruct z0; intuition.
+  - destruct q1; andb_destr H0; simpl; andb_split; try assumption; try apply leb_trans with (j:= n0); intuition.
+  - destruct q1; destruct z; simpl; intuition.
+  - destruct q1; andb_destr H0; simpl; andb_split; try assumption; try apply leb_trans with (j:= n0); intuition.
+Qed.
+
+Lemma valid_b_more_l (p1 p2 q : poly) (n n0:nat) : 
+  valid_b (Poly (Poly p1 n0 p2) n q) = true -> valid_b (Poly p1 n q) = true /\ valid_b (Poly p2 n q) = true.
+Proof.
+  intro.
+  destruct p1;  destruct q; simpl in H; simpl.
+  - split; destruct z0; intuition; destruct p2; andb_destr H; try andb_split; intuition; apply ltb_leb_trans with (j:=n0); intuition.
+  - split; destruct p2; andb_split; andb_destr H; intuition.
+    apply ltb_leb_trans with (j:=n0); intuition.
+  - split. 
+    + destruct z; [intuition| |]; destruct p2. 
+      destruct z; andb_destr H; [ inversion H0| |]; andb_split; intuition; apply ltb_trans with (j:=n0); intuition.
+      andb_split; andb_destr H; [apply ltb_trans with (j:=n0)|]; intuition.
+      andb_split; [ destruct z; andb_destr H; apply ltb_trans with (j:=n0)|]; intuition.
+      destruct z; andb_destr H; [inversion H0| |]; intuition.
+      andb_destr H; andb_split; [apply ltb_trans with (j:=n0)|]; intuition.
+    + destruct p2. 
+      destruct z; intuition.
+      destruct z; intuition; andb_destr H; andb_split.
+      1,3: apply ltb_leb_trans with (j:= n0); split; intuition.
+      1-2: assumption.
+  - split. 
+    + destruct p2. andb_destr H; destruct z; [intuition| |]; andb_destr H1; andb_split; intuition. 
+      apply ltb_trans with (j:=n0); split; intuition.
+      apply ltb_trans with (j:=n0); split; intuition.
+      andb_split; andb_destr H; intuition.
+      apply ltb_trans with (j:=n0); split; intuition.
+    + destruct p2. andb_destr H; destruct z; [intuition| |]; andb_destr H1; andb_split; intuition.
+      andb_split; andb_destr H; intuition.
+      apply ltb_leb_trans with (j:=n0); split; intuition.
 Qed.
 
 
-  Lemma valid_b_more_ (p1 p2 q : poly) (i j:nat) : 
-  valid_b (Poly (Poly p1 j p2) i q) = true -> 
-  valid_b (Poly p1 i q) = true /\ valid_b (Poly p2 i q) = true.
-Proof.
-  intro.
-  
-  split.
-  - simpl in *. 
-    destruct p1.
-    + destruct q.
-      * destruct z0; [assumption|trivial|trivial].
-      * andb_destr H.
-        andb_split.
-        assumption.
-        assumption.
+Ltac is_valid := match goal with
+  | H:valid_b (Poly (Poly _ _ _) _ (Poly _ _ _)) = true |- valid_b (Poly _ _ _) = true =>
+    idtac "match_lr"; 
+    let t := type of H in idtac t;
+    let H1 := fresh H in apply valid_b_more_l in H as [H2 H3];
+    let t := type of H2 in idtac "H2 : " t;
+    let t := type of H3 in idtac "H3 : " t;
+    assumption || is_valid H1 
 
-    + destruct q.
-        destruct z.
-        * inversion H.
-        * destruct p2. 
-          -- destruct z.
-            ++ andb_destr H; andb_split; inversion H0.
-            ++ andb_destr H; andb_split; andb_destr H0. 
-              ** eapply ltb_trans with (j:=j); split; assumption.
-              ** assumption.
-            ++ andb_destr H; andb_split; andb_destr H0. 
-              ** eapply ltb_trans with (j:=j); split; assumption.
-              ** assumption.
-          -- andb_destr H; andb_split; andb_destr H0. 
-            ** eapply ltb_trans with (j:=j); split; assumption.
-            ** assumption.
-        *  destruct p2. 
-        -- destruct z.
-          ++ andb_destr H; andb_split; inversion H0.
-          ++ andb_destr H; andb_split; andb_destr H0. 
-            ** eapply ltb_trans with (j:=j); split; assumption.
-            ** assumption.
-          ++ andb_destr H; andb_split; andb_destr H0. 
-            ** eapply ltb_trans with (j:=j); split; assumption.
-            ** assumption.
-        -- andb_destr H; andb_split; andb_destr H0. 
-          ** eapply ltb_trans with (j:=j); split; assumption.
-          ** assumption.
+  | H:valid_b (Poly (Poly _ _ _) _ (Poly _ _ _)) = true |- valid_b (Poly _ _ _) = true =>
+    idtac "match_lr"; 
+    let H1 := fresh H in apply valid_b_more_r in H as [H4];
+    let t := type of H4 in idtac "H4 : " t;
+    assumption || is_valid H1 
 
-        *  destruct p2. 
-        -- destruct z.
-          ++ andb_destr H; andb_split; inversion H1.
-          ++ andb_destr H; andb_split; andb_destr H1. 
-            ** eapply ltb_trans with (j:=j); split; assumption.
-            ** assumption.
-            ** assumption.
-            ** assumption.
-          ++ andb_destr H; andb_split; andb_destr H1. 
-            ** eapply ltb_trans with (j:=j); split; assumption.
-            ** assumption.
-            ** assumption.
-            ** assumption.
-            
-        -- andb_destr H; andb_split; andb_destr H1. 
-          ** eapply ltb_trans with (j:=j); split; assumption.
-          ** assumption.
-          ** assumption.
-          ** assumption.
-  
-  - simpl in *. 
-  destruct p2.
-  + destruct q.
-    * destruct z0; [assumption|trivial|trivial].
-    * andb_destr H.
-      andb_split.
-      assumption.
-      assumption.
+  | H:valid_b (Poly (_ _ _) _ ?q) = true |- valid_b (Poly _ _ ?q) = true =>
+    idtac "match_l"; let H' := fresh H in apply valid_b_more_l in H as [H H']; assumption
 
-  + destruct q.
-      destruct z.
-      * inversion H.
-      * destruct p1. 
-        -- destruct z.
-          ++ andb_destr H; andb_destr H0; andb_split. 
-          rewrite Nat.ltb_lt in H.
-          rewrite Nat.ltb_lt.
-          apply Nat.lt_le_trans with (m:= j). 
-            ** assumption. 
-            ** rewrite <- Nat.leb_le. assumption.
-            ** assumption. 
-          
-          ++ andb_destr H; andb_split; andb_destr H0.
-            rewrite Nat.ltb_lt in H.
-            rewrite Nat.ltb_lt.
-            apply Nat.lt_le_trans with (m:= j). 
-            ** assumption. 
-            ** rewrite <- Nat.leb_le. assumption.
-            ** assumption. 
-           
-            
-          ++ andb_destr H; andb_split; andb_destr H0. 
-          rewrite Nat.ltb_lt in H.
-            rewrite Nat.ltb_lt.
-            apply Nat.lt_le_trans with (m:= j). 
-            ** assumption. 
-            ** rewrite <- Nat.leb_le. assumption.
-            ** assumption.
-          
-        -- andb_destr H; andb_split; andb_destr H0. 
-            rewrite Nat.ltb_lt in H.
-            rewrite Nat.ltb_lt.
-            apply Nat.lt_le_trans with (m:= j). 
-            ** assumption. 
-            ** rewrite <- Nat.leb_le. assumption.
-            ** assumption. 
-      * destruct p1.
-        -- andb_destr H; andb_split; andb_destr H0.     
-            rewrite Nat.ltb_lt in H.
-            rewrite Nat.ltb_lt.
-            apply Nat.lt_le_trans with (m:= j). 
-            ** assumption. 
-            ** rewrite <- Nat.leb_le. assumption.
-            ** assumption. 
-        -- andb_destr H; andb_split; andb_destr H0.     
-        rewrite Nat.ltb_lt in H.
-        rewrite Nat.ltb_lt.
-        apply Nat.lt_le_trans with (m:= j). 
-        ** assumption. 
-        ** rewrite <- Nat.leb_le. assumption.
-        ** assumption.
-      * destruct p1.
-        -- andb_destr H; andb_destr H1; andb_split; andb_destr H0.     
-            rewrite Nat.ltb_lt in H.
-            rewrite Nat.ltb_lt.
-            apply Nat.lt_le_trans with (m:= j). 
-            ** assumption. 
-            ** rewrite <- Nat.leb_le. assumption.
-            ** assumption.
-            ** assumption.
-            ** assumption.
-            
-        -- andb_destr H; andb_destr H1; andb_split; andb_destr H0.     
-        rewrite Nat.ltb_lt in H.
-        rewrite Nat.ltb_lt.
-        apply Nat.lt_le_trans with (m:= j). 
-        ** assumption. 
-        ** rewrite <- Nat.leb_le. assumption.
-        ** assumption.
-        ** assumption.
-        ** assumption.
-Qed.    
-                  
-  
+  | H:valid_b (Poly ?p _ (_ _ _)) = true |- valid_b (Poly ?p _ _) = true =>
+    idtac "match_r"; let H' := fresh H in apply valid_b_more_r in H ; 
+    assumption  
+
+  | H:valid_b (Poly _ _ _) = true |- valid_b ?p' = true => 
+    idtac "match"; let H' := fresh H in apply valid_b_more in H as [H H']; 
+    assumption
+end.
+
+Ltac valid_destr H := 
+  let H' := fresh "V" in specialize H as H';  
+  match type of H' with 
+  | valid_b (Poly (Poly _ _ _) _ (Poly _ _ _)) = true  =>
+    idtac "match_lr"; 
+    let t := type of H in idtac t;
+    let H1 := fresh "V" in
+    let H2 := fresh "V" in
+    let H3 := fresh "V" in
+    apply valid_b_more_l in H' as [H1 H2];
+    apply valid_b_more_r in H' 
+
+  | valid_b (Poly _ _ (Poly _ _ _)) = true  => 
+    idtac "match_r"; 
+    apply valid_b_more_r in H'
+
+
+  | valid_b (Poly (Poly _ _ _) _ _) = true  =>
+    idtac "match_l"; 
+    let H1 := fresh "V" in
+    let H2 := fresh "V" in
+    apply valid_b_more_l in H' as [H1 H2]
+
+  | valid_b (Poly _ _ _) = true  => 
+    idtac "match"; 
+    let H1 := fresh "V" in
+    let H2 := fresh "V" in
+    apply valid_b_more in H' as [H1 H2] 
+end.
+
+
+ 
+ 
 
 Lemma poly_equivalence (p:poly) : valid_b p = true <-> valid_poly p.
 Proof.
-  unfold iff. split.
-  intro.
+  unfold iff. split; intro.
   - induction p.
-  
-  + econstructor.
-  + induction p1,p2.
-    * econstructor.
-      simpl in H.
-      unfold "<>".
-      intro.
-      rewrite H0 in H.
-      intuition. 
-    * simpl in H.
-      intuition.
-      andb_destr H.
-      econstructor.
-      -- apply leb_complete.
-        assumption.
-      -- intuition.
-    * intuition.
-      simpl in H.
-      destruct z; econstructor.
-      -- intuition. 
-      -- intuition.
-      -- intuition.
-      
-      -- andb_destr H.
-        apply leb_complete.
-        intuition.
-      -- intuition.
-      -- andb_destr H.
-        intuition.
-      -- andb_destr H.
-      apply leb_complete.
-      intuition.
-      -- intuition.
-      -- andb_destr H.
-         intuition.
-    * intuition.
-      simpl in H.
-      andb_destr H.
-      econstructor.
-      split; apply leb_complete; intuition.
-      split.
-      intuition.
-      intuition.
-  - 
-  induction p;intros; inversion H.
-    * intuition.
-    
-    * destruct y; intuition. 
-    * destruct x; intuition.
-      -- rewrite <- H0 in IHp1.
-        apply IHp1 in H5.
-      simpl.
-      simpl in H5 .
-      induction p; intuition.
-      andb_split.
-      apply leb_correct; intuition.
-      assumption.
-      andb_split.
-      apply leb_correct; intuition.
-      assumption.
-
-
-
-      -- rewrite <- H0 in IHp1.
-      apply IHp1 in H5.
-      simpl.
-      simpl in H5.
-      induction p; intuition.
-      andb_split.
-      apply leb_correct; intuition.
-      assumption.
-      andb_split.
-      apply leb_correct; intuition.
-      assumption.
-  * rewrite <- H3 in IHp2.
-    apply IHp2 in H4.
-    simpl.
-    simpl in H4. 
-    andb_split.
-    apply leb_correct; intuition.
-    induction p; intuition.
-  * destruct H4.
-
-    (* rewrite <- H3 in IHp2.
-    apply IHp2 in H5. *)
-
-    rewrite <- H0 in IHp1.
-    apply IHp1 in H4.
-      simpl.
-      simpl in H4.
-      
-      
-      repeat (andb_split; try (apply leb_correct); intuition).
-      
-      rewrite <- H3 in IHp2.
-      apply IHp2 in H5.
-      simpl in H5.
-      assumption.
+    + constructor.
+    + destruct p1,p2; simpl in H; andb_destr H; constructor.
+      * intro. rewrite H0 in H. inversion H. 
+      * intuition.
+      * destruct z; andb_destr H; intuition.
+      * destruct z; andb_destr H; intuition.
+      * intro. rewrite H0 in H. inversion H.
+      * destruct z; andb_destr H; intuition.
+      * split; intuition.
+      * split; intuition.
+  - induction p; inversion H.
+    + intuition.
+    + destruct y; intuition. 
+    + rewrite <- H0 in *. rewrite <- H2 in *. 
+      specialize (IHp1 H5). 
+      simpl in *.
+      destruct x; andb_split; intuition.
+    + rewrite <- H0 in *. rewrite <- H3 in *.
+      specialize (IHp2 H4).
+      destruct x; andb_split; intuition.
+    + rewrite <- H0 in *. rewrite <- H3 in *.
+      destruct H2. destruct H4.
+      specialize (IHp1 H4).
+      specialize (IHp2 H6).
+      simpl; andb_split; intuition.
 Qed.
 
 
 Definition p1 := (Poly (Cst 0) 2 (Cst 1)).
-
 
 Record valid_pol : Type :=
 { VP_value : poly ;
@@ -510,124 +400,6 @@ Proof.
   rewrite H. intuition.
 Qed.
 
-Lemma for_all_add_add (m:monoid) (n0 n1 i: nat) :  P.for_all (fun _ v : nat => (v =? 0)%nat) (add i n1 (add i n0 m)) = P.for_all (fun _ v : nat => (v =? 0)%nat) (add i n1 m).
-Proof.
-  (* revert i.
-  revert n1.
-  revert n0. *)
-  unfold P.for_all.
-  erewrite P.fold_Equal with (m2:= add i n1 m).
-  - reflexivity.
-  - intuition.
-  - intuition.
-  - unfold P.transpose_neqkey; intros; destruct e,e'; intuition.
-  - unfold Equal; intros.
-    elim (Nat.eq_dec y i); intros.
-    * rewrite a in *.
-          rewrite F.add_eq_o; [|reflexivity].
-          rewrite F.add_eq_o; [|reflexivity].
-          reflexivity.
-    * rewrite F.add_neq_o; [|intuition].
-      rewrite F.add_neq_o; [|intuition].
-      rewrite F.add_neq_o; [|intuition].
-      reflexivity. 
-Qed. 
-
-Lemma for_all_remove (m:monoid) (n:nat) : P.for_all (fun _ v : nat => v =? 0) m = true -> P.for_all (fun _ v : nat => v =? 0) (NatMap.remove n m) = true.
-Proof.
-  
-  intros.
-  unfold P.for_all.
-  apply P.fold_rec_nodep.
-  - trivial.
-  - intros.
-    rewrite P.for_all_iff in H; [|intuition].
-    elim (Nat.eq_dec k n); intro.
-    + specialize (H k e). rewrite a0 in H0. rewrite F.remove_mapsto_iff in H0. destruct H0. specialize (H0 eq_refl). contradiction. 
-    + specialize (H k e). rewrite F.remove_mapsto_iff in H0.  destruct H0. specialize (H H2). rewrite H. assumption.
-Qed.
-
-Lemma for_all_add_0  (m:monoid) (i:nat) : P.for_all (fun _ v : nat => v =? 0) m = true 
-  -> P.for_all (fun _ v : nat => v =? 0) (add i 0 m) = true.
-Proof.
-  intros.
-  unfold P.for_all in *.
-  rewrite P.fold_Equal with (m2:= add i 0 (NatMap.remove i m)).
-  - rewrite P.fold_add.
-    + simpl.
-      elim (F.In_dec m i); intro.
-      * rewrite F.mem_in_iff in a.
-        assert (aaa: mem (elt:=nat) i (NatMap.remove i m) = false).
-        apply F.remove_eq_b; apply eq_refl.
-        rewrite <- F.not_mem_in_iff in aaa.
-        rewrite <- F.mem_in_iff in a.
-        specialize H as H'.
-        apply for_all_remove.
-        assumption.
-      * 
-        specialize H as H'. 
-        apply for_all_remove.
-        assumption.
-    + intuition.
-    + intuition.
-    + unfold P.transpose_neqkey. 
-      intuition.
-      destruct e,e'; intuition.
-    + rewrite F.not_mem_in_iff.
-      rewrite F.remove_eq_b; reflexivity.
-      
-  - intuition.
-  - intuition.
-  - unfold P.transpose_neqkey.
-    intuition.
-    destruct e,e'; intuition.
-  - unfold Equal.
-    intros.
-    elim (Nat.eq_dec i y); intros.
-    + rewrite F.add_eq_o; [|assumption].
-      rewrite F.add_eq_o; [|assumption]. 
-      reflexivity.
-    + rewrite F.add_neq_o; [|assumption].
-      rewrite F.add_neq_o; [|assumption]. 
-      rewrite F.remove_neq_o; [|assumption].
-      reflexivity.
-Qed.
-
-
-Lemma for_all_add_S  (m:monoid) (i n:nat) :  P.for_all (fun _ v : nat => v =? 0) (add i (S n) m) = false.
-Proof.
-  unfold P.for_all.
-  rewrite P.fold_Equal with (m2:= add i (S n) (NatMap.remove i m)).
-  - rewrite P.fold_add.
-    + simpl.
-      reflexivity.
-    + intuition.
-    + intuition.
-    + unfold P.transpose_neqkey. 
-      intuition.
-      destruct e,e'; intuition.
-    + rewrite F.remove_in_iff.
-      intro. 
-      destruct H.
-      specialize (H eq_refl).
-      contradiction.
-  - intuition.
-  - intuition.
-  - unfold P.transpose_neqkey.
-    intuition.
-    destruct e,e'; intuition.
-  - unfold Equal.
-    intros.
-    elim (Nat.eq_dec i y); intros.
-    + rewrite F.add_eq_o; [|assumption].
-      rewrite F.add_eq_o; [|assumption]. 
-      reflexivity.
-    + rewrite F.add_neq_o; [|assumption].
-      rewrite F.add_neq_o; [|assumption]. 
-      rewrite F.remove_neq_o; [|assumption].
-      reflexivity.
-Qed.
-
 Lemma eq_map_add_add (i x y :nat) (m:monoid) : Equal (add i x m) (add i x (add i y m)).
 Proof.
   unfold Equal.
@@ -642,48 +414,84 @@ Proof.
     reflexivity.
 Qed.
 
-Lemma for_all_exist_pos  (m:monoid) : (exists (n' r:nat), NatMap.find n' m = Some r /\ r <> 0) ->  P.for_all (fun _ v : nat => v =? 0) m = false.
+Lemma eq_map_add_each (i x :nat) (m1 m2:monoid) : Equal m1 m2 -> Equal (add i x m1) (add i x m2).
+Proof.
+  unfold Equal.
+  intros.
+  elim (Nat.eq_dec i y); intro.
+  - rewrite F.add_eq_o; [|assumption]. 
+    rewrite F.add_eq_o; [|assumption].
+    reflexivity.
+  - rewrite F.add_neq_o; [|assumption]. 
+    rewrite F.add_neq_o; [|assumption]. 
+    apply H.
+Qed.
+
+
+Lemma eq_map_add_remove (i x :nat) (m:monoid) : Equal (add i x m) (add i x (NatMap.remove i m)).
+Proof.
+  unfold Equal.
+  intros.
+  elim (Nat.eq_dec i y); intro.
+  - rewrite F.add_eq_o; [|assumption]. 
+    rewrite F.add_eq_o; [|assumption].
+    reflexivity.
+  - rewrite F.add_neq_o; [|assumption]. 
+    rewrite F.add_neq_o; [|assumption]. 
+    rewrite F.remove_neq_o; [|assumption].
+    reflexivity.
+Qed.
+
+Lemma eq_map_add_swap (i j x y :nat) (m:monoid) : i <> j -> Equal (add i x (add j y m)) (add j y (add i x m)).
+Proof.  
+  unfold Equal.
+  intros.
+  elim (Nat.eq_dec i y0); intro.
+  - rewrite F.add_eq_o; [|intuition].
+    rewrite F.add_neq_o; [|intuition].
+    rewrite F.add_eq_o; [|intuition].
+    reflexivity.
+  - rewrite F.add_neq_o; [|intuition].
+    elim (Nat.eq_dec j y0); intro.
+    + rewrite F.add_eq_o; [|intuition].
+      rewrite F.add_eq_o; [|intuition].
+      reflexivity.
+    + rewrite F.add_neq_o; [|intuition].
+      rewrite F.add_neq_o; [|intuition].
+      rewrite F.add_neq_o; [|intuition].
+      reflexivity.
+Qed.
+
+Lemma for_all_eq_map (m1 m2 :monoid) : Equal m1 m2 -> P.for_all (fun _ v : nat => v =? 0) m1 = P.for_all (fun _ v : nat => v =? 0) m2.
 Proof.
   intro.
-  destruct H.
-  destruct H.
-  destruct H.
   unfold P.for_all.
-  (* rewrite <- F.find_mapsto_iff in H. *)
-  
-  rewrite P.fold_Equal with  (m2:= add x x0 (NatMap.remove x m)).
-  - rewrite P.fold_add.
-    destruct x0.
-    + unfold not in H0.
-      specialize (H0 eq_refl); contradiction.
-    + Search (S _ > 0).
-      unfold "=?".
-      trivial.
-    + intuition.
-    + intuition.
-    + unfold P.transpose_neqkey. 
-      intuition.
-      destruct e,e'; intuition.
-    + rewrite F.remove_in_iff.
-      intro. 
-      destruct H1.
-      specialize (H1 eq_refl).
-      contradiction.
-    
+  rewrite P.fold_Equal with (m2:=m2).
+  - intuition.
   - intuition.
   - intuition.
   - unfold P.transpose_neqkey.
-    intuition.
-    destruct e,e'; intuition.
-  - unfold Equal.
     intros.
-    elim (Nat.eq_dec x y); intros.
-    + rewrite F.add_eq_o. rewrite <- a. 
-      assumption.
-      assumption.
-    + rewrite F.add_neq_o; [|assumption]. 
-      rewrite F.remove_neq_o; [|assumption].
-      reflexivity.
+    destruct e,e'; intuition.
+  - assumption.
+Qed.
+
+Lemma find_eq_map (m1 m2 :monoid) (x:nat) : Equal m1 m2 -> NatMap.find x m1 = NatMap.find x m2.
+Proof.
+  apply F.find_m; intuition.
+Qed.
+
+Lemma for_all_remove (m:monoid) (n:nat) : P.for_all (fun _ v : nat => v =? 0) m = true -> P.for_all (fun _ v : nat => v =? 0) (NatMap.remove n m) = true.
+Proof.
+  intros.
+  unfold P.for_all.
+  apply P.fold_rec_nodep.
+  - trivial.
+  - intros.
+    rewrite P.for_all_iff in H; [|intuition].
+    elim (Nat.eq_dec k n); intro.
+    + specialize (H k e). rewrite a0 in H0. rewrite F.remove_mapsto_iff in H0. destruct H0. contradiction (H0 eq_refl). 
+    + specialize (H k e). rewrite H1. rewrite F.remove_mapsto_iff in H0. destruct H0 as [_ H0]. specialize (H H0). rewrite H. reflexivity.
 Qed.
 
 Lemma for_all_add_0_notin (m:monoid) (i:nat) :
@@ -700,8 +508,65 @@ Proof.
   - rewrite F.not_find_in_iff; assumption.
 Qed.
 
+Lemma for_all_add_0 (m:monoid) (i:nat) : P.for_all (fun _ v : nat => v =? 0) m = true 
+  -> P.for_all (fun _ v : nat => v =? 0) (add i 0 m) = true.
+Proof.
+  intros.
+  rewrite for_all_eq_map with (m2:= add i 0 (NatMap.remove i m)).
+  - erewrite <- for_all_add_0_notin.
+    + apply for_all_remove; assumption.
+    + rewrite F.remove_eq_o; intuition.
+  - apply eq_map_add_remove.
+Qed.
 
-Lemma eq_map_get_coeff_add_add (m1 m2:monoid)  (p:poly) : valid_b p = true -> 
+Lemma for_all_add_S_notin (m:monoid) (i n:nat) :
+NatMap.find i m = None -> 
+ P.for_all (fun _ v : nat => v =? 0) (add i (S n) m) = false.
+Proof.
+  intro.
+  unfold P.for_all.
+  rewrite P.fold_add.
+  - simpl. reflexivity.
+    - intuition.
+    - intuition.
+    - unfold P.transpose_neqkey. 
+      intuition.
+      destruct e,e'; intuition.
+    - rewrite F.not_find_in_iff; assumption.
+Qed.
+
+Lemma for_all_add_S  (m:monoid) (i n:nat) :  P.for_all (fun _ v : nat => v =? 0) (add i (S n) m) = false.
+Proof.
+  rewrite for_all_eq_map with (m2:= add i (S n) (NatMap.remove i m)).
+  - apply for_all_add_S_notin.
+    apply F.remove_eq_o; reflexivity. 
+  - rewrite eq_map_add_remove; reflexivity.
+Qed.
+
+Lemma for_all_add_add (m:monoid) (n0 n1 i: nat) :  P.for_all (fun _ v : nat => (v =? 0)%nat) (add i n1 (add i n0 m)) = P.for_all (fun _ v : nat => (v =? 0)%nat) (add i n1 m).
+Proof.
+  rewrite for_all_eq_map with (m2:= add i n1 m).
+  - reflexivity.
+  - rewrite <- eq_map_add_add; reflexivity.
+Qed. 
+
+Lemma for_all_exist_pos  (m:monoid) : (exists (n' r:nat), NatMap.find n' m = Some r /\ r <> 0) ->  P.for_all (fun _ v : nat => v =? 0) m = false.
+Proof.
+  intro.
+  do 3 destruct H. 
+  destruct x0; [contradiction|].
+  rewrite for_all_eq_map with (m2 := add x (S x0) m).
+  - apply for_all_add_S.
+  - unfold Equal.
+    intros.
+    elim (Nat.eq_dec x y); intro.
+    + rewrite a in *. 
+      rewrite F.add_eq_o; intuition.
+    + rewrite F.add_neq_o; [|assumption].
+      reflexivity.
+Qed.
+
+Lemma get_coeff_eq_map (m1 m2:monoid)  (p:poly) : valid_b p = true -> 
 Equal m1 m2 ->
 get_coefficient_ p m1 = get_coefficient_ p m2.
 Proof.
@@ -710,100 +575,50 @@ Proof.
   revert m1.
   induction p; intros.
   - simpl.
-    unfold P.for_all.
-    rewrite P.fold_Equal with (m1:=m1) (m2:=m2).
-    + intuition.
-    + intuition.
-    + intuition.
-    + unfold P.transpose_neqkey; intros; destruct e,e'; intuition.
-    + assumption.
-  - apply valid_b_more in H; destruct H.
-    specialize (IHp1 H).
-    specialize (IHp2 H1).
+    rewrite for_all_eq_map with (m2:=m2); intuition.
+  - valid_destr H. 
+    specialize (IHp1 V0).
+    specialize (IHp2 V1).
     simpl.
     specialize H0 as Heq.
     unfold Equal in H0.
     rewrite (H0 n).
     destruct (NatMap.find (elt:=nat) n m2).
-    + destruct n0.
-      * rewrite (IHp1 m1 m2 Heq); reflexivity.
-      * simpl. rewrite Nat.sub_0_r.
-        assert (Heq' : Equal (add n n0 m1) (add n n0 m2)).
-        -- unfold Equal.
-          intro.
-          elim (Nat.eq_dec n y); intro.
-          ++ rewrite F.add_eq_o; [|assumption].
-             rewrite F.add_eq_o; [|assumption].
-            reflexivity.
-          ++ rewrite F.add_neq_o; [|assumption].
-             rewrite F.add_neq_o; [|assumption].
-            apply (H0 y).
-        -- rewrite (IHp2 (add n n0 m1) (add n n0 m2) Heq').
-          rewrite (IHp1 m1 m2 Heq).
-          reflexivity.
+    + rewrite (IHp1 m1 m2 Heq). 
+      destruct n0; [reflexivity|].
+      simpl; rewrite Nat.sub_0_r.
+      rewrite (IHp2 (add n n0 m1) (add n n0 m2)).
+      * reflexivity.
+      * apply eq_map_add_each; apply Heq.
     + apply (IHp1 m1 m2 Heq).
 Qed.
-
 
 Lemma get_coeff_add_add (i x y :nat) (m:monoid)  (p:poly) : valid_b p = true -> get_coefficient_ p (add i x m) = get_coefficient_ p (add i x (add i y m)).
 Proof.
   intro.
-  revert y.
-  revert x.
-  revert m.
   induction p.
   - simpl. intros.
     destruct x; rewrite for_all_add_add; reflexivity.
-  - apply valid_b_more in H; destruct H.
-    specialize (IHp1 H).
-    specialize (IHp2 H0).
+  - valid_destr H.
+    specialize (IHp1 V0).
+    specialize (IHp2 V1).
     simpl in *.
     intros.
-    rewrite <- (IHp1 m x y).
-    Search (Equal _ _ ).
-    assert (mapeq1 : NatMap.find (elt:=nat) n (add i x m) = NatMap.find (elt:=nat) n (add i x (add i y m))).
-    apply F.find_m.
-    + reflexivity.
-    + apply eq_map_add_add.
-    + rewrite <- mapeq1.
-
-    elim (Nat.eq_dec i n); intro.
-    * rewrite a in *.
-      rewrite F.add_eq_o; [|reflexivity].
-      
-      destruct x.
-      -- reflexivity.
-      -- simpl.
-        rewrite Nat.sub_0_r.
-        rewrite <- (IHp2 (add n y m) x (S x)).
-        rewrite <- (IHp2 (m) x (S x)).
-        rewrite <- (IHp2 (m) x y).
-        reflexivity.
-    * rewrite F.add_neq_o; [|assumption].
-      eelim (option_dec (NatMap.find (elt:=nat) n m)); intro.
-      -- destruct a. rewrite e.
-        destruct x0; [reflexivity|].
-        simpl.
-        rewrite Nat.sub_0_r.
-        assert (Heq : Equal (add n x0 (add i x m)) (add n x0 (add i x (add i y m)))).
-        ++ unfold Equal.
-          intro.
-          elim (Nat.eq_dec n y0); intro.
-          ** rewrite F.add_eq_o; [|assumption].
-             rewrite F.add_eq_o; [|assumption].
-             reflexivity.
-          ** rewrite F.add_neq_o; [|assumption].
-             rewrite F.add_neq_o with (x:=n); [|assumption].
-             apply eq_map_add_add.
-        ++ assert (Heq' :  (get_coefficient_ p3 (add n x0 (add i x m))) = (get_coefficient_ p3 (add n x0 (add i x (add i y m))))).
-          ** apply eq_map_get_coeff_add_add; assumption.
-          ** rewrite Heq'. reflexivity.
-        
-      -- rewrite b0.
-        reflexivity.
+    rewrite <- IHp1.
+    rewrite find_eq_map with (m1:= (add i x (add i y m))) (m2:=(add i x m)).
+    + destruct (NatMap.find n (add i x m)); [|reflexivity].
+      destruct n0; [reflexivity|].
+      simpl; rewrite Nat.sub_0_r.
+      rewrite get_coeff_eq_map with (m1:=(add n n0 (add i x m))) (m2:=(add n n0 (add i x (add i y m)))).
+      * reflexivity.
+      * assumption.
+      * apply eq_map_add_each.
+        apply eq_map_add_add.
+    + rewrite <- eq_map_add_add; intuition. 
 Qed.
 
-Lemma  coeff_n_pos (p q : poly) (i:nat) (m:monoid) : valid_b (Poly p i q) = true -> 
+
+Lemma coeff_n_pos (p q : poly) (i:nat) (m:monoid) : valid_b (Poly p i q) = true -> 
   (exists (n:nat), NatMap.find i m = Some n /\ n <> 0) ->  
 get_coefficient_ p m = 0%Z .
 Proof.
@@ -817,38 +632,49 @@ Proof.
   - simpl.
   elim (Nat.eq_dec n i); intro.
   + rewrite a in *.
-  simpl in H.
-  destruct q.
-  destruct z.
-    * inversion H.
-    * andb_destr H.
-      rewrite Nat.ltb_irrefl in H; inversion H.
-    * andb_destr H.
-      rewrite Nat.ltb_irrefl in H; inversion H.
-    * andb_destr H.
-      rewrite Nat.ltb_irrefl in H; inversion H.
-  + 
-    specialize H0 as H0'.
+    destruct q; [destruct z|]; try (andb_destr H; rewrite Nat.ltb_irrefl in H; inversion H); inversion H.
+  + valid_destr H.
+    specialize (IHp1 V0 m H0). 
+    specialize (IHp2 V1).
+    destruct (NatMap.find n m); [|apply IHp1].
+    destruct n0; [apply IHp1|].
+    simpl; rewrite Nat.sub_0_r.
+    rewrite (IHp2 (add n n0 m)); [intuition|].
     destruct H0.
-    destruct H0.
-
-    apply valid_b_more_ in H. destruct H as (V1 & V2).
-    
-    specialize (IHp1 V1 m H0'). 
-    specialize (IHp2 V2).
-
-    destruct (NatMap.find (elt:=nat) n m).
-    destruct n0.
-
-    * assumption.
-    * rewrite IHp1; simpl; rewrite Nat.sub_0_r.
-
-    specialize (IHp2 (add n n0 m)).
-    apply IHp2.
     exists x.
-    split; [|assumption].
     rewrite F.add_neq_o; assumption.
-    * assumption.
+Qed.
+
+Lemma get_coeff_add_0_notin (p:poly) (n:nat) (m:monoid): valid_b p = true ->
+NatMap.find n m = None ->
+get_coefficient_ p m = get_coefficient_ p (add n 0 m).
+Proof.
+  intro.
+  revert n.
+  revert m.
+  induction p; intros.
+  - simpl.
+    erewrite (for_all_add_0_notin m n H0); reflexivity.
+  - simpl.
+    valid_destr H.
+    specialize (IHp1 V0 m n0 H0).
+    specialize (IHp2 V1 ).
+    rewrite IHp1.
+    elim (Nat.eq_dec n n0); intro.
+    + rewrite a in *. 
+      rewrite F.add_eq_o; [|intuition].
+      rewrite H0.
+      reflexivity.
+    + rewrite F.add_neq_o; [|intuition].
+      simpl.
+      destruct (NatMap.find (elt:=nat) n m); [|reflexivity].
+      destruct n1; [reflexivity|].
+      simpl; rewrite Nat.sub_0_r.
+      rewrite get_coeff_eq_map with (m1:= add n n1 (add n0 0 m) ) (m2:= add n0 0 (add n n1 m)); [|assumption|].
+      erewrite (IHp2 (add n n1 m) n0).
+      * reflexivity.
+      * rewrite F.add_neq_o; intuition.
+      * apply eq_map_add_swap; assumption.
 Qed.
 
 
@@ -863,486 +689,137 @@ Proof.
         unfold valid_b in valid.
         rewrite a in valid.
         inversion valid.
-      * (* rewrite Zeq_plus_swap in a. *)
-      exists (add n 1 empty_mono).
+      * exists (add n 1 empty_mono).
         simpl.
         split.
         -- rewrite F.add_eq_o; [|trivial].
-        simpl.
-        rewrite for_all_add_add.
-        unfold P.for_all; rewrite P.fold_add; simpl; intuition.
-          ++ unfold P.transpose_neqkey.
-            intros. destruct e,e'; intuition.
-          ++ rewrite F.empty_in_iff in H. contradiction.
-        -- exists n. exists 1. 
+          simpl.
+          rewrite for_all_add_add.
+          rewrite for_all_add_0; intuition.
+        -- exists n. exists 1.  
           rewrite F.add_eq_o; split; intuition.
     + exists (add n 1 empty_mono).
+      simpl.
       split.
-      * simpl. 
-        rewrite F.add_eq_o; [|trivial].
+      * rewrite F.add_eq_o; [|trivial].
         simpl.
         rewrite for_all_add_add.
         elim (Z.eq_dec z0 0); intro.
         -- rewrite a in valid. 
           inversion valid.
-        -- rewrite for_all_add_0.
-          assumption.
-          unfold P.for_all.
-          unfold empty_mono.
-          rewrite P.fold_Empty; intuition.
-          apply empty_1.
-      * exists n. exists 1.
+        -- rewrite for_all_add_0; intuition.
+      * exists n. exists 1. 
       rewrite F.add_eq_o; split; intuition.
-  - specialize valid as valid'.
-    apply valid_b_tr in valid.
-    specialize (IHq2 valid).
+  
+  - clear IHq1.
+    valid_destr valid.
+    specialize valid as V0.
+    apply valid_b_more in valid; destruct valid as (V1 & V2).
+    specialize V2 as V3; apply valid_b_more in V2; destruct V2 as (V4 & V5). 
+    
+    specialize (IHq2 V).
     destruct IHq2.
     destruct H.
-    
-    
+    simpl in H; rewrite for_all_exist_pos in H; [|intuition].
 
     elim (option_dec (NatMap.find n x)); intro. 
-    (* elim (Z.eq_dec z 0); intro. *)
-    +
-     (* rewrite a in *. *)
-      destruct a.
-      
+    + exists x.
+      simpl in H; rewrite H1 in H.
+      simpl in H; try rewrite Nat.sub_0_r in H.
+      specialize (H eq_refl); contradiction.
+    + destruct H1.
+      rewrite H1 in H; simpl.
       elim (Nat.eq_dec n0 n); intro.
       * rewrite a in *.
-        eelim (Z.eq_dec (get_coefficient_ q1 (add n ( x0) x)) 0); intro.
-        --  exists (add n ((S x0)) x).
-              
-              specialize valid' as valid2.
-              split.
-              simpl.
-              rewrite F.add_eq_o; [|reflexivity].
-              rewrite for_all_add_S.
-              simpl.
-              rewrite F.add_eq_o; [|reflexivity].
-              simpl.
-                
-              apply valid_b_more in valid'; destruct valid' as (valid3 & valid4).
-              apply valid_b_more in valid4; destruct valid4 as (valid5 & valid6). 
-              
-              rewrite <- get_coeff_add_add; [|assumption].
-              rewrite <- get_coeff_add_add; [|assumption].
-              rewrite <- get_coeff_add_add; [|assumption].
-              rewrite Nat.sub_0_r.
-              rewrite a0.
-              simpl.
-              specialize H as H'.
-              simpl in H.
-              rewrite e in H.
-              destruct x0.
-              ++ apply for_all_exist_pos in H0.
-                rewrite H0 in H.
-                assumption.
-              ++ simpl.
-                rewrite Nat.sub_0_r.
-                simpl in H.
-                rewrite Nat.sub_0_r in H.
-                apply for_all_exist_pos in H0.
-                rewrite H0 in H.
-                assumption.
-              ++ exists n. 
-                exists (S x0).
-                split.
-                rewrite F.add_eq_o; reflexivity.
-                intuition.
-
-  -- 
-  specialize valid' as valid''.
-  apply valid_b_more in valid'; destruct valid' as (valid3 & valid4).
-  destruct x0.
-  ++ exists (add n 1 x).
-    simpl.
-    rewrite F.add_eq_o.
-    simpl.
-    rewrite for_all_add_S; simpl.
-    rewrite F.add_eq_o.
-    split.
-    rewrite <- get_coeff_add_add.
-    assumption.
-    apply valid_b_more in valid4; destruct valid4 as (valid5 & valid6). 
-    assumption.
-    exists n.
-    exists 1.
-    rewrite F.add_eq_o.
-    intuition.
-    1-3: reflexivity.
-  ++ assert (q1_coeff0 : get_coefficient_ q1 (add n (S x0) x) = 0%Z).
-    ** eapply coeff_n_pos with (i:= n) (q:= q2). assumption.
-    destruct H0. destruct H0.
-    exists (S x0).
-    rewrite F.add_eq_o.
-    intuition.
-    reflexivity.
-    ** rewrite q1_coeff0 in b.
-      specialize (b eq_refl); contradiction.
-* eelim (Z.eq_dec (get_coefficient_ q1 (add n ( x0) x)) 0); intro.
-  -- elim (option_dec (NatMap.find n0 x)); intro. 
-    ++ destruct a0.
-      elim (Nat.eq_dec x0 0); intro.
-      ** rewrite a0 in *. exists (x).
-        split.
-        simpl.
-        rewrite e.
-        simpl in H.
-        rewrite e in H.
-        assumption.
-        assumption.
-    
-    
-
-
-  ** clear IHq1.
-
-      destruct x1.
-      --- destruct x0; [specialize (b0 eq_refl); contradiction|].
-      
-      simpl.
-      exists (add n (S (x0)) (add n0 1 x)).
-      split.
-      
-      simpl.
-      rewrite F.add_eq_o; [|intuition].
-      
-      rewrite for_all_exist_pos.
-      simpl.
-      
-
-      rewrite F.add_neq_o; [|intuition].
-      rewrite F.add_neq_o; [|intuition].
-      rewrite F.add_eq_o; [|intuition].
-
-      
-      rewrite <- get_coeff_add_add.
-      simpl.
-      try rewrite Nat.sub_0_r.
-
-      erewrite coeff_n_pos with (i:=n0) (q:=q2); [simpl| |].
-      simpl in H.
-      rewrite e in H; simpl in H;try rewrite Nat.sub_0_r in H.
-      rewrite for_all_exist_pos in H; [|assumption]; simpl in H.
-      
-      
-      erewrite eq_map_get_coeff_add_add with (m2:= add n (x0) x).
-      
-
-      assumption.
-      specialize valid as v2.
-      apply valid_b_more in valid; destruct valid as (v3 & v4).
-      assumption.
-      unfold Equal.
-      intro.
-      elim (Nat.eq_dec n0 y); intro.
-      +++ rewrite a0 in *. 
-          rewrite F.add_eq_o; [|reflexivity]. 
-          elim (Nat.eq_dec n y); intro.
-          *** rewrite a1 in b; specialize (b eq_refl ); contradiction.
-          *** rewrite F.add_neq_o; [|assumption]. 
-              rewrite e0.
-              reflexivity.
-      +++ rewrite F.add_neq_o; [|assumption].
-        elim (Nat.eq_dec n y); intro.
-        *** rewrite a0 in *. 
-            rewrite F.add_eq_o; [|reflexivity]. 
-            rewrite F.add_eq_o; [|reflexivity].
-            reflexivity. 
-            
-        *** repeat (rewrite F.add_neq_o; [|assumption]).
-            reflexivity.
-      +++ apply valid_b_more in valid'; destruct valid' as (v1 & v2).
-          assumption.
-      +++ exists 1.
-          rewrite F.add_neq_o; intuition. 
-          rewrite F.add_eq_o; intuition.
-      +++ apply valid_b_more in valid'; destruct valid' as (v1 & v2).
-          apply valid_b_more in v2; destruct v2 as (v3 & v4).
-          assumption.
-      +++ exists n.
-          exists (S x0).
-          rewrite F.add_eq_o; intuition.
-      +++ exists n. exists (S x0). rewrite F.add_eq_o; intuition.
-    --- 
-        destruct x0; [specialize (b0 eq_refl); contradiction|].
+        exists (add n ((S x0)) x).
+        split; simpl.
+        do 2 (rewrite F.add_eq_o; [|reflexivity]).
+        do 3 (rewrite <- get_coeff_add_add; [|assumption]).
+        rewrite for_all_add_S.
+        simpl; rewrite Nat.sub_0_r.
         
-
-        simpl in H.
-        rewrite e in H.
-        rewrite for_all_exist_pos in H; [|assumption]; simpl in H; try rewrite Nat.sub_0_r in H.
-        
-        apply valid_b_more in valid'; destruct valid' as (v1 & v2).
-        specialize v2 as v5.
-        apply valid_b_more in v2; destruct v2 as (v3 & v4).
-
+        destruct x0.
+        ++ intuition.
+        ++ erewrite (coeff_n_pos q1 q2 n (add n (S x0) x) V3 );  intuition.
+           exists (S x0); rewrite F.add_eq_o; intuition.
+        ++ exists n; exists (S x0); rewrite F.add_eq_o; intuition.
       
-      exists (add n (S x0)  (add n0 (S (S x1)) x)).
-      simpl.
-        rewrite F.add_eq_o; [|intuition].
-        rewrite for_all_add_S; simpl; try rewrite Nat.sub_0_r.
-        rewrite F.add_neq_o; [|intuition].
-        rewrite F.add_neq_o; [|intuition].
-        rewrite F.add_eq_o; [|intuition].
-        simpl; try rewrite Nat.sub_0_r.
-        rewrite <- get_coeff_add_add; [|intuition].
-        erewrite coeff_n_pos with (i:= n0) (q:=q2); [| assumption|].
-        simpl; split.
-        +++ rewrite eq_map_get_coeff_add_add with (m2:=add n x0 x).
-          *** assumption.
-          *** assumption.
-          *** unfold Equal; intro.
-            elim (Nat.eq_dec n0 y); intro.
-            ---- rewrite a0 in *.
-                rewrite F.add_eq_o; [|intuition].
-                rewrite F.add_neq_o; intuition.
-            ---- rewrite F.add_neq_o; [|intuition].
-              elim (Nat.eq_dec n y); intro.    
-              ++++ rewrite a0 in *.
-                rewrite F.add_eq_o; [|intuition].
-                rewrite F.add_eq_o; intuition.
-              ++++ repeat (rewrite F.add_neq_o); intuition.
-        +++ exists n. exists (S x0).
-          rewrite F.add_eq_o; intuition.
-        +++ exists (S (S x1)).
+      * destruct x0; [specialize (H eq_refl);contradiction|]; simpl in H; rewrite Nat.sub_0_r in H.
+        elim (option_dec (NatMap.find n0 x)); intro.
+        ++ exists (add n0 1 (add n (S x0) x)).
+          do 2 (rewrite F.add_neq_o; [|intuition]; rewrite F.add_eq_o; [|intuition]).
+          rewrite for_all_add_S; simpl; repeat (rewrite Nat.sub_0_r).
+          split.
+          rewrite coeff_n_pos with (i:= n0) (q:=q2); [simpl|assumption |].
+          -- rewrite get_coeff_eq_map with (m2:=add n0 0 (add n x0 x)); [|assumption|].
+            ** erewrite <- get_coeff_add_0_notin; [assumption|assumption|].
+              rewrite F.add_neq_o; [|intuition].
+              assumption.
+            ** repeat (rewrite <- eq_map_add_swap; [|intuition];rewrite <- eq_map_add_add).
+              intuition.
+          -- exists 1.
             rewrite F.add_neq_o; [|intuition].
             rewrite F.add_eq_o; intuition.
-  ++  elim (Z.eq_dec z 0); intro.
-    ** rewrite a0 in *.
-      simpl in H.
-      rewrite e in H.
-      rewrite for_all_exist_pos in H; [|intuition].
-      destruct x0. 
-      --- specialize (H eq_refl);contradiction.
-      --- simpl in H; rewrite Nat.sub_0_r in H.
-          exists (add n0 1 (add n (S (S x0)) x)).
-          split.
-          simpl.
-          rewrite F.add_neq_o; [|intuition].
-          rewrite for_all_add_S; simpl; try rewrite Nat.sub_0_r.
-          rewrite F.add_eq_o; [|intuition].
-          rewrite F.add_neq_o; [|intuition].
-          rewrite F.add_eq_o; [|intuition].
-          simpl; try rewrite Nat.sub_0_r.
-          
-          rewrite eq_map_get_coeff_add_add with (m2:=add n (S x0) (add n0 1 x)).
-          erewrite coeff_n_pos with (i:= n0) (q:=q2).
-          simpl.
-          
-          
-
-  
-  -- admit.
-  + admit.
-  - admit.
-            
-
-        
-
-  Admitted.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  (* apply P.fold_rec.
-  
-  induction fold.
-rewrite <- P.for_all_iff. *)
-
-
-Lemma coeff_map_add' (n n' i: nat) (p:poly) (m:monoid) : 
-get_coefficient_ p m = get_coefficient_ p (add i (S n) (add i n' m)) 
--> 
-get_coefficient_  p (add i n m) = get_coefficient_ p (add i n (add i (S n) (add i n' m))) .
-Proof.
-  intros.
-  induction p.
-  - simpl.
-    unfold P.for_all.
-    rewrite P.fold_Equal with (m2:=(add i n (add i (S n) (add i n' m))) ); intuition.
-    unfold P.transpose_neqkey; intros; destruct e,e'; intuition.
-    unfold Equal.
-    intros.
-    elim (Nat.eq_dec y i); intro.
-    + rewrite F.add_eq_o; [|intuition].
-      rewrite F.add_eq_o; [|intuition].
-      reflexivity.
-    + rewrite F.add_neq_o; [|intuition].
-    rewrite F.add_neq_o; [|intuition].
-    rewrite F.add_neq_o; [|intuition].
-    rewrite F.add_neq_o; [|intuition].
-    reflexivity.
-  - simpl in H.
-    simpl.
-Admitted.  
-
-
-
-
-
-(* Lemma coeff_map_add (p:poly) (m:monoid) (n n'  i: nat) : get_coefficient_ p (add i n m) = get_coefficient_ p (add i n (add i n' m)).
-Proof.
-  revert n.
-  revert n'.
-  revert i.
-  revert m.
-  induction p; intros.
-  - simpl.
-    unfold P.for_all.
-      rewrite P.fold_Equal with (m1:=(add i n (add i n' m))) (m2:= add i n m).
-      + reflexivity.
-      + intuition.
-      + intuition.
-      + unfold P.transpose_neqkey. intros. destruct e,e'; intuition.
-      + unfold Equal.
-        intros.
-        elim (Nat.eq_dec y i); intro.
-        * rewrite a in *.
-          rewrite F.add_eq_o; [|reflexivity].
-          rewrite F.add_eq_o; [|reflexivity].
-          reflexivity.
-        * rewrite F.add_neq_o; [|intuition].
-          rewrite F.add_neq_o; [|intuition].
-          rewrite F.add_neq_o; [|intuition].
-          reflexivity. 
-  - simpl.
-    rewrite <- IHp1.
-    elim (Nat.eq_dec n i); intro.
-    + rewrite a in *.
-      rewrite F.add_eq_o ; [|intuition].
-      rewrite F.add_eq_o; [|intuition].
-      destruct n0; [reflexivity|].
-      simpl.
-      rewrite Nat.sub_0_r.
-      rewrite <- IHp2 with (i:=i) (n':=S n0) (n:=n0) .
-      rewrite <- IHp2 with (i:=i) (n':=S n0) (n:=n0) (m:= add i n' m).
-      rewrite <- IHp2.
-      reflexivity.
-    + rewrite F.add_neq_o ; [|intuition].
-      rewrite F.add_neq_o ; [|intuition].
-      rewrite F.add_neq_o ; [|intuition].
-      destruct (NatMap.find (elt:=nat) n m); [|reflexivity].
-      destruct n1; [reflexivity|].
-      simpl.
-      rewrite Nat.sub_0_r.
-
-      (* rewrite <- IHp2 with (i:=i) (n:=n1) (n':=n0) .
-      rewrite <- IHp2 with (i:=i) (n':=S n0) (n:=n0) (m:= add i n' m).
-      rewrite <- IHp2. *)
+          -- exists n0.
+            exists 1.
+            rewrite F.add_eq_o; intuition.
       
-      induction p3.
-      * simpl.
-      unfold P.for_all.
-      rewrite P.fold_Equal with (m1:= add n n1 (add i n0 m)) (m2:= add n n1 (NatMap.remove n (add i n0 m))) ; [intuition | intuition | intuition | unfold P.transpose_neqkey |  ].
-      rewrite P.fold_Equal with (m1:= (add n n1 (add i n0 (add i n' m)))) (m2:= (add n n1 (NatMap.remove n (add i n0 (add i n' m)))))  ; [intuition | intuition | intuition | unfold P.transpose_neqkey |  ].
-      -- simpl in *.
-        
-        unfold P.for_all in IHp2.
-        (* assert (aaa: fold (fun (_ : key) (e : nat) (b0 : bool) => if (e =? 0)%nat then b0 else false)
-        (add n n1 (NatMap.remove (elt:=nat) n (add i n0 m))) true = fold (fun (_ : key) (e : nat) (b0 : bool) => if (e =? 0)%nat then b0 else false)
-        (add n n1 (NatMap.remove (elt:=nat) n (add i n0 (add i n' m)))) true). *)
+        ++ destruct H2. 
+          exists (add n0 (S x1) (add n (S x0) x)).
+          do 2 (rewrite F.add_neq_o; [|intuition]; rewrite F.add_eq_o; [|intuition]).
+          rewrite for_all_add_S; simpl; repeat (rewrite Nat.sub_0_r).
+          split.
+          rewrite coeff_n_pos with (i:= n0) (q:=q2); [simpl| assumption|].
+          -- rewrite get_coeff_eq_map with (m2:=add n x0 x); [assumption|assumption|].
+            repeat (rewrite <- eq_map_add_swap; [|intuition]; rewrite <- eq_map_add_add).
+            rewrite <- eq_map_add_swap; [|intuition].
+            rewrite eq_map_add_each with (m2:=x); [intuition|].
+            unfold Equal; intro.
+            elim (Nat.eq_dec n0 y); intro.
+            ** rewrite a in *.
+              rewrite F.add_eq_o; intuition.
+            ** rewrite F.add_neq_o; intuition.
+          -- exists ( (S x1)).
+            rewrite F.add_neq_o; [|intuition].
+            rewrite F.add_eq_o; intuition.
+          -- exists n. exists (S x0).
+            rewrite F.add_neq_o; [|intuition].
+            rewrite F.add_eq_o; intuition.
+          
+  - valid_destr valid.
+    specialize valid as V2.
+    apply valid_b_more in valid; destruct valid as (V3 & V4).
+    specialize V3 as V5; apply valid_b_more in V3; destruct V3 as (V3 & V6). 
 
-        specialize (IHp2 m i n' n0) as IHp2'.
-        
-      rewrite P.fold_add with (k:=n); [intuition | intuition | intuition | unfold P.transpose_neqkey |  ].
-      rewrite P.fold_add with (k:=n); [intuition | intuition | intuition | unfold P.transpose_neqkey |  ].
-      (* rewrite P.fold_add; [intuition | intuition | intuition | unfold P.transpose_neqkey |  ].
-      rewrite P.fold_add; [intuition | intuition | intuition | unfold P.transpose_neqkey |  ]. *)
-      destruct n1; simpl; try intuition.
-      ++ destruct z.
-      destruct (( fold (fun (_ : key) (e : nat) (b : bool) => if e =? 0 then b else false) (add i n0 m) true)).
-      ++ intros; destruct e,e'; intuition.
-      ++ rewrite F.not_find_in_iff.
-         rewrite F.remove_eq_o; reflexivity.
-      ++ intros; destruct e,e'; intuition.
-      ++ rewrite F.not_find_in_iff.
-         rewrite F.remove_eq_o; reflexivity.
-      -- intros; destruct e,e'; intuition.
-      -- unfold Equal.
-        intros.
-        
+    specialize (IHp1 V0) as (mP2 & H0).
+    specialize (IHp2 V1) as (mP3 & H1).
+    destruct H0 as (coeffP2 & exP2).
+    destruct H1 as (coeffP3 & exP3).
 
-      specialize (IHp2 m i n' 0) as IHp2'.
-      simpl in IHp2'.
-      unfold P.for_all in IHp2'. 
-      rewrite P.fold_add in IHp2'; [intuition | intuition | intuition | unfold P.transpose_neqkey | ].
-      simpl in IHp2'.
-      destruct n'.
+    elim (Z.eq_dec z 0); intro.
+    + simpl in V2. rewrite a in V2. inversion V2.
+    + exists (add n 1 empty_mono).
       simpl.
-      reflexivity.
-      simpl.
-      intuition.              
-      rewrite <- IHp2'.
+      rewrite F.add_eq_o; [|intuition].
+      elim (Nat.eq_dec n0 n); intro.
+      * simpl in V2. rewrite a in V2.
+      destruct z; [inversion V2| |]; andb_destr V2; rewrite Nat.ltb_irrefl in V2; inversion V2.
+      
+      * rewrite F.add_neq_o; [|intuition].
+        rewrite F.empty_o.
+      
+        erewrite coeff_n_pos with (p:= p2) (i:= n) (q:= Cst z); [|intuition|].
+        simpl; split.
+        -- rewrite for_all_add_add.
+          rewrite for_all_add_0; intuition.
+        -- exists n. exists 1. 
+          rewrite F.add_eq_o; intuition.
+        -- exists 1. 
+          rewrite F.add_eq_o; intuition.
 
-      rewrite P.fold_add.
-
-    eelim (option_dec (NatMap.find (elt:=nat) n (add i n0 (add i n' m)) ) ); intro.
-    + destruct a.
-      rewrite e.
-Admitted. *)        
-
-
-Lemma coeff_map_add (p:poly) (m:monoid) (n i: nat) : 
- NatMap.find (elt:=nat) i m = Some n ->  get_coefficient_ p m = get_coefficient_ p (add i n m).
-Proof.
-  revert n.
-  revert i.
-  revert m.
-  
-  induction p; intros.
-  - simpl.
-  
-    unfold P.for_all.
-    
-    
-     rewrite P.fold_Equal with (m1:=(add i n m)) (m2:=m).
-      * reflexivity.
-      * intuition.
-      * intuition.
-      * unfold P.transpose_neqkey. intros. destruct e,e'; intuition.
-      * unfold Equal.
-        intros.
-        elim (Nat.eq_dec y i); intro.
-        -- rewrite a in *.
-          rewrite F.add_eq_o.
-          rewrite H.
-          reflexivity.
-          reflexivity.
-        -- rewrite F.add_neq_o.
-          reflexivity.
-          intuition.
-  - simpl.
-    specialize (IHp1 m i n0 H) as IHp1n0.
-    specialize (IHp2 m i n0 H) as IHp2n0.
-
-    (* specialize (IHp1 i n) as IHp1IN. *)
-
-    elim (Nat.eq_dec n i); intro.
-    -- rewrite a in *.
-    rewrite F.add_eq_o; [|reflexivity].
-    rewrite <- IHp1n0.
-    rewrite H.
-    destruct n0.
-    reflexivity.
-    simpl.
-    rewrite Nat.sub_0_r.
-    
-
-    destruct p3.
-    ++ simpl in IHp2.
-
+- valid_destr valid. valid_destr V.
 Admitted.
+  
 
 
 
@@ -1439,12 +916,34 @@ Proof.
   
         (* destruct (NatMap.find (elt:=nat) n x). *)
         (* elim (F.In_dec x n); intro. *)
-        
+        ** rewrite H1 in exiN1. 
+        simpl in exiN1.
+        rewrite for_all_add_S in exiN1.
+        rewrite F.add_eq_o in exiN1.
+        simpl in exiN1.
+        rewrite Z.eq_sym_iff in exiN1.
+        elim (Nat.eq_dec n0 n); intro.
+        +++ rewrite F.add_eq_o in exiN1; [|rewrite Nat.eq_sym_iff; assumption].
+            rewrite a0 in H0.
+            rewrite H1 in H0.
+            replace ((add n 0 (add n 1 x))) with x in exiN1; [|admit].
+            unfold not in H0.
+            destruct H0.
+            specialize (H0 exiN1).
+            contradiction.
+        +++ rewrite F.add_neq_o in exiN1; [|rewrite Nat.eq_sym_iff; assumption].
+            rewrite F.add_neq_o in exiN1; [|rewrite Nat.eq_sym_iff; assumption].
+            
+            replace (add n 0 (add n 1 x)) with ( x) in exiN1; [|admit].
+            destruct H0.
+            specialize (H0 exiN1).
+            contradiction.
+        +++ trivial.
         ** 
-          specialize a0 as a1.
+          specialize H1 as a1.
           (* rewrite F.in_find_iff in a0.  *)
           destruct a1.
-          rewrite e in exiN1.
+          rewrite H2 in exiN1.
           (* destruct (NatMap.find (elt:=nat) n x); [|unfold not in a0; specialize (a0 eq_refl); contradiction]. *)
           
           simpl in exiN1.
@@ -1452,32 +951,32 @@ Proof.
           
           destruct x0.
           --- rewrite Nat.add_0_l in exiN1.
-              specialize e as e'.
+              
               (* eapply P.fold_rec_nodep in exiN1. *)
               elim (bool_dec (P.for_all (fun _ v : nat => v =? 0) (add n 1 x)) true); intro.
-              rewrite P.for_all_iff in a1.
-              specialize (a1 n 1).
-              simpl in a1.
-              rewrite F.add_mapsto_iff in a1.
+              rewrite P.for_all_iff in a0.
+              specialize (a0 n 1).
+              simpl in a0.
+              rewrite F.add_mapsto_iff in a0.
               apply False_rect.
               Search (false=true).
               apply diff_false_true.
-              apply a1.
+              apply a0.
               
               left.
               intuition.
               intuition.
               
               elim (bool_dec (P.for_all (fun _ v : nat => v =? 0) (add n 1 x)) false); intro.
-              rewrite a1 in b0.
-              rewrite a1 in exiN1.
+              rewrite a0 in b0.
+              rewrite a0 in exiN1.
               simpl in exiN1.
               (*  *)
               +++ elim (Nat.eq_dec n0 n); intro.
                 *** rewrite F.add_eq_o in exiN1.
                     replace (add n 0 (add n 1 x)) with x in exiN1; [|admit].
-                    rewrite a2 in H0.
-                    rewrite e in H0.
+                    rewrite a1 in H0.
+                    rewrite H2 in H0.
                     unfold not in H0.
                     destruct H0.
                     rewrite Z.eq_sym_iff in exiN1.
@@ -1509,10 +1008,10 @@ Proof.
               elim (Nat.eq_dec n0 n); intro.
                 +++ rewrite F.add_eq_o in exiN1.
                     replace (add n (S x0) (add n (S (S x0)) x)) with x in exiN1; [|admit].
-                    rewrite a1 in H0.
-                    rewrite e in H0.
+                    rewrite a0 in H0.
+                    rewrite H2 in H0.
                     unfold not in H0.
-                    rewrite <- a1 in H0.
+                    rewrite <- a0 in H0.
                     rewrite Z.eq_sym_iff in exiN1.
                     destruct H0.
                     specialize (H0 exiN1).
@@ -1526,32 +1025,10 @@ Proof.
                     destruct H0.
                     specialize (H0 exiN1).
                     contradiction.
-                    intro; unfold not in b0; rewrite Nat.eq_sym_iff in H1; specialize (b0 H1); contradiction. 
-                    intro; unfold not in b0; rewrite Nat.eq_sym_iff in H1; specialize (b0 H1); contradiction.
-          
-        ** rewrite b0 in exiN1. 
-        simpl in exiN1.
-        rewrite for_all_add_S in exiN1.
-        rewrite F.add_eq_o in exiN1.
-        simpl in exiN1.
-        rewrite Z.eq_sym_iff in exiN1.
-        elim (Nat.eq_dec n0 n); intro.
-        +++ rewrite F.add_eq_o in exiN1; [|rewrite Nat.eq_sym_iff; assumption].
-            rewrite a0 in H0.
-            rewrite b0 in H0.
-            replace ((add n 0 (add n 1 x))) with x in exiN1; [|admit].
-            unfold not in H0.
-            destruct H0.
-            specialize (H0 exiN1).
-            contradiction.
-        +++ rewrite F.add_neq_o in exiN1; [|rewrite Nat.eq_sym_iff; assumption].
-            rewrite F.add_neq_o in exiN1; [|rewrite Nat.eq_sym_iff; assumption].
-            
-            replace (add n 0 (add n 1 x)) with ( x) in exiN1; [|admit].
-            destruct H0.
-            specialize (H0 exiN1).
-            contradiction.
-        +++ trivial.
+                    intuition.
+                    intuition.
+                    
+        
     * specialize (H empty_mono).
       simpl in H.
       specialize (b H).
@@ -2444,4 +1921,4 @@ Abort.
 
 
 End BTauto.
- 
+  
