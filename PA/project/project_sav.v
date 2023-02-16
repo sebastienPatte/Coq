@@ -1,4 +1,4 @@
-Require Import ZArith Bool.
+Require Import ZArith Bool Lia.
 
 Inductive poly : Type :=
 | Cst : Z -> poly
@@ -255,6 +255,8 @@ end.
 Goal valid_b (Poly (Poly (Cst 0) 1 (Cst 1)) 0 (Poly (Cst 0) 1 (Cst 1))) =true -> valid_b (Cst 1) =true.
 intro.
  valid_destr H.
+Abort.
+
 Lemma poly_equivalence (p:poly) : valid_b p = true <-> valid_poly p.
 Proof.
   unfold iff. split; intro.
@@ -301,23 +303,19 @@ Section Bool_irrel.
     elim (bool_dec b1 b2); intro; intuition.
   Qed.
 
-  (* Set Implicit Arguments. *)
   Let comp [A] [x y y':A] (eq1:x = y) (eq2:x = y') : y = y' :=
     eq_ind _ (fun a => a = y') eq2 _ eq1.
-  Print comp.
 
   Let trans_sym_eq [A] (x y:A) (u:x = y) : comp u u = eq_refl y.
   Proof.
     case u; trivial.
   Qed.
 
-  Check trans_sym_eq.
-
   Let nu [x y:bool] (u:x = y) : x = y :=
-    match b_dec x y with
-      | or_introl eqxy => eqxy
-      | or_intror neqxy => False_ind _ (neqxy u)
-    end.
+  match b_dec x y with     
+    | or_introl eqxy => eqxy 
+    | or_intror neqxy => False_ind _ (neqxy u)
+  end.
 
   Let nu_constant [x y:bool] (u v:x = y) : nu u = nu v.
     unfold nu.
@@ -343,7 +341,10 @@ Section Bool_irrel.
     reflexivity.
   Qed.
 
+  Eval compute in (comp (nu (eq_refl))).
+
 End Bool_irrel.
+
 
 Lemma leibniz : forall (p q : valid_pol), VP_value p = VP_value q -> p=q.
 Proof.
@@ -703,7 +704,7 @@ Proof.
   assumption.
 Qed.
 
-(* If [i] is not in the monoid, then we can the polynom on the right *)
+(* If [i] is not in the monoid, then we can keep only the polynom on the right *)
 Lemma coeff_remove_r (p q : poly) (i:nat) (m:monoid) : valid_b (Poly p i q) = true -> 
 NatMap.find i m = None \/ NatMap.find i m = Some 0 ->  
   get_coefficient_ (Poly p i q) m = get_coefficient_ p m.
@@ -754,7 +755,7 @@ Proof.
   erewrite get_coeff_eq_map with (m1:=add i n m) (m2:= m).
   intuition.
   assumption.
-  rewrite <- eq_map_add_same_in; intuition.
+    rewrite <- eq_map_add_same_in; intuition.
 Qed.
 
 
@@ -993,34 +994,6 @@ Definition poly_val (pol:valid_pol) (f : nat -> Z) :=
 
 
 
-
-Lemma val_coeff (p q : poly) : 
-valid_b p = true -> valid_b q = true -> 
-(forall (f:nat -> Z), poly_val_ p f = poly_val_ q f) -> p=q.
-Proof.
-  intros.
-  
-  revert p H H1.
-  
-  induction q; intros.
-  - 
-    simpl.
-    induction p.
-    + elim (Z.eq_dec z0 z); intro. 
-      * rewrite a in *.
-        reflexivity.
-      * specialize (H1 (fun x => 0%Z)). 
-        simpl in H1.
-        rewrite H1 in b.
-        specialize (b eq_refl); contradiction.
-    + valid_destr H.
-      specialize (IHp1 V0).
-      specialize (IHp2 V1).
-      specialize (H1 (fun x => 1%Z)).
-      simpl in H1.
-Abort.
-
-
 Lemma val_coeff (p q : valid_pol) : (forall (f:nat -> Z), poly_val p f = poly_val q f) -> (forall (m: monoid ), get_coefficient p m = get_coefficient q m).
 Proof.
   intros.
@@ -1036,7 +1009,8 @@ Proof.
   induction q.
   - intro. 
     + intros. 
-      
+      simpl in H.
+
       elim (Z.eq_dec (poly_val_ p (fun _ => 0%Z)) z); intro.
       * 
         induction p.
@@ -1060,7 +1034,7 @@ Inductive form : Set :=
 | f_and 	: form -> form -> form 
 | f_or  	: form -> form -> form
 | f_not 	: form -> form
-| f_imp 	: form -> form -> form
+(* | f_imp 	: form -> form -> form *)
 .
 Fixpoint eval_form (f:form) (val : nat -> bool) : bool := 
   match f with 
@@ -1070,14 +1044,14 @@ Fixpoint eval_form (f:form) (val : nat -> bool) : bool :=
   | f_and f1 f2 => eval_form f1 val && eval_form f2 val
   | f_or f1 f2 => eval_form f1 val || eval_form f2 val
   | f_not f1 => negb (eval_form f1 val	)
-  | f_imp f1 f2 => impb (eval_form f1 val) (eval_form f2 val)
+  (* | f_imp f1 f2 => impb (eval_form f1 val) (eval_form f2 val) *)
   end.  
 
 
 Hint Constructors form : core.
 Notation "A ∧ B" := (f_and A B) (at level 30, right associativity).
 Notation "A ∨ B" := (f_or A B) (at level 35, right associativity).
-Notation "A → B" := (f_imp A B) (at level 49, right associativity, B at level 50).
+(* Notation "A → B" := (f_imp A B) (at level 49, right associativity, B at level 50). *)
 Notation "⊤" := (f_true) (at level 5).
 Notation "⊥" := (f_false) (at level 5).
 Notation "# x" := (f_var x) (at level 10).
@@ -1123,11 +1097,11 @@ match f with
   |(?x' , ?l') => match read_term y l' with
     |(?y' , ?l'') => constr:(( f_or x' y' , l''))
   end end
-|impb ?x ?y => 
+(* |impb ?x ?y => 
   match read_term x l with
   |(?x' , ?l') => match read_term y l' with
     |(?y' , ?l'') => constr:(( f_imp x' y' , l''))
-  end end
+  end end *)
 |false => constr:((f_false , l))
 |true => constr:((f_true , l))
 
@@ -1160,14 +1134,19 @@ From Equations Require Import Equations.
 Fixpoint length (p:poly) := 
   match p with 
   |Cst _ => 1 
-  |Poly p _ q => 1 + length p + length q 
+  |Poly p _ q => S ((length p) + (length q))
   end.
 
+Obligation Tactic := try (unfold Nat.max; simpl; intuition).
 
 Equations sum_poly_ (p q:poly) : poly by wf (length p + length q) :=
   sum_poly_ (Cst z1) (Cst z2) := Cst (Z.add z1 z2) ;
-  sum_poly_ (Poly p1 i q1) (Cst z2) := Poly (sum_poly_ (Cst z2) p1 ) i q1;
+  sum_poly_ (Poly p1 i q1) (Cst z2) := Poly (sum_poly_ p1 (Cst z2) ) i q1;
   sum_poly_ (Cst z1) (Poly p2 j q2) := Poly (sum_poly_ (Cst z1) p2 ) j q2 ;
+  (* when the sum of 2 constants on the right is zero, we just keep the left part *)
+  (* sum_poly_ (Poly p1 i (Cst z1)) (Poly p2 i (Cst z2)) := 
+    if Z.eqb (Z.add z1 z2) 0%Z then sum_poly_ p1 p2 
+    else Poly (sum_poly_ p1 p2) i (Cst (Z.add z1 z2)); *)
   sum_poly_ (Poly p1 i q1) (Poly p2 j q2) := 
     match Nat.compare i j with
     | Eq => Poly (sum_poly_ p1 p2) i (sum_poly_ q1 q2)
@@ -1175,13 +1154,34 @@ Equations sum_poly_ (p q:poly) : poly by wf (length p + length q) :=
     | Gt => Poly (sum_poly_ p2 (Poly p1 i q1)) j q2
     end
 . 
-Next Obligation. intuition. Qed.
-Next Obligation. intuition. Qed.
-Next Obligation. intuition. Qed.
-Next Obligation. intuition. Qed.
-Next Obligation. intuition. Qed.
-Next Obligation. intuition. Defined.
 
+
+Fixpoint weak_valid_b (pol:poly) : bool := 
+  match pol with
+  |Cst _ => true
+  |Poly p i q => 
+    match p,q with 
+    | (Cst _), (Cst _) => true 
+    | (Poly _ j1 _), (Cst _) => Nat.ltb i j1 && weak_valid_b p 
+    | (Cst _),  (Poly p2 j2 q2) => Nat.leb i j2 && weak_valid_b q 
+    |(Poly p1 j1 q1),  (Poly p2 j2 q2) => 
+      Nat.ltb i j1 && Nat.leb i j2 
+      && weak_valid_b p 
+      && weak_valid_b q
+    end 
+  end
+.
+
+Fixpoint remove_null_r (pol:poly) : poly :=
+  match pol with 
+  |Cst z => Cst z
+  |Poly p i (Cst 0%Z) => remove_null_r p 
+  |Poly p i q => Poly (remove_null_r p) i (remove_null_r q) 
+  end.
+
+Goal sum_poly_ (Poly (Cst 1%Z) 1 (Poly (Cst 1%Z) 2 (Cst (-1%Z)))) (Poly (Cst 1%Z) 1 (Poly (Cst 1%Z) 2 (Cst 1%Z))) = (Cst 0%Z).
+simp sum_poly_. simpl.
+Abort.
 
 Lemma sum_pol_sym (p q:poly) : 
 valid_b p = true -> 
@@ -1192,13 +1192,13 @@ Proof.
   induction p; intros.
   - induction q. 
     + simp sum_poly_.  apply f_equal. intuition.
-    + simp sum_poly_. apply f_equal. reflexivity.
+    + simp sum_poly_. valid_destr H0. rewrite (IHq1 V0). apply f_equal. reflexivity.
   
   - valid_destr H.
     specialize (IHp1 q V0 H0) as HQ1. 
     specialize (IHp2 q V1 H0) as HQ2.
     destruct q.
-    + simp sum_poly_. apply f_equal. reflexivity.
+    + simp sum_poly_. rewrite HQ1. apply f_equal. reflexivity.
     + simp sum_poly_.
       elim (gt_eq_gt_dec n n0); intro.
       * elim a; intro.
@@ -1219,20 +1219,6 @@ Proof.
         rewrite a_lt.
         apply f_equal. reflexivity.
 Qed.
-
-
-  
-
-
-
-Goal sum_poly_ (Poly (Cst 1) 0 (Cst 1)) (Poly (Cst (-2%Z)) 0 (Cst 2)) = (Cst 0).
-simp sum_poly_. simpl.  
-Abort.
-
-Definition pol1 := (Poly (Cst 1%Z) 1 (Poly (Cst 1%Z) 2 (Cst 1%Z))).
-Definition pol2 := (Poly (Cst 2%Z) 2 (Poly (Cst 2%Z) 3 (Cst 2%Z))).
-
-Eval compute in (sum_poly_ pol1 pol2).
 
 
 Lemma valid_sum_cst_p (p q:poly) (i:nat) (z:Z) : 
@@ -1261,50 +1247,582 @@ Qed.
 
 Lemma valid_sum_le (p1 p2 q1 q2:poly) (i j:nat) : valid_b (Poly (sum_poly_ q1 (Poly p1 i p2)) j q2) = true -> j < i.
 Proof.
-  
   intro.
   induction q1.
   - simp sum_poly_ in H. eapply valid_le in H. assumption.
   - simp sum_poly_ in H.
-   eapply valid_le in H. assumption.
-
-
-Lemma valid_extend (p1 p2 q1 q2 : poly) (n n0 :nat) : 
-n0 > n ->
-valid_b (Poly q1 n q2) = true ->
-valid_b (Poly p1 n0 p2) = true ->
-valid_b (sum_poly_ q1 (Poly p1 n0 p2)) = true ->
-valid_b (Poly (sum_poly_ q1 (Poly p1 n0 p2)) n q2) = true
-.
-Proof.
-  intros.
-  revert n n0 H q2 H0 p1 p2 H1 H2.
-  induction q1; intros.
-  - simp sum_poly_.
-    simp sum_poly_ in H2.
-    simpl in H2.
-    simpl in H1.
-    simpl in H0.
-    destruct q2.
-    + destruct z0. 
-      * inversion H0.
-      * andb_split. intuition. simpl. assumption.
-      * andb_split. intuition. simpl. assumption.
-    + andb_destr H0. andb_split; intuition.
-  - valid_destr H0.  
-    specialize (IHq1_1 n0 n1 H q2 V0 p2 p0 H1) as IH1.
-    simp sum_poly_ in H2.
-    simp sum_poly_.
-    elim (gt_eq_gt_dec n n1); intro.
+    elim (gt_eq_gt_dec n i); intro.
       * elim a; intro.
-        -- eapply nat_compare_lt in a0 as a1.
-          rewrite a1 in *.
-          
+      -- eapply nat_compare_lt in a0 as a1.
+        rewrite a1 in *.
+        valid_destr H.
+        specialize (IHq1_1 V0).
+        assumption.
+      -- rewrite b in *.
+        rewrite Nat.compare_refl in H.
+        valid_destr H.
+        apply valid_le in H.
+        assumption.
+      * eapply nat_compare_gt in b as a.
+        rewrite a in H.
+        apply valid_le in H.
+        assumption.
+Qed.
+
+Lemma weaken_valid (p:poly) (H:valid_b p = true) : weak_valid_b p = true.
+Proof.
+  induction p.
+  - simpl. reflexivity.
+  - valid_destr H.
+    specialize (IHp1 V0).
+    specialize (IHp2 V1).
+    simpl in *.
+    destruct p2.
+    * destruct p3.
+      destruct z0; reflexivity.
+      andb_split. andb_destr H. assumption.
+      assumption.
+    * destruct p3.
+      destruct z. inversion H.  
+      1-3 : andb_destr H; andb_split; assumption.
+Qed.
+
+Lemma weak_valid_le (p q1 q2:poly) (i j:nat) : weak_valid_b (Poly (Poly p i q1) j q2) = true -> j < i.
+Proof.
+  intro.
+  simpl in H.
+  destruct q2.
+  - destruct z; [inversion H| |]; andb_destr H; apply ltb_complete; assumption.
+  - andb_destr H; apply ltb_complete; assumption.
+Qed.
+
+Lemma weak_valid_leq (p q1 q2:poly) (i j:nat) : weak_valid_b (Poly p i (Poly q1 j q2) )  = true -> i <= j.
+Proof.
+  intro.
+  simpl in H.
+  destruct p; andb_destr H; apply leb_complete; assumption.
+Qed.
+
+Lemma weak_valid_b_more (p q : poly) (i:nat) : 
+  weak_valid_b (Poly p i q) = true -> weak_valid_b p = true /\ weak_valid_b q = true.
+Proof.
+  intro.
+  split.
+  induction p; simpl in H; intuition.
+  - destruct q.
+  elim (Z.eq_dec z 0); intro; destruct z; intuition; andb_destr H; intuition.
+    andb_destr H.
+    simpl.
+    assumption.
+  - destruct p,q; simpl in H; intuition; andb_destr H; simpl; assumption.
 Qed.
 
 
-Program Definition sum_poly (p q:valid_pol) := {|VP_value := sum_poly_ (VP_value p) (VP_value q) ; VP_prop := _ |}.
-Next Obligation.
+Lemma weak_valid_b_more_r (p q1 q2 : poly) (n n0:nat) : 
+  weak_valid_b (Poly p n (Poly q1 n0 q2)) = true -> weak_valid_b (Poly p n q2) = true.
+Proof.
+  intro.
+  simpl in H.
+  destruct p; destruct q2; andb_destr H.
+  - destruct q1; destruct z0; intuition.
+  - destruct q1; andb_destr H0; simpl; andb_split; try assumption; try apply leb_trans with (j:= n0); intuition.
+  - destruct q1; destruct z; simpl; intuition.
+  - destruct q1; andb_destr H0; simpl; andb_split; try assumption; try apply leb_trans with (j:= n0); intuition.
+Qed.
+
+Lemma weak_valid_b_more_l (p1 p2 q : poly) (n n0:nat) : 
+  weak_valid_b (Poly (Poly p1 n0 p2) n q) = true -> weak_valid_b (Poly p1 n q) = true /\ weak_valid_b (Poly p2 n q) = true.
+Proof.
+  intro.
+  destruct p1;  destruct q; simpl in H; simpl.
+  - split; destruct z0; intuition; destruct p2; andb_destr H; try andb_split; intuition; apply ltb_leb_trans with (j:=n0); intuition.
+  - split; destruct p2; andb_split; andb_destr H; intuition.
+    apply ltb_leb_trans with (j:=n0); intuition.
+  - split. 
+    +  destruct p2; 
+      andb_destr H; andb_split.  apply ltb_trans with (j:=n0); intuition. 
+      assumption. apply ltb_trans with (j:=n0); intuition. assumption.
+    + destruct p2. 
+      trivial.
+      andb_destr H; andb_split.
+      apply ltb_leb_trans with (j:= n0); split; intuition.
+      assumption.
+  - split. 
+    +  destruct p2; andb_destr H; andb_destr H1; andb_split; intuition. 
+      apply ltb_trans with (j:=n0); split; intuition.
+      apply ltb_trans with (j:=n0); split; intuition.
+    + destruct p2; andb_destr H; andb_destr H1; andb_split; intuition.
+      apply ltb_leb_trans with (j:=n0); split; intuition.
+Qed.
+
+Lemma weak_sum_pol_sym (p q:poly) : 
+weak_valid_b p = true -> 
+weak_valid_b q = true -> 
+sum_poly_ p q = sum_poly_ q p.
+Proof.
+  revert q.
+  induction p; intros.
+  - induction q. 
+    + simp sum_poly_.  apply f_equal. intuition.
+    + simp sum_poly_. apply weak_valid_b_more in H0 as (V0 & V1). rewrite (IHq1 V0). apply f_equal. reflexivity.
+  
+  - apply weak_valid_b_more in H as (V0 & V1).
+    specialize (IHp1 q V0 H0) as HQ1. 
+    specialize (IHp2 q V1 H0) as HQ2.
+    destruct q.
+    + simp sum_poly_. rewrite HQ1. apply f_equal. reflexivity.
+    + simp sum_poly_.
+      elim (gt_eq_gt_dec n n0); intro.
+      * elim a; intro.
+        -- eapply nat_compare_gt in a0 as a_gt.  
+          eapply nat_compare_lt in a0 as a_lt.  
+          rewrite a_gt. 
+          rewrite a_lt.
+          rewrite HQ1. apply f_equal. reflexivity.
+        -- rewrite b in *.
+          rewrite Nat.compare_refl.
+          apply weak_valid_b_more in H0 as (V2 & V3).
+          rewrite (IHp1 q1 V0 V2).
+          rewrite (IHp2 q2 V1 V3).
+          apply f_equal. reflexivity.
+      * eapply nat_compare_gt in b as a_gt.  
+        eapply nat_compare_lt in b as a_lt.  
+        rewrite a_gt. 
+        rewrite a_lt.
+        apply f_equal. reflexivity.
+Qed.
+
+Lemma le_weak_valid (p p' q q' : poly) (i j:nat)  : 
+i>j -> 
+weak_valid_b (Poly p i q) = true ->
+weak_valid_b (Poly p' j q') = true -> 
+weak_valid_b (Poly (Poly p i q) j q') = true.
+Proof.
+  intros.
+  simpl in *.
+  destruct p.
+  - destruct p'.
+    + destruct q'.
+      *  andb_split; intuition.
+      * andb_destr H1.  andb_split; intuition.
+    +  destruct q'. 
+      * andb_split; intuition.
+      * andb_destr H1.  andb_split; intuition.
+  - destruct p'.
+    + destruct q'.
+      *  andb_split; intuition.
+      * andb_destr H1. andb_split; intuition.
+    +  destruct q'. 
+      * andb_split; intuition.
+      * andb_destr H1.  andb_split; intuition.
+Qed.
+
+Lemma leq_weak_valid (p p' q q' : poly) (i j:nat)  : 
+i<=j -> 
+weak_valid_b (Poly p i q) = true ->
+weak_valid_b (Poly p' j q') = true -> 
+weak_valid_b (Poly p i (Poly p' j q')) = true.
+Proof.
+  intros.
+  simpl in *.
+  destruct p.
+  - destruct p'.
+    + destruct q'.
+      * andb_split; intuition.
+      * andb_destr H1.  andb_split; intuition.
+    +  destruct q'. 
+      * andb_destr H1. andb_split; intuition.
+      * andb_destr H1.  andb_split; intuition.
+  - destruct p'.
+    + destruct q'.
+      * destruct q; andb_destr H0; andb_split; intuition.
+      * andb_destr H1; destruct q; andb_destr H0; andb_split; intuition.
+    +  destruct q'. 
+      * andb_destr H1. destruct q; andb_destr H0; andb_split; intuition.
+      * andb_destr H1. destruct q; andb_destr H0; andb_split; intuition.
+Qed.
+
+Lemma weak_valid_sum_cst_p (p q:poly) (i:nat) (z:Z) : 
+weak_valid_b (Poly p i q) = true -> 
+weak_valid_b (sum_poly_ (Cst z) p) = true ->
+weak_valid_b (Poly (sum_poly_ (Cst z) p) i q) = true.
+Proof.
+  revert z i p q .
+  induction p.
+  - intros.
+    simp sum_poly_.
+    
+
+  - intros. simp sum_poly_.
+    
+    specialize H as V. apply weak_valid_b_more_l in V as (V0 & V1).
+    specialize (IHp1 q V0).
+    simp sum_poly_ in H0.
+    specialize H0 as V. apply weak_valid_b_more in V as (V2 & V3).
+    specialize (IHp1 V2).
+      eapply le_weak_valid  with (i:=n) (p':=p2).
+      + eapply weak_valid_le in H. assumption.
+      + assumption.
+      + assumption.
+Qed. 
+
+Lemma lt_inv_le (n n0 : nat) : (n0 ?= n) = Lt -> (n ?= n0) = Gt.
+Proof.
+  
+  - intro. 
+    elim (gt_eq_gt_dec n0 n); intro.
+    + elim a; intro.
+      * eapply nat_compare_gt in a0 as a1. rewrite a1. trivial.
+      * rewrite b in *. rewrite Nat.compare_refl in H. inversion H.
+    + eapply nat_compare_gt in b as b1. 
+      rewrite b1 in H. inversion H.
+Qed.
+
+Lemma weak_val_eq  (p2 p3 q1 q2 : poly) (n0 n1 : nat) :  
+(forall q : poly, weak_valid_b q = true -> weak_valid_b (sum_poly_ p2 q) = true) ->
+(forall q : poly, weak_valid_b q = true -> weak_valid_b (sum_poly_ p3 q) = true) -> 
+weak_valid_b (Poly p2 n0 p3) = true ->
+weak_valid_b (Poly q1 n0 q2) = true -> 
+weak_valid_b (sum_poly_ (Poly p2 n0 p3) q1) = true ->
+weak_valid_b (sum_poly_ (Poly p2 n0 p3) q2) = true ->
+weak_valid_b (Poly (sum_poly_ p2 q1) n0 (sum_poly_ p3 q2)) = true
+.
+Proof.
+  intro. intro.
+  intros.
+  induction q1. 
+  - destruct p2.
+    + simp sum_poly_. 
+      simpl.
+      destruct p3.
+      * destruct q2.
+        -- simp sum_poly_.
+        -- simp sum_poly_.
+          andb_split.
+          apply weak_valid_leq in H2. auto.
+           apply weak_valid_b_more in H2. destruct H2. 
+          specialize (H0 (Poly q2_1 n q2_2) H5).
+          simp sum_poly_ in H0.
+      * destruct q2.
+        -- simp sum_poly_.
+          andb_split.
+          apply weak_valid_leq in H1. auto.
+          apply weak_valid_b_more in H2. destruct H2. 
+          specialize (H0 (Cst z1) H5).  
+          simp sum_poly_ in H0.
+        -- simp sum_poly_. simp sum_poly_ in H3.  
+          elim (gt_eq_gt_dec n2 n); intro.
+          ++ elim a; intro.
+            ** eapply nat_compare_gt in a0 as a1. rewrite a1.
+              andb_split.
+              apply weak_valid_leq in H2. auto.
+              apply weak_valid_b_more in H2. destruct H2. 
+              specialize (H0 (Poly q2_1 n2 q2_2) H5). simp sum_poly_ in H0. rewrite a1 in H0. assumption.
+            ** rewrite b in *. rewrite Nat.compare_refl. andb_split.
+              apply weak_valid_leq in H3. auto.
+              apply weak_valid_b_more in H2. destruct H2.
+              specialize (H0 (Poly q2_1 n q2_2) H5). simp sum_poly_ in H0. rewrite Nat.compare_refl in H0. assumption.
+          ++ eapply nat_compare_lt in b as b1. rewrite b1. andb_split.
+            apply weak_valid_leq in H1. auto.
+            apply weak_valid_b_more in H2. destruct H2. 
+            specialize (H0 (Poly q2_1 n2 q2_2) H5). simp sum_poly_ in H0. rewrite b1 in H0. assumption.
+    + simp sum_poly_. 
+      apply weak_valid_le in H1 as Hlt.
+      apply nat_compare_lt in Hlt as Hlt2.
+      specialize (H (Poly (Cst z) n0 (sum_poly_ p3 q2)) ) as HN2.
+      simp sum_poly_ in HN2.
+      
+      
+      destruct p3.
+      * simp sum_poly_ in H3.
+        destruct q2. 
+        simp sum_poly_.    
+        simp sum_poly_. simp sum_poly_ in H0. simp sum_poly_ in H.
+
+        apply lt_inv_le in Hlt2 as Htl3. rewrite Htl3 in HN2. simp sum_poly_ in HN2.
+        rewrite weak_sum_pol_sym. 
+        apply HN2.
+        apply weak_valid_b_more in H1 as HH. destruct HH.
+Abort.
+
+Lemma sum_weak_valid_lt (p2 p3 q1 q2 : poly) (n n0:nat) : 
+n < n0 -> 
+weak_valid_b (Poly p2 n p3) = true ->
+weak_valid_b (Poly q1 n0 q2) = true ->
+weak_valid_b (sum_poly_ (Poly p2 n p3) q1) = true ->
+weak_valid_b (sum_poly_ (Poly p2 n p3) q2) = true ->
+weak_valid_b (Poly (Poly q1 n0 q2) n p3) = true -> 
+weak_valid_b (sum_poly_ p2 (Poly q1 n0 q2)) = true ->
+weak_valid_b (Poly (sum_poly_ p2 (Poly q1 n0 q2)) n p3) = true
+.
+Proof.
+  intros.
+  destruct p2.
+  ++ simp sum_poly_. simp sum_poly_ in *.
+    destruct p3.
+    ** andb_split; auto.
+    ** simpl in H4. andb_destr H4. andb_split; try assumption.
+    ++ simp sum_poly_. 
+    elim (gt_eq_gt_dec n1 n0); intro.
+    ** elim a; intro.
+      --- eapply nat_compare_lt in a0 as a1.
+        simp sum_poly_ in H5. rewrite a1 in *.
+        apply weak_valid_le in H0 as VP1.
+        eapply le_weak_valid; intuition.
+      --- rewrite b in *.
+          simp sum_poly_ in H5.
+          rewrite Nat.compare_refl in *.
+          eapply le_weak_valid; intuition.
+    ** eapply nat_compare_gt in b as b1.
+        simp sum_poly_ in H5.
+        rewrite b1 in *.
+        eapply le_weak_valid; intuition.
+Qed.
+
+Lemma weak_sum_leq (p1 p2 q1 q2:poly) (n0:nat): 
+weak_valid_b (Poly p1 n0 p2) = true ->
+weak_valid_b (Poly q1 n0 q2) = true -> 
+match sum_poly_ p2 q2 with 
+|Cst _ => true 
+|Poly _ j _ => n0 <=? j 
+end = true
+.
+Proof.
+  induction p2; induction q2; intros; simp sum_poly_.
+  -  trivial.
+  - apply weak_valid_leq in H0. auto.
+  - apply weak_valid_leq in H. auto.
+  - apply weak_valid_leq in H. apply weak_valid_leq in H0.  destruct (n ?= n1).
+    + auto.
+    + auto.
+    + auto.
+Qed.
+
+Lemma weak_sum_gt (p1 p2 q1 q2:poly) (n0:nat): 
+weak_valid_b (Poly p1 n0 p2) = true ->
+weak_valid_b (Poly q1 n0 q2) = true -> 
+match sum_poly_ p1 q1 with 
+|Cst _ => true 
+|Poly _ j _ => n0 <? j 
+end = true
+.
+Proof.
+  induction p1; induction q1; intros; simp sum_poly_.
+  -  trivial.
+  - apply weak_valid_le in H0. auto.
+  - apply weak_valid_le in H. auto.
+  - apply weak_valid_le in H. apply weak_valid_le in H0.  destruct (n ?= n1).
+    + auto.
+    + auto.
+    + auto.
+Qed.
+
+
+Lemma sum_weak_valid (p q:poly) : weak_valid_b p = true -> weak_valid_b q = true -> weak_valid_b (sum_poly_ p q) = true.
+Proof.
+  intros VP VQ.
+  revert p VP q VQ.
+  induction p.
+  - induction q; intro.
+    + simp sum_poly_.
+    + specialize VQ as V. apply weak_valid_b_more in V; destruct V as (V0 & V1).
+      specialize (IHq1 V0).
+      specialize (IHq2 V1).
+      simp sum_poly_.
+      eapply weak_valid_sum_cst_p; assumption.
+  - intros.
+    specialize VP as V. apply weak_valid_b_more in V as (V0 & V1).
+    specialize (IHp1 V0 ).
+    specialize (IHp2 V1 ).
+    induction q.
+    + simp sum_poly_.
+      rewrite weak_sum_pol_sym; try assumption.
+      eapply weak_valid_sum_cst_p.
+      assumption.
+      specialize (IHp1 (Cst z) VQ). rewrite weak_sum_pol_sym; assumption.
+    + specialize VQ as V. apply weak_valid_b_more in V as (V2 & V3).
+      specialize (IHq1 V2). specialize (IHq2 V3).
+      simp sum_poly_.
+      elim (gt_eq_gt_dec n n0); intro.
+      * elim a; intro.
+        -- eapply nat_compare_lt in a0 as a1.
+          
+          rewrite a1.
+          eapply le_weak_valid with (p:=q1) (q:=q2) (p':=p2) (q':=p3) in a0 as a2; try assumption.
+          specialize (IHp1 (Poly q1 n0 q2) VQ) as HN1.
+          eapply sum_weak_valid_lt; intuition.
+
+        -- rewrite b in *. rewrite Nat.compare_refl.
+          specialize (IHp1 (Poly q1 n0 q2) VQ) as HN1.
+          specialize (IHp2 (Poly q1 n0 q2) VQ) as HN2.
+          simpl. 
+
+          destruct p2.
+          ++ destruct q1.
+            ** simp sum_poly_.
+              apply weak_valid_b_more in VQ. destruct VQ. specialize (IHp2 q2 H0) as HN3.
+              destruct p3.
+              destruct q2. simp sum_poly_.
+              simp sum_poly_ in HN3. simp sum_poly_ in HN2. apply weak_valid_leq in HN2. andb_split; intuition.
+              destruct q2. simp sum_poly_.
+              simp sum_poly_. apply weak_valid_leq in VP. simp sum_poly_ in HN3. andb_split; intuition.
+              simp sum_poly_ in HN1. simp sum_poly_. simp sum_poly_ in HN3. apply weak_valid_leq in VP. apply weak_valid_leq in HN1. 
+              destruct (n1 ?= n2).
+              andb_split; intuition.
+              andb_split; intuition.
+              andb_split; intuition.
+
+            ** simp sum_poly_. 
+              destruct p3.
+              --- destruct q2. simp sum_poly_. simp sum_poly_ in HN1.
+                simp sum_poly_ in HN1. simp sum_poly_ in HN2.
+                simp sum_poly_.
+                andb_split.
+                apply weak_valid_le in HN1. intuition.
+                apply weak_valid_leq in HN1. intuition.
+                apply weak_valid_b_more in HN1; destruct HN1. assumption.
+                
+                simpl.
+                destruct q2_1.
+                simp sum_poly_.
+                simp sum_poly_.
+                destruct q2_2.
+                +++ andb_split.
+                  apply weak_valid_b_more in HN2; destruct HN2. apply weak_valid_le in H0. auto.
+                  apply weak_valid_b_more in VQ as VQ0. destruct VQ0. apply weak_valid_b_more in H0 as VQ1. destruct VQ1. 
+                  specialize (IHp2 (Poly q2_1_1 n3 q2_1_2) H1).
+                  simp sum_poly_ in IHp2.
+                +++ andb_split.
+                  apply weak_valid_b_more in HN2; destruct HN2. apply weak_valid_le in H0. auto.
+                  apply weak_valid_b_more in HN2; destruct HN2. apply weak_valid_leq in H0. auto.
+                  apply weak_valid_b_more in VQ as VQ0. destruct VQ0. apply weak_valid_b_more in H0 as VQ1. destruct VQ1.  
+                  specialize (IHp2 (Poly q2_1_1 n3 q2_1_2) H1).
+                  simp sum_poly_ in IHp2.
+                  apply weak_valid_b_more in VQ; destruct VQ. apply weak_valid_b_more in H0; destruct H0.
+                  assumption.
+              --- destruct q2. simp sum_poly_. simp sum_poly_ in HN1. simp sum_poly_ in IHq2.
+                  andb_split.
+                  apply weak_valid_le in HN1. intuition.
+                  apply weak_valid_leq in IHq2. intuition. 
+                  apply weak_valid_b_more in VQ as (H & ?). specialize (IHp1 (Poly q1_1 n1 q1_2) H).  simp sum_poly_ in IHp1. 
+                  specialize (IHp2 (Cst z0) V3). simp sum_poly_ in IHp2. 
+                
+                  simp sum_poly_.
+
+                  simp sum_poly_ in HN1. 
+                  apply weak_valid_leq in VP as HPleq. apply Nat.compare_le_iff in HPleq as HPleq'.
+                  apply weak_valid_leq in VQ as HQleq. apply Nat.compare_le_iff in HQleq as HQleq'.
+                  apply weak_valid_le in VQ as HQlt. apply nat_compare_lt in HQlt as HQlt'.
+                  
+
+                  elim (gt_eq_gt_dec n3 n2); intro.
+                  +++ elim a0; intro.
+                    *** apply nat_compare_gt in a1 as a2.
+                      rewrite a2.
+                      andb_split.
+                        
+                      simp sum_poly_ in IHq1. rewrite HQlt' in IHq1. 
+                      auto.
+                      auto.
+                      specialize (IHp1 (Poly q1_1 n1 q1_2) V2). simp sum_poly_ in IHp1.
+                      specialize (IHp2 (Poly q2_1 n3 q2_2) V3). simp sum_poly_ in IHp2. rewrite a2 in IHp2. assumption.
+                    *** rewrite b0 in *. rewrite Nat.compare_refl. andb_split.
+                      auto. auto.
+                      apply weak_valid_b_more in HN1. destruct HN1. assumption.
+                      specialize (IHp2 (Poly q2_1 n2 q2_2) V3). simp sum_poly_ in IHp2. rewrite Nat.compare_refl in IHp2. assumption.
+                  +++ simp sum_poly_ in IHq1.
+                    rewrite HQlt' in IHq1.
+                    apply nat_compare_lt in b0 as b1.
+                    rewrite b1.
+                    andb_split.
+                    auto. auto.
+                    apply weak_valid_b_more in IHq1. destruct IHq1. assumption.
+                    specialize (IHp2 (Poly q2_1 n3 q2_2) V3). simp sum_poly_ in IHp2. rewrite b1 in IHp2. assumption.
+
+          ++ simp sum_poly_ in HN1. 
+            apply weak_valid_le in VP as Hlt.
+            eapply nat_compare_gt in Hlt.
+            rewrite Hlt in HN1. simpl in HN1. rewrite weak_sum_pol_sym; try assumption.
+            destruct (sum_poly_ q1 (Poly p2_1 n1 p2_2)).
+            destruct q2. destruct p3.
+            simp sum_poly_.
+            simp sum_poly_.
+            apply weak_valid_leq in VP as Hleq. andb_split. auto.
+            specialize (IHp2 (Cst z0) V3). simp sum_poly_ in IHp2.
+            assert (aaaa : match sum_poly_ p3 (Poly q2_1 n2 q2_2) with
+            | Cst _ => true
+            | Poly _ j _ => n0 <=? j
+            end = true).
+                        eapply weak_sum_leq with (p1:=(Poly p2_1 n1 p2_2)) (q1:=q1). assumption. assumption.
+                        specialize (IHp2 (Poly q2_1 n2 q2_2) V3). 
+                        destruct (sum_poly_ p3 (Poly q2_1 n2 q2_2)).
+                        trivial.
+                        andb_split. assumption. assumption.
+            assert (aaaa : match sum_poly_ p3 q2 with
+            | Cst _ => true
+            | Poly _ j _ => n0 <=? j
+            end = true).
+            eapply weak_sum_leq with (p1:=(Poly p2_1 n1 p2_2)) (q1:=q1). assumption. assumption.
+
+            destruct q2.
+            specialize (IHp2 (Cst z) V3).
+            destruct (sum_poly_ p3 (Cst z)). andb_destr HN1.
+            andb_split. auto. assumption.
+            andb_destr HN1. andb_split. auto. auto. assumption. assumption.
+            specialize (IHp2 (Poly q2_1 n3 q2_2) V3).
+            destruct (sum_poly_ p3 (Poly q2_1 n3 q2_2)). andb_destr HN1.
+            andb_split. auto. assumption.
+            andb_destr HN1. andb_split. auto. auto. assumption. assumption.
+    * apply nat_compare_gt in b as b1.
+      rewrite b1.
+      simpl.
+      destruct q1.
+      -- simp sum_poly_.
+        destruct q2. andb_split. auto. simp sum_poly_ in IHq1. rewrite weak_sum_pol_sym; assumption.
+        andb_split. auto. eapply weak_valid_leq in VQ. auto. 
+        simp sum_poly_ in IHq1.   rewrite weak_sum_pol_sym; assumption.
+        assumption.
+      -- 
+          assert (aaa : match sum_poly_ (Poly q1_1 n1 q1_2) (Poly p2 n p3) with
+        | Cst _ => true
+        | Poly _ j1 _ => (n0 <? j1) 
+        end = true).
+        rewrite weak_sum_pol_sym; try assumption.
+        simp sum_poly_ in IHq1.
+        simp sum_poly_.
+        destruct (n ?= n1).
+        ++ auto.
+        ++ auto.
+        ++ apply weak_valid_le in VQ. auto.
+        ++ rewrite weak_sum_pol_sym in IHq1; try assumption. 
+          destruct q2.
+          ** destruct (sum_poly_ (Poly q1_1 n1 q1_2) (Poly p2 n p3)). 
+            trivial.
+            andb_split. auto. assumption.
+          **  destruct (sum_poly_ (Poly q1_1 n1 q1_2) (Poly p2 n p3)).
+            --- andb_split. apply weak_valid_leq in VQ. auto. assumption.
+            --- andb_split. auto.  apply weak_valid_leq in VQ. auto.  assumption. assumption.
+          
+Qed.
+
+Lemma sum_valid (p q:poly) : valid_b p = true -> valid_b q = true -> valid_b (remove_null_r (sum_poly_ p q)) = true.
+Proof.
+  intros VP VQ.
+  revert p VP q VQ.
+  induction p.
+  - induction q; intro.
+    + simp sum_poly_.
+    + simp sum_poly_.
+      valid_destr VQ.
+      specialize (IHq1 V0).
+      specialize (IHq2 V1).
+      induction q2.
+      * simpl.
+Abort.
+
+
+Program Definition sum_poly (p q:valid_pol) := {|VP_value := remove_null_r (sum_poly_ (VP_value p) (VP_value q)) ; VP_prop := _ |}.
+(* Next Obligation.
   destruct p as [p VP].
   destruct q as [q VQ].
   unfold VP_value.
@@ -1317,16 +1835,14 @@ Next Obligation.
       specialize (IHp1 V0 ) as Hp1.
       specialize (IHp2 V1 ) as Hp2.
       simp sum_poly_.
-      eapply valid_sum_cst_p.
-      assumption.
-      rewrite sum_pol_sym; intuition.
+      rewrite sum_pol_sym; try assumption.
+      eapply valid_sum_cst_p; try assumption.
+      rewrite sum_pol_sym; assumption.
 
   - intros VQ p VP.
     valid_destr VQ.
     specialize (IHq1 V0).
     specialize (IHq2 V1).
-
-    
 
     induction p; intros.
     + simp sum_poly_.
@@ -1336,114 +1852,75 @@ Next Obligation.
       specialize (IHq1 (Cst z) VP). rewrite sum_pol_sym; assumption.
       assumption.
       assumption.
-    + 
+    + valid_destr VP.
+      specialize (IHp1 V2).
+      specialize (IHp2 V3).
       simp sum_poly_. 
-    
       elim (gt_eq_gt_dec n n0); intro.
       * elim a; intro.
         -- eapply nat_compare_gt in a0 as a1.
           rewrite a1.
-          specialize (IHq1 (Poly p2 n0 p3) VP) as H1.
-          rewrite sum_pol_sym in H1; try assumption.
-          eapply le_valid  in a0.
+          specialize (IHq1 (Poly p2 n0 p3) VP) as HN1.
+          rewrite sum_pol_sym; try assumption.
+          simpl.
           admit.
-        -- rewrite b in *. rewrite Nat.compare_refl.
-
-          eapply le_valid in a0.
-               
+        -- rewrite <- b in *. rewrite Nat.compare_refl.
+        
+Admitted. *)
 Admit Obligations.
 
 
-
-Program Fixpoint mul_poly_ (p q:poly) {measure (length p + length q) } := 
-  match p with 
-  |Cst z1 => 
-    match q with 
-    |Cst z2 => Cst (Z.mul z1 z2)
-    |Poly p2 j q2 => Poly (mul_poly_ (Cst z1) p2 ) j (mul_poly_ (Cst z1) q2 )
-    end 
-  |Poly p1 i q1 => 
-    match q with 
-    | Cst z2 => Poly (mul_poly_ (Cst z2) p1) i (mul_poly_ (Cst z2) q1 )
-    | Poly p2 j q2 => 
-      match Nat.compare i j with 
-      |Lt => Poly (mul_poly_ p1 (Poly p2 j q2)) i (mul_poly_ q1 (Poly p2 j q2))
-      |Gt => Poly (mul_poly_ p2 (Poly p1 i q1)) j (mul_poly_ q2 (Poly p1 i q1))
-      |Eq => Poly (mul_poly_ p1 p2) i (Poly (mul_poly_ p1 q2) j (mul_poly_ q1 q2)) 
-      end
+Equations mul_poly_ (p q:poly) : poly by wf (length p + length q) :=
+  mul_poly_ (Cst z1) (Cst z2) := Cst (z1 * z2);
+  mul_poly_ (Poly p1 i q1) (Cst z2) := Poly (mul_poly_ p1 (Cst z2)) i (mul_poly_ q1 (Cst z2));
+  mul_poly_ (Cst z1) (Poly p2 j q2) := Poly (mul_poly_ p2 (Cst z1)) j (mul_poly_ q2 (Cst z1));
+  mul_poly_ (Poly p1 i q1) (Poly p2 j q2) :=
+    match Nat.compare i j with
+    |Eq => sum_poly_ (Poly (mul_poly_ p1 p2) i (Poly (mul_poly_ p2 q1) j (mul_poly_ q1 q2))) (Poly (Cst 0) i (mul_poly_ p1 q2)) 
+    |Lt => Poly (mul_poly_ p1 (Poly p2 j q2)) i (mul_poly_ q1 (Poly p2 j q2))
+    |Gt => Poly (mul_poly_ p2 (Poly p1 i q1)) j (mul_poly_ q2 (Poly p1 i q1))
     end
-  end.
-Next Obligation.
-  simpl.
-  intuition.
-  Qed.
-  Next Obligation.
-  simpl.
-  intuition.
-  Qed.
-  Next Obligation.
-  simpl.
-  intuition.
-  Qed.
-  Next Obligation.
-  simpl.
-  intuition.
-  Qed.
-  Next Obligation.
-  simpl.
-  intuition.
-  Qed.
-  Next Obligation.
-  simpl.
-  intuition.
-  Qed.
-  Next Obligation.
-  simpl.
-  intuition.
-  Qed.
-  Next Obligation.
-  simpl.
-  intuition.
-  Qed.
-  Next Obligation.
-  simpl.
-  intuition.
-  Qed.
-  Next Obligation.
-  simpl.
-  intuition.
-  Qed.
-  Next Obligation.
-  simpl.
-  intuition.
-Defined.
+.
 
+Goal mul_poly_ (Poly (Cst 3) 0 (Cst 1)) (Poly (Cst (-2%Z)) 0 (Cst 2)) = Poly (Cst (-6)) 0 (Poly (Cst 4) 0 (Cst 2)).
+  simp mul_poly_. simpl.
+  simp sum_poly_. simpl.
+Abort.
 
-Lemma mul_eq (p q:poly) : mul_poly_ p q = 
-match p with 
-  |Cst z1 => 
-    match q with 
-    |Cst z2 => Cst (Z.mul z1 z2)
-    |Poly p2 j q2 => Poly (mul_poly_ (Cst z1) p2 ) j (mul_poly_ (Cst z1) q2 )
-    end 
-  |Poly p1 i q1 => 
-    match q with 
-    | Cst z2 => Poly (mul_poly_ (Cst z2) p1) i (mul_poly_ (Cst z2) q1 )
-    | Poly p2 j q2 => 
-      match Nat.compare i j with 
-      |Lt => Poly (mul_poly_ p1 (Poly p2 j q2)) i (mul_poly_ q1 (Poly p2 j q2))
-      |Gt => Poly (mul_poly_ p2 (Poly p1 i q1)) j (mul_poly_ q2 (Poly p1 i q1))
-      |Eq => Poly (mul_poly_ p1 p2) i (Poly (mul_poly_ p1 q2) j (mul_poly_ q1 q2)) 
-      end
-    end
-  end.
+Goal mul_poly_ (Poly (Cst (-2%Z)) 0 (Cst 2)) (Poly (Cst 3) 0 (Cst 1)) = Poly (Cst (-6)) 0 (Poly (Cst 4) 0 (Cst 2)).
+  simp mul_poly_. simpl.
+  simp sum_poly_. simpl.
+Abort.
+
+Lemma mul_poly_sym (p q :poly) : mul_poly_ p q = mul_poly_ q p.
 Proof.
-Admitted.
+  revert p q.
+  induction p; intros.
+  - destruct q.
+    + simp mul_poly_. apply f_equal. intuition.
+    + simp mul_poly_. apply f_equal. reflexivity.
+  - destruct q.
+    + simp mul_poly_. apply f_equal. intuition.
+    + simp mul_poly_. 
+    elim (gt_eq_gt_dec n n0); intro.
+      * elim a; intro.
+        -- eapply nat_compare_gt in a0 as a_gt.  
+          eapply nat_compare_lt in a0 as a_lt.  
+          rewrite a_gt. 
+          rewrite a_lt.
+          reflexivity.
+        -- rewrite b in *.
+          simp sum_poly_.  
+          rewrite Nat.compare_refl.
+          rewrite (IHp1 q1).
+          rewrite (IHp2 q2).
+      
+Abort.
 
-Eval compute in (mul_poly_ pol1 pol2).
 
 Program Definition mul_poly (p q:valid_pol) := {|VP_value := mul_poly_ (VP_value p) (VP_value q) ; VP_prop := _ |}.
 Admit Obligations.
+
 
 Definition sub_poly (p q:valid_pol) := sum_poly p (mul_poly (cst_poly (-1)%Z) q).
 
@@ -1459,94 +1936,56 @@ Fixpoint to_poly (f:form) (val:nat->bool) :=
 end.
 
 
-Lemma mul_pol_1 : forall (p:poly),  (mul_poly_ (Cst 1) p)  = p .
+Lemma mul_pol_1 : forall (p:poly), (mul_poly_ (Cst 1) p)  = p .
 Proof.
-intros.
-induction  p.
-- simpl. destruct z; trivial.
-- rewrite mul_eq. 
-  simpl.
-  rewrite IHp1.
-  rewrite IHp2.
-  reflexivity.
+  intros.
+  induction  p.
+  - simpl. destruct z; trivial.
+  - simp mul_poly_. 
+    simpl.
+    rewrite IHp1.
+    rewrite IHp2.
+    reflexivity.
 Qed. 
 
 Lemma mul_pol_0 : forall (p:poly) (val:nat -> Z), Z.eq (poly_val_ (mul_poly_ (Cst 0) p) val)  0%Z .
 Proof.
-intros.
-induction  p.
-- simpl. intuition.
-- rewrite mul_eq. 
-  simpl.
-  rewrite IHp1.
-  rewrite IHp2.
-  simpl.
-  rewrite Z.mul_0_r.
-  intuition.
+  intros.
+  induction  p.
+  - simp mul_poly_. simpl. intuition.
+  - simp mul_poly_. 
+    simpl.
+    rewrite IHp1.
+    rewrite IHp2.
+    simpl.
+    rewrite Z.mul_0_r.
+    intuition.
 Qed. 
-
 
 Lemma mul_pol_1_r : forall (p:poly),  (mul_poly_ p (Cst 1))  = p .
 Proof.
-intros.
-induction  p.
-- simpl. rewrite mul_eq. rewrite Z.mul_1_r. reflexivity.
-- rewrite mul_eq.
-  rewrite mul_pol_1.
-  rewrite mul_pol_1.
-  reflexivity.
+  intros.
+  induction  p.
+  - simp mul_poly_.  rewrite Z.mul_1_r. reflexivity.
+  - simp mul_poly_. 
+    rewrite mul_pol_1.
+    rewrite mul_pol_1.
+    reflexivity.
 Qed.
-
 
 Lemma mul_pol_0_r : forall (p:poly) (val:nat -> Z), Z.eq (poly_val_ (mul_poly_ p (Cst 0)) val)  0%Z .
 Proof.
-intros.
-induction  p.
-- simpl. rewrite Z.mul_0_r. reflexivity.
-- rewrite mul_eq.
-  simpl.
-  rewrite mul_pol_0.
-  rewrite mul_pol_0.
-  simpl.
-  rewrite Z.mul_0_r.
-  reflexivity.
-Qed.
-
-(* Goal  forall (val:nat->bool) (f1 f2:form), (poly_val (to_poly f1 val) (fun x : nat => if val x then 1 else 0) =? 1)%Z &&
-(poly_val (to_poly f2 val) (fun x : nat => if val x then 1 else 0) =? 1)%Z =
-(poly_val (mul_poly (to_poly f1 val) (to_poly f2 val))
-   (fun x : nat => if val x then 1 else 0) =? 1)%Z.
-
   intros.
-  
-  induction f1; induction f2.
-  - simpl. trivial.
-  - simpl. trivial.
-  - simpl. destruct (val n); intuition.
-  - simpl in *.
-    unfold poly_val.
+  induction  p.
+  - simp mul_poly_.  rewrite Z.mul_0_r. reflexivity.
+  - simp mul_poly_. 
     simpl.
-    rewrite mul_pol_1.
-    
-    
-    unfold poly_val in *.
-    simpl in *.
-    
-    induction ((mul_poly_ (VP_value (to_poly f2_1 val)) (VP_value (to_poly f2_2 val)))).
-  
-    + simpl. destruct z; intuition.
-    + unfold poly_val_. destruct (val n). fold poly_val_.  
-      
-      * rewrite Z.mul_1_l.
-
-
-        simpl in IHp1. rewrite IHp1.
+    rewrite mul_pol_0.
+    rewrite mul_pol_0.
     simpl.
-    fold mul_poly.
-    
-
-   rewrite IHf2_1.
-Abort *)
+    rewrite Z.mul_0_r.
+    reflexivity.
+Qed.
 
 
 Hint Rewrite Z.mul_0_r : core.
@@ -1555,164 +1994,7 @@ Require Import Lia.
 
 Definition z_of_bool := (fun x : bool => if x then 1%Z else 0%Z).
 
-(* Lemma mul_poly_comm (p q : valid_pol) : (mul_poly p q) = (mul_poly q p).
-Proof.
-  destruct p as ( p & ? ).
-  destruct q as ( q & ? ).
-  unfold mul_poly.
-  apply leibniz. 
-  simpl.
-  induction p.
-  - induction q. 
-    + rewrite mul_eq. 
-      rewrite mul_eq.
-      rewrite Z.mul_comm.
-      reflexivity.
-    + apply valid_b_more in VP_prop1. destruct VP_prop1 as (validq1 & validq2).
-    specialize (IHq1 validq1).
-    specialize (IHq2 validq2).
-    rewrite mul_eq. 
-    rewrite IHq1.
-    rewrite IHq2.
-    rewrite mul_eq.
-    rewrite mul_eq.
-    rewrite mul_eq.
-    rewrite mul_eq.
-    rewrite mul_eq.
-    destruct q1,q2; intuition.
-    * rewrite Z.mul_comm.
-    rewrite Z.mul_comm with (n:= z1).
-    reflexivity.
 
-    * rewrite Z.mul_comm. reflexivity.
-    * rewrite Z.mul_comm. reflexivity.
-  - apply valid_b_more in VP_prop0. destruct VP_prop0 as (validp1 & validp2).
-    specialize (IHp1 validp1).
-    specialize (IHp2 validp2).
-    induction q.
-    rewrite mul_eq. 
-    rewrite mul_eq.
-    rewrite mul_eq.
-    rewrite mul_eq.
-    rewrite mul_eq.
-    rewrite mul_eq.
-    induction p2; induction p3; intuition. 
-    apply valid_b_more in VP_prop1. destruct VP_prop1 as (validq1 & validq2).
-    specialize (IHq1 validq1).
-    specialize (IHq2 validq2).
-
-    rewrite mul_eq.
-    elim (Nat.eq_dec n n0); intro.
-    * rewrite a. rewrite Nat.compare_refl.
-      rewrite mul_eq with (p:= Poly q1 n0 q2).
-      rewrite Nat.compare_refl.
-
-
-    rewrite mul_eq in IHp1.
-    rewrite mul_eq in IHp1.
-    destruct p2.
-    rewrite mul_eq.
-    rewrite mul_eq.
-    
-    rewrite IHq1.
-    rewrite IHq2.
-    rewrite Z.mul_comm.
-    rewrite Z.mul_comm with (n:= z1).
-    reflexivity. *)
-    
-
-Lemma mul_poly_val_comm (p q : valid_pol) (val:nat->Z) : 
-(poly_val (mul_poly p q) val)%Z  = (poly_val (mul_poly q p) val)%Z.
-Proof.
-  destruct p as ( p & ? ).
-  destruct q as ( q & ? ).
-  unfold poly_val.
-  unfold mul_poly.
-  simpl.
-  induction p.
-  - unfold poly_val. simpl. induction q. simpl. 
-    + rewrite Z.mul_comm. reflexivity.
-    + apply valid_b_more in VP_prop1.
-      destruct VP_prop1 as (validq1 & validq2).
-      specialize (IHq1 validq1).
-      specialize (IHq2 validq2).
-      rewrite mul_eq.
-      rewrite mul_eq with (p:=(Poly q1 n q2) ).
-      reflexivity.
-    
-  - apply valid_b_more in VP_prop0.
-    destruct VP_prop0 as (validp1 & validp2).
-    specialize (IHp1 validp1).
-    specialize (IHp2 validp2).
-    simpl.
-    
-    induction q.
-    + rewrite mul_eq.
-    rewrite mul_eq with (p:=Cst z) (q:=(Poly p2 n p3)). reflexivity.
-    +  
-      apply valid_b_more in VP_prop1.
-      destruct VP_prop1 as (validq1 & validq2).
-      specialize (IHq1 validq1).
-      specialize (IHq2 validq2).
-      rewrite mul_eq.
-      (* rewrite mul_eq with (p:=(Poly q1 n0 q2)). *)
-      
-      elim (Nat.eq_dec n n0); intro.
-      * rewrite <- a. rewrite Nat.compare_refl. 
-        (* simpl poly_val_.
-        rewrite mul_eq with (p:=(Poly q1 n q2)).
-        rewrite Nat.compare_refl.
-        simpl poly_val_. *)
-
-        rewrite <- a in IHp1.
-        rewrite <- a in IHp2.
-
-        (* rewrite mul_eq in IHp1.
-        rewrite mul_eq with (p:=(Poly q1 n q2)) in IHp1. *)
-
-        (* rewrite mul_eq.
-        rewrite Z.mul_add_distr_l.
-        rewrite Z.mul_add_distr_l.
-        
-        rewrite Z.add_assoc. *)
-
-        destruct p2,p3.
-        rewrite mul_eq in IHp1.
-        (* rewrite mul_eq with (q:= Cst z) in IHp1. *)
-        rewrite mul_eq in IHp2.
-        (* rewrite mul_eq with (q:= Cst z0) in IHp2. *)
-        
-        -- rewrite mul_eq in IHp1. 
-          simpl poly_val_ at 1 in IHp1.
-          rewrite Z.mul_add_distr_l.
-          rewrite Z.mul_add_distr_l.
-          rewrite Z.add_assoc.
-          rewrite IHp1.
-
-          
-          destruct p3.
-          ++ rewrite mul_eq in IHp2. 
-          simpl poly_val_ at 1 in IHp2.
-          rewrite Z.add_assoc.
-
-          
-          rewrite Z.mul_add_distr_l.
-          rewrite Z.add_assoc.
-            rewrite IHp2.
-
-        rewrite Z.add_comm.
-
-        rewrite mul_eq in IHp1.
-        rewrite mul_eq with (q:=p2) in IHp1.
-         
-        
-
-      rewrite <- IHp2.
-      rewrite <- IHp1.
-      
-  
-      rewrite Z.mul_add_distr_r.
-      rewrite <- Z.mul_assoc.
 
 Lemma mul_poly_val (p q : valid_pol) (val:nat->Z) : 
 (poly_val (mul_poly p q) val)%Z  = ((poly_val p val) * (poly_val q val))%Z.
@@ -1726,208 +2008,4 @@ Proof.
   - unfold poly_val. simpl. induction q. simpl. 
     + reflexivity.
     + apply valid_b_more in VP_prop1.
-      destruct VP_prop1 as (validq1 & validq2).
-      specialize (IHq1 validq1).
-      specialize (IHq2 validq2).
-      rewrite mul_eq. simpl. 
-      rewrite IHq1.
-      rewrite IHq2.
-      intuition.
-  - apply valid_b_more in VP_prop0.
-    destruct VP_prop0 as (validp1 & validp2).
-    specialize (IHp1 validp1).
-    specialize (IHp2 validp2).
-    simpl.
-    rewrite mul_eq.
-    induction q.
-    + 
-      rewrite Z.mul_add_distr_r.
-      rewrite <- Z.mul_assoc.
-      
-      
-      rewrite <- IHp2.
-      rewrite <- IHp1.
-      
-      
-      simpl.
-      rewrite Z.mul_comm with (n:= ).
-      rewrite Z.mul_comm.
-      rewrite IHp2.
-      reflexivity.
-    rewrite IHp2.
-    + 
-    
-
-    
-    
-    
-    intuition.
-      rewrite mul_eq in IHq1,IHq2. destruct q1, q2. simpl in *. 
-      
-      rewrite IHq1.
-      
-  - simpl. unfold poly_val. unfold mul_poly. simpl. rewrite mul_pol_0. reflexivity.
-  - simpl. unfold poly_val.  unfold mul_poly. simpl. destruct (val n); unfold cst_poly; simpl VP_value; [rewrite mul_pol_1|rewrite mul_pol_0]; intuition. 
-  - 
-  -
-  - 
-
-Lemma to_poly_dec (f:form) (val:nat-> bool) : Z.eq (poly_val (to_poly f val) (fun x : nat => if val x then 1%Z else 0%Z)) 1%Z \/ Z.eq (poly_val (to_poly f val) (fun x : nat => if val x then 1%Z else 0%Z)) 0%Z.
-Proof.
-  induction f.
-  - simpl. unfold poly_val. simpl. intuition.
-  - simpl. unfold poly_val. simpl. intuition.
-  - simpl. unfold poly_val. destruct (val n);  simpl; intuition.
-  - simpl. 
-
-    induction f1; unfold poly_val; simpl.
-    + rewrite mul_pol_1. assumption.
-    + rewrite mul_pol_0. assumption.
-    + destruct (val n); simpl; [rewrite mul_pol_1|rewrite mul_pol_0]; intuition.
-    + destruct IHf1.
-    destruct (to_poly f1 val). simpl.  destruct (to_poly f2 val). simpl. 
-    unfold poly_val in IHf1,IHf2. unfold VP_value in IHf1,IHf2. 
-    induction VP_value0, VP_value1; destruct IHf1,IHf2. 
-      * simpl in *.
-        rewrite H.
-        rewrite H0.
-        rewrite Z.mul_1_l.
-        unfold Z.eq. 
-        left.
-        reflexivity.
-      * right.
-        rewrite H.  
-        rewrite mul_pol_1. 
-        assumption.
-      *  rewrite H.
-        right. 
-        rewrite mul_pol_0. 
-        intuition.
-      * rewrite H. rewrite H0.
-        right.
-        simpl.
-        intuition.
-      * rewrite H. 
-        rewrite mul_pol_1.
-        intuition.
-      * rewrite H.
-        rewrite mul_pol_1.
-        intuition.
-      * rewrite H.
-        rewrite mul_pol_0.
-        intuition.
-      * rewrite H.
-        rewrite mul_pol_0.
-        intuition.
-      * rewrite H0.
-        (* unfold poly_val_ in H,H0. fold poly_val_ in H,H0. *)
-        rewrite mul_pol_1_r. left. assumption.
-      * rewrite H0.
-        rewrite mul_pol_0_r. right. reflexivity.
-      * rewrite H0.
-        rewrite mul_pol_1_r. right. assumption.
-      * rewrite H0.
-        rewrite mul_pol_0_r. right. reflexivity.
-      * rewrite mul_eq.
-        
-       (*  unfold poly_val_ in H0.   fold poly_val_ in H0. unfold poly_val_ in H. fold poly_val_ in H. *)
-
-        elim (Nat.eq_dec n n0); intro.
-        -- rewrite <- a. rewrite Nat.compare_refl. 
-          unfold poly_val_ in H,H0.   fold poly_val_ in H,H0.
-          unfold poly_val_. fold poly_val_.
-          
-          rewrite <- a in H0.
-          destruct (val n).
-          rewrite Z.mul_1_l. rewrite Z.mul_1_l.
-          rewrite Z.mul_1_l in H. rewrite Z.mul_1_l in H0.
-          unfold poly_val_. unfold poly_val_. fold poly_val_.
-          ++ admit.
-          ++ admit.
 Abort.
-
-
-Goal forall (f1 f2 : form) (val : nat -> bool),  (poly_val (to_poly f1 val) (fun x : nat => if val x then 1 else 0) =? 1)%Z &&
-(poly_val (to_poly f2 val) (fun x : nat => if val x then 1 else 0) =? 1)%Z =
-(poly_val (mul_poly (to_poly f1 val) (to_poly f2 val))
-   (fun x : nat => if val x then 1 else 0) =? 1)%Z.
-intros.
-  induction f1; simpl.
-  - unfold poly_val. unfold mul_poly. simpl. rewrite mul_pol_1. reflexivity.
-  - unfold poly_val. unfold mul_poly. simpl. rewrite mul_pol_0. reflexivity.
-  - destruct (val n).
-    + unfold poly_val. unfold mul_poly. simpl. rewrite mul_pol_1. reflexivity.
-    + unfold poly_val. unfold mul_poly. simpl. rewrite mul_pol_0. reflexivity.
-  - 
-
-(* Eval compute in (poly_val (to_poly (⊤ ∨ ⊥)) (fun x => 0%Z)). *)
-
-Goal forall (f:form), forall (val:nat -> bool),  eval_form f val = Z.eqb (poly_val (to_poly f val) (fun x => if val x then 1%Z else 0%Z)) 1.
-intro.
-
-intro.
-induction f.  
-- intuition.
-- intuition.
-- simpl. destruct val; intuition.
-- simpl.
-
-  rewrite (IHf1 ).
-  rewrite (IHf2 ).
-  (* unfold poly_val. simpl. rewrite mul_eq.
-  destruct ( (to_poly f1 val)).
-  simpl.
-  destruct (to_poly f2 val).
-  simpl.
-  destruct VP_value0.
-  + destruct VP_value1.
-
-  rewrite mul_eq.
-  
-
-  induction f1;  simpl.
-  + unfold poly_val. simpl. 
-    rewrite mul_pol_1.   reflexivity.
-
-  + unfold poly_val. simpl. rewrite mul_pol_0. intuition. 
-  + unfold poly_val. simpl.  destruct (val n); simpl.
-    * rewrite mul_pol_1.  reflexivity.
-    * rewrite mul_pol_0. intuition.
-
-  +  *)
-
-    
-  induction f1.
-  + simpl in *.
-    unfold poly_val.
-    unfold mul_poly.
-    simpl.  
-    rewrite mul_pol_1.
-    reflexivity.
-  + simpl in *.
-    unfold poly_val.
-    unfold mul_poly.
-    simpl.  
-    rewrite mul_pol_0.
-    reflexivity.
-  + simpl in *.
-    unfold poly_val.
-    unfold mul_poly.
-    simpl.  
-    destruct (val n).
-    * simpl. rewrite mul_pol_1. reflexivity.
-    * simpl. rewrite mul_pol_0. reflexivity.
-  + simpl in *.
-    unfold poly_val.
-    unfold mul_poly.
-    simpl.  
-
-- admit.
-- simpl.
-  rewrite (IHf val).
-  
-Abort.
-
-
-End BTauto.
-  
