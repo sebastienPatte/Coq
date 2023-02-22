@@ -1,0 +1,247 @@
+DIGEST c5e7524484dc71ebafb5dd6cb423547a
+FTop.definitions
+R15:20 Coq.ZArith.ZArith <> <> lib
+R22:26 Coq.Arith.Arith <> <> lib
+R28:31 Coq.Bool.Bool <> <> lib
+R33:35 Coq.micromega.Lia <> <> lib
+ind 49:52 <> poly
+constr 66:68 <> Cst
+constr 84:87 <> Poly
+R73:76 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R72:72 Coq.Numbers.BinNums <> Z ind
+R77:80 Top.definitions <> poly:1 ind
+R95:98 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R91:94 Top.definitions <> poly:1 ind
+R102:105 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R99:101 Coq.Init.Datatypes <> nat ind
+R110:113 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R106:109 Top.definitions <> poly:1 ind
+R114:117 Top.definitions <> poly:1 ind
+ind 132:141 <> valid_poly
+constr 163:165 <> cst
+constr 205:215 <> compose_cst
+constr 310:318 <> compose_l
+constr 476:484 <> compose_r
+constr 631:640 <> compose_lr
+R149:152 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R145:148 Top.definitions <> poly ind
+R179:179 Coq.Numbers.BinNums <> Z ind
+binder 177:177 <> z:5
+R183:192 Top.definitions <> valid_poly:3 ind
+R195:197 Top.definitions <> Cst constr
+R199:199 Top.definitions <> z:5 var
+R232:234 Coq.Init.Datatypes <> nat ind
+binder 229:229 <> i:6
+R253:253 Coq.Numbers.BinNums <> Z ind
+binder 248:248 <> x:7
+binder 250:250 <> y:8
+R265:271 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R258:261 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R257:257 Top.definitions <> y:8 var
+R272:281 Top.definitions <> valid_poly:3 ind
+R284:287 Top.definitions <> Poly constr
+R290:292 Top.definitions <> Cst constr
+R294:294 Top.definitions <> x:7 var
+R297:297 Top.definitions <> i:6 var
+R300:302 Top.definitions <> Cst constr
+R304:304 Top.definitions <> y:8 var
+R337:339 Coq.Init.Datatypes <> nat ind
+binder 332:332 <> i:9
+binder 334:334 <> j:10
+R348:352 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R344:346 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
+R343:343 Top.definitions <> i:9 var
+R347:347 Top.definitions <> j:10 var
+R364:364 Coq.Numbers.BinNums <> Z ind
+binder 361:361 <> x:11
+R377:382 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R370:373 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R369:369 Top.definitions <> x:11 var
+R397:400 Top.definitions <> poly ind
+binder 391:391 <> p:12
+binder 393:393 <> q:13
+R427:432 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R404:413 Top.definitions <> valid_poly:3 ind
+R416:419 Top.definitions <> Poly constr
+R421:421 Top.definitions <> p:12 var
+R423:423 Top.definitions <> j:10 var
+R425:425 Top.definitions <> q:13 var
+R433:442 Top.definitions <> valid_poly:3 ind
+R445:448 Top.definitions <> Poly constr
+R451:454 Top.definitions <> Poly constr
+R456:456 Top.definitions <> p:12 var
+R458:458 Top.definitions <> j:10 var
+R460:460 Top.definitions <> q:13 var
+R463:463 Top.definitions <> i:9 var
+R466:468 Top.definitions <> Cst constr
+R470:470 Top.definitions <> x:11 var
+R503:505 Coq.Init.Datatypes <> nat ind
+binder 498:498 <> i:14
+binder 500:500 <> j:15
+R515:519 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R510:513 Coq.Init.Peano <> ::nat_scope:x_'<='_x not
+R509:509 Top.definitions <> i:14 var
+R514:514 Top.definitions <> j:15 var
+R531:531 Coq.Numbers.BinNums <> Z ind
+binder 528:528 <> x:16
+R552:555 Top.definitions <> poly ind
+binder 546:546 <> p:17
+binder 548:548 <> q:18
+R582:587 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R559:568 Top.definitions <> valid_poly:3 ind
+R571:574 Top.definitions <> Poly constr
+R576:576 Top.definitions <> p:17 var
+R578:578 Top.definitions <> j:15 var
+R580:580 Top.definitions <> q:18 var
+R588:597 Top.definitions <> valid_poly:3 ind
+R600:603 Top.definitions <> Poly constr
+R606:608 Top.definitions <> Cst constr
+R610:610 Top.definitions <> x:16 var
+R613:613 Top.definitions <> i:14 var
+R616:619 Top.definitions <> Poly constr
+R621:621 Top.definitions <> p:17 var
+R623:623 Top.definitions <> j:15 var
+R625:625 Top.definitions <> q:18 var
+R661:663 Coq.Init.Datatypes <> nat ind
+binder 654:654 <> i:19
+binder 656:656 <> j:20
+binder 658:659 <> j':21
+R683:687 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R672:675 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R668:670 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
+R667:667 Top.definitions <> i:19 var
+R671:671 Top.definitions <> j:20 var
+R677:680 Coq.Init.Peano <> ::nat_scope:x_'<='_x not
+R676:676 Top.definitions <> i:19 var
+R681:682 Top.definitions <> j':21 var
+R707:710 Top.definitions <> poly ind
+binder 696:696 <> p:22
+binder 698:698 <> q:23
+binder 700:701 <> p':24
+binder 703:704 <> q':25
+R767:772 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R737:740 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R714:723 Top.definitions <> valid_poly:3 ind
+R726:729 Top.definitions <> Poly constr
+R731:731 Top.definitions <> p:22 var
+R733:733 Top.definitions <> j:20 var
+R735:735 Top.definitions <> q:23 var
+R741:750 Top.definitions <> valid_poly:3 ind
+R753:756 Top.definitions <> Poly constr
+R758:759 Top.definitions <> p':24 var
+R761:762 Top.definitions <> j':21 var
+R764:765 Top.definitions <> q':25 var
+R773:782 Top.definitions <> valid_poly:3 ind
+R785:788 Top.definitions <> Poly constr
+R791:794 Top.definitions <> Poly constr
+R796:796 Top.definitions <> p:22 var
+R798:798 Top.definitions <> j:20 var
+R800:800 Top.definitions <> q:23 var
+R803:803 Top.definitions <> i:19 var
+R806:809 Top.definitions <> Poly constr
+R811:812 Top.definitions <> p':24 var
+R814:815 Top.definitions <> j':21 var
+R817:818 Top.definitions <> q':25 var
+def 835:841 <> valid_b
+R848:851 Top.definitions <> poly ind
+binder 844:846 <> pol:26
+R856:859 Coq.Init.Datatypes <> bool ind
+R871:873 Top.definitions <> pol:26 var
+R882:884 Top.definitions <> Cst constr
+R891:894 Coq.Init.Datatypes <> true constr
+R897:900 Top.definitions <> Poly constr
+R937:939 Top.definitions <> Cst constr
+R946:950 Coq.Init.Datatypes <> false constr
+R956:958 Top.definitions <> Cst constr
+R963:965 Top.definitions <> Cst constr
+R972:975 Coq.Init.Datatypes <> true constr
+R981:984 Top.definitions <> Poly constr
+R994:996 Top.definitions <> Cst constr
+R1003:1003 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1011:1015 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1005:1008 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
+R1016:1022 Top.definitions <> valid_b:27 def
+R1030:1032 Top.definitions <> Cst constr
+R1039:1042 Top.definitions <> Poly constr
+R1057:1057 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1066:1070 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1059:1063 Coq.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
+R1071:1077 Top.definitions <> valid_b:27 def
+R1086:1089 Top.definitions <> Poly constr
+R1104:1107 Top.definitions <> Poly constr
+R1164:1167 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1148:1154 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1125:1125 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1133:1138 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1147:1147 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1127:1130 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
+R1140:1144 Coq.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
+R1155:1161 Top.definitions <> valid_b:27 def
+R1168:1174 Top.definitions <> valid_b:27 def
+rec 1199:1207 <> valid_pol
+proj 1221:1228 <> VP_value
+proj 1239:1245 <> VP_prop
+R1232:1235 Top.definitions <> poly ind
+R1265:1267 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1249:1255 Top.definitions <> valid_b def
+R1257:1264 Top.definitions <> VP_value:32 meth
+R1268:1271 Coq.Init.Datatypes <> true constr
+R1336:1348 Coq.Bool.Bool <> andb_true_iff thm
+R1423:1435 Coq.Bool.Bool <> andb_true_iff thm
+R1463:1470 Coq.FSets.FMapList <> <> lib
+R1488:1505 Coq.FSets.FMapList <> <> lib
+R1523:1550 Coq.Structures.OrderedTypeEx <> <> lib
+R1577:1589 Coq.FSets.FMapList Make <> modtype
+R1591:1599 Coq.Structures.OrderedTypeEx Nat_as_OT <> modtype
+mod 1567:1572 <> NatMap
+R1618:1636 Coq.FSets.FMapFacts <> <> lib
+R1651:1665 Coq.FSets.FMapFacts WProperties_fun <> modtype
+R1667:1675 Coq.Structures.OrderedTypeEx Nat_as_OT <> modtype
+R1677:1682 Top.definitions NatMap <> modtype
+mod 1646:1646 <> P
+R1697:1699 Top.definitions P.F <> modtype
+mod 1692:1692 <> F
+def 1714:1719 <> monoid
+R1731:1738 Top.definitions <> t def
+R1740:1742 Coq.Init.Datatypes <> nat ind
+def 2076:2091 <> get_coefficient_
+R2099:2102 Top.definitions <> poly ind
+binder 2094:2096 <> pol:34
+R2108:2113 Top.definitions <> monoid def
+binder 2106:2106 <> m:35
+R2128:2130 Top.definitions <> pol:34 var
+R2142:2144 Top.definitions <> Cst constr
+R2155:2163 Top.definitions <> for_all def
+R2202:2202 Top.definitions <> m:35 var
+R2173:2175 Coq.Init.Datatypes <> nat ind
+binder 2171:2171 <> k:38
+R2181:2183 Coq.Init.Datatypes <> nat ind
+binder 2179:2179 <> v:39
+R2190:2193 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R2189:2189 Top.definitions <> v:39 var
+R2226:2229 Top.definitions <> Poly constr
+R2251:2261 Top.definitions <> find def
+R2265:2265 Top.definitions <> m:35 var
+R2280:2283 Coq.Init.Datatypes <> None constr
+R2287:2290 Coq.Init.Datatypes <> Some constr
+R2297:2312 Top.definitions <> get_coefficient_:36 def
+R2316:2316 Top.definitions <> m:35 var
+R2297:2312 Top.definitions <> get_coefficient_:36 def
+R2316:2316 Top.definitions <> m:35 var
+R2325:2328 Coq.Init.Datatypes <> Some constr
+R2335:2339 Coq.ZArith.BinInt Z add def
+R2342:2357 Top.definitions <> get_coefficient_:36 def
+R2361:2361 Top.definitions <> m:35 var
+R2365:2380 Top.definitions <> get_coefficient_:36 def
+R2385:2387 Top.definitions <> add def
+R2397:2397 Top.definitions <> m:35 var
+R2393:2393 Coq.Init.Peano <> ::nat_scope:x_'-'_x not
+def 2428:2442 <> get_coefficient
+R2450:2458 Top.definitions <> valid_pol rec
+binder 2445:2447 <> pol:40
+R2464:2469 Top.definitions <> monoid def
+binder 2462:2462 <> m:41
+R2475:2490 Top.definitions <> get_coefficient_ def
+R2493:2500 Top.definitions <> VP_value proj
+R2502:2504 Top.definitions <> pol:40 var
+R2507:2507 Top.definitions <> m:41 var

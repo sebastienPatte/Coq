@@ -1,0 +1,671 @@
+DIGEST ec9daf4bab8412b21528a9dc3eacdcb0
+FTop.maps
+R15:25 Top.definitions <> <> lib
+R43:51 Top.bool_help <> <> lib
+R61:66 Coq.ZArith.ZArith <> <> mod
+R68:72 Coq.Arith.Arith <> <> mod
+R74:77 Coq.Bool.Bool <> <> mod
+R79:81 Coq.micromega.Lia <> <> mod
+R91:98 Coq.FSets.FMapList <> <> mod
+R109:109 Top.definitions P <> mod
+R119:119 Top.definitions P.F <> mod
+R129:134 Top.definitions NatMap <> mod
+R144:162 Coq.FSets.FMapFacts <> <> mod
+R445:449 Top.valid <> <> lib
+prf 459:472 <> eq_map_add_add
+R482:484 Coq.Init.Datatypes <> nat ind
+binder 475:475 <> i:1
+binder 477:477 <> x:2
+binder 479:479 <> y:3
+R490:495 Top.definitions <> monoid def
+binder 488:488 <> m:4
+R500:504 Top.definitions NatMap Equal def
+R519:521 Top.definitions NatMap add def
+R528:530 Top.definitions NatMap add def
+R536:536 Top.maps <> m:4 var
+R534:534 Top.maps <> y:3 var
+R532:532 Top.maps <> i:1 var
+R525:525 Top.maps <> x:2 var
+R523:523 Top.maps <> i:1 var
+R507:509 Top.definitions NatMap add def
+R515:515 Top.maps <> m:4 var
+R513:513 Top.maps <> x:2 var
+R511:511 Top.maps <> i:1 var
+R557:561 Top.definitions NatMap Equal def
+R582:591 Coq.Arith.PeanoNat Nat eq_dec thm
+R582:591 Coq.Arith.PeanoNat Nat eq_dec thm
+R619:628 Top.definitions P.F add_eq_o thm
+R619:628 Top.definitions P.F add_eq_o thm
+R619:628 Top.definitions P.F add_eq_o thm
+R619:628 Top.definitions P.F add_eq_o thm
+R656:665 Top.definitions P.F add_eq_o thm
+R656:665 Top.definitions P.F add_eq_o thm
+R656:665 Top.definitions P.F add_eq_o thm
+R656:665 Top.definitions P.F add_eq_o thm
+R709:719 Top.definitions P.F add_neq_o thm
+R709:719 Top.definitions P.F add_neq_o thm
+R709:719 Top.definitions P.F add_neq_o thm
+R709:719 Top.definitions P.F add_neq_o thm
+R747:757 Top.definitions P.F add_neq_o thm
+R747:757 Top.definitions P.F add_neq_o thm
+R747:757 Top.definitions P.F add_neq_o thm
+R747:757 Top.definitions P.F add_neq_o thm
+R785:795 Top.definitions P.F add_neq_o thm
+R785:795 Top.definitions P.F add_neq_o thm
+R785:795 Top.definitions P.F add_neq_o thm
+R785:795 Top.definitions P.F add_neq_o thm
+prf 839:853 <> eq_map_add_each
+R861:863 Coq.Init.Datatypes <> nat ind
+binder 856:856 <> i:5
+binder 858:858 <> x:6
+R873:878 Top.definitions <> monoid def
+binder 867:868 <> m1:7
+binder 870:871 <> m2:8
+R894:897 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R883:887 Top.definitions NatMap Equal def
+R892:893 Top.maps <> m2:8 var
+R889:890 Top.maps <> m1:7 var
+R898:902 Top.definitions NatMap Equal def
+R918:920 Top.definitions NatMap add def
+R926:927 Top.maps <> m2:8 var
+R924:924 Top.maps <> x:6 var
+R922:922 Top.maps <> i:5 var
+R905:907 Top.definitions NatMap add def
+R913:914 Top.maps <> m1:7 var
+R911:911 Top.maps <> x:6 var
+R909:909 Top.maps <> i:5 var
+R947:951 Top.definitions NatMap Equal def
+R972:981 Coq.Arith.PeanoNat Nat eq_dec thm
+R972:981 Coq.Arith.PeanoNat Nat eq_dec thm
+R1008:1017 Top.definitions P.F add_eq_o thm
+R1008:1017 Top.definitions P.F add_eq_o thm
+R1008:1017 Top.definitions P.F add_eq_o thm
+R1008:1017 Top.definitions P.F add_eq_o thm
+R1045:1054 Top.definitions P.F add_eq_o thm
+R1045:1054 Top.definitions P.F add_eq_o thm
+R1045:1054 Top.definitions P.F add_eq_o thm
+R1045:1054 Top.definitions P.F add_eq_o thm
+R1098:1108 Top.definitions P.F add_neq_o thm
+R1098:1108 Top.definitions P.F add_neq_o thm
+R1098:1108 Top.definitions P.F add_neq_o thm
+R1098:1108 Top.definitions P.F add_neq_o thm
+R1136:1146 Top.definitions P.F add_neq_o thm
+R1136:1146 Top.definitions P.F add_neq_o thm
+R1136:1146 Top.definitions P.F add_neq_o thm
+R1136:1146 Top.definitions P.F add_neq_o thm
+prf 1187:1203 <> eq_map_add_remove
+R1211:1213 Coq.Init.Datatypes <> nat ind
+binder 1206:1206 <> i:9
+binder 1208:1208 <> x:10
+R1219:1224 Top.definitions <> monoid def
+binder 1217:1217 <> m:11
+R1229:1233 Top.definitions NatMap Equal def
+R1248:1250 Top.definitions NatMap add def
+R1257:1269 Top.definitions NatMap remove def
+R1273:1273 Top.maps <> m:11 var
+R1271:1271 Top.maps <> i:9 var
+R1254:1254 Top.maps <> x:10 var
+R1252:1252 Top.maps <> i:9 var
+R1236:1238 Top.definitions NatMap add def
+R1244:1244 Top.maps <> m:11 var
+R1242:1242 Top.maps <> x:10 var
+R1240:1240 Top.maps <> i:9 var
+R1294:1298 Top.definitions NatMap Equal def
+R1319:1328 Coq.Arith.PeanoNat Nat eq_dec thm
+R1319:1328 Coq.Arith.PeanoNat Nat eq_dec thm
+R1355:1364 Top.definitions P.F add_eq_o thm
+R1355:1364 Top.definitions P.F add_eq_o thm
+R1355:1364 Top.definitions P.F add_eq_o thm
+R1355:1364 Top.definitions P.F add_eq_o thm
+R1392:1401 Top.definitions P.F add_eq_o thm
+R1392:1401 Top.definitions P.F add_eq_o thm
+R1392:1401 Top.definitions P.F add_eq_o thm
+R1392:1401 Top.definitions P.F add_eq_o thm
+R1445:1455 Top.definitions P.F add_neq_o thm
+R1445:1455 Top.definitions P.F add_neq_o thm
+R1445:1455 Top.definitions P.F add_neq_o thm
+R1445:1455 Top.definitions P.F add_neq_o thm
+R1483:1493 Top.definitions P.F add_neq_o thm
+R1483:1493 Top.definitions P.F add_neq_o thm
+R1483:1493 Top.definitions P.F add_neq_o thm
+R1483:1493 Top.definitions P.F add_neq_o thm
+R1521:1534 Top.definitions P.F remove_neq_o thm
+R1521:1534 Top.definitions P.F remove_neq_o thm
+R1521:1534 Top.definitions P.F remove_neq_o thm
+R1521:1534 Top.definitions P.F remove_neq_o thm
+prf 1578:1595 <> eq_map_add_same_in
+R1603:1605 Coq.Init.Datatypes <> nat ind
+binder 1598:1598 <> i:12
+binder 1600:1600 <> n:13
+R1611:1616 Top.definitions <> monoid def
+binder 1609:1609 <> m:14
+R1645:1649 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1636:1638 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1621:1631 Top.definitions NatMap find def
+R1635:1635 Top.maps <> m:14 var
+R1633:1633 Top.maps <> i:12 var
+R1639:1642 Coq.Init.Datatypes <> Some constr
+R1644:1644 Top.maps <> n:13 var
+R1650:1654 Top.definitions NatMap Equal def
+R1659:1661 Top.definitions NatMap add def
+R1667:1667 Top.maps <> m:14 var
+R1665:1665 Top.maps <> n:13 var
+R1663:1663 Top.maps <> i:12 var
+R1656:1656 Top.maps <> m:14 var
+R1688:1692 Top.definitions NatMap Equal def
+R1713:1722 Coq.Arith.PeanoNat Nat eq_dec thm
+R1713:1722 Coq.Arith.PeanoNat Nat eq_dec thm
+R1763:1772 Top.definitions P.F add_eq_o thm
+R1763:1772 Top.definitions P.F add_eq_o thm
+R1763:1772 Top.definitions P.F add_eq_o thm
+R1763:1772 Top.definitions P.F add_eq_o thm
+R1798:1808 Top.definitions P.F add_neq_o thm
+R1798:1808 Top.definitions P.F add_neq_o thm
+R1798:1808 Top.definitions P.F add_neq_o thm
+R1798:1808 Top.definitions P.F add_neq_o thm
+prf 1834:1848 <> eq_map_add_swap
+R1860:1862 Coq.Init.Datatypes <> nat ind
+binder 1851:1851 <> i:15
+binder 1853:1853 <> j:16
+binder 1855:1855 <> x:17
+binder 1857:1857 <> y:18
+R1868:1873 Top.definitions <> monoid def
+binder 1866:1866 <> m:19
+R1884:1887 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1879:1882 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R1878:1878 Top.maps <> i:15 var
+R1883:1883 Top.maps <> j:16 var
+R1888:1892 Top.definitions NatMap Equal def
+R1917:1919 Top.definitions NatMap add def
+R1926:1928 Top.definitions NatMap add def
+R1934:1934 Top.maps <> m:19 var
+R1932:1932 Top.maps <> x:17 var
+R1930:1930 Top.maps <> i:15 var
+R1923:1923 Top.maps <> y:18 var
+R1921:1921 Top.maps <> j:16 var
+R1895:1897 Top.definitions NatMap add def
+R1904:1906 Top.definitions NatMap add def
+R1912:1912 Top.maps <> m:19 var
+R1910:1910 Top.maps <> y:18 var
+R1908:1908 Top.maps <> j:16 var
+R1901:1901 Top.maps <> x:17 var
+R1899:1899 Top.maps <> i:15 var
+R1957:1961 Top.definitions NatMap Equal def
+R1982:1991 Coq.Arith.PeanoNat Nat eq_dec thm
+R1982:1991 Coq.Arith.PeanoNat Nat eq_dec thm
+R2019:2028 Top.definitions P.F add_eq_o thm
+R2019:2028 Top.definitions P.F add_eq_o thm
+R2019:2028 Top.definitions P.F add_eq_o thm
+R2019:2028 Top.definitions P.F add_eq_o thm
+R2054:2064 Top.definitions P.F add_neq_o thm
+R2054:2064 Top.definitions P.F add_neq_o thm
+R2054:2064 Top.definitions P.F add_neq_o thm
+R2054:2064 Top.definitions P.F add_neq_o thm
+R2090:2099 Top.definitions P.F add_eq_o thm
+R2090:2099 Top.definitions P.F add_eq_o thm
+R2090:2099 Top.definitions P.F add_eq_o thm
+R2090:2099 Top.definitions P.F add_eq_o thm
+R2142:2152 Top.definitions P.F add_neq_o thm
+R2142:2152 Top.definitions P.F add_neq_o thm
+R2142:2152 Top.definitions P.F add_neq_o thm
+R2142:2152 Top.definitions P.F add_neq_o thm
+R2176:2185 Coq.Arith.PeanoNat Nat eq_dec thm
+R2176:2185 Coq.Arith.PeanoNat Nat eq_dec thm
+R2212:2221 Top.definitions P.F add_eq_o thm
+R2212:2221 Top.definitions P.F add_eq_o thm
+R2212:2221 Top.definitions P.F add_eq_o thm
+R2212:2221 Top.definitions P.F add_eq_o thm
+R2249:2258 Top.definitions P.F add_eq_o thm
+R2249:2258 Top.definitions P.F add_eq_o thm
+R2249:2258 Top.definitions P.F add_eq_o thm
+R2249:2258 Top.definitions P.F add_eq_o thm
+R2302:2312 Top.definitions P.F add_neq_o thm
+R2302:2312 Top.definitions P.F add_neq_o thm
+R2302:2312 Top.definitions P.F add_neq_o thm
+R2302:2312 Top.definitions P.F add_neq_o thm
+R2340:2350 Top.definitions P.F add_neq_o thm
+R2340:2350 Top.definitions P.F add_neq_o thm
+R2340:2350 Top.definitions P.F add_neq_o thm
+R2340:2350 Top.definitions P.F add_neq_o thm
+R2378:2388 Top.definitions P.F add_neq_o thm
+R2378:2388 Top.definitions P.F add_neq_o thm
+R2378:2388 Top.definitions P.F add_neq_o thm
+R2378:2388 Top.definitions P.F add_neq_o thm
+prf 2433:2446 <> for_all_eq_map
+R2456:2461 Top.definitions <> monoid def
+binder 2449:2450 <> m1:20
+binder 2452:2453 <> m2:21
+R2477:2480 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2466:2470 Top.definitions NatMap Equal def
+R2475:2476 Top.maps <> m2:21 var
+R2472:2473 Top.maps <> m1:20 var
+R2519:2521 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2481:2489 Top.definitions P for_all def
+R2517:2518 Top.maps <> m1:20 var
+R2502:2504 Coq.Init.Datatypes <> nat ind
+binder 2498:2498 <> v:22
+R2510:2513 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R2509:2509 Top.maps <> v:22 var
+R2522:2530 Top.definitions P for_all def
+R2558:2559 Top.maps <> m2:21 var
+R2543:2545 Coq.Init.Datatypes <> nat ind
+binder 2539:2539 <> v:23
+R2551:2554 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R2550:2550 Top.maps <> v:23 var
+R2587:2595 Top.definitions P for_all def
+R2608:2619 Top.definitions P fold_Equal thm
+R2608:2619 Top.definitions P fold_Equal thm
+R2608:2619 Top.definitions P fold_Equal thm
+R2608:2619 Top.definitions P fold_Equal thm
+R2608:2619 Top.definitions P fold_Equal thm
+R2608:2619 Top.definitions P fold_Equal thm
+R2608:2619 Top.definitions P fold_Equal thm
+R2692:2709 Top.definitions P transpose_neqkey def
+prf 2776:2786 <> find_eq_map
+R2796:2801 Top.definitions <> monoid def
+binder 2789:2790 <> m1:24
+binder 2792:2793 <> m2:25
+R2807:2809 Coq.Init.Datatypes <> nat ind
+binder 2805:2805 <> x:26
+R2825:2828 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2814:2818 Top.definitions NatMap Equal def
+R2823:2824 Top.maps <> m2:25 var
+R2820:2821 Top.maps <> m1:24 var
+R2845:2847 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2829:2839 Top.definitions NatMap find def
+R2843:2844 Top.maps <> m1:24 var
+R2841:2841 Top.maps <> x:26 var
+R2848:2858 Top.definitions NatMap find def
+R2862:2863 Top.maps <> m2:25 var
+R2860:2860 Top.maps <> x:26 var
+R2881:2888 Top.definitions P.F find_m def
+R2881:2888 Top.definitions P.F find_m def
+prf 2916:2934 <> for_all_add_0_notin
+R2939:2944 Top.definitions <> monoid def
+binder 2937:2937 <> m:27
+R2950:2952 Coq.Init.Datatypes <> nat ind
+binder 2948:2948 <> i:28
+R2979:2982 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2972:2974 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2957:2967 Top.definitions NatMap find def
+R2971:2971 Top.maps <> m:27 var
+R2969:2969 Top.maps <> i:28 var
+R2975:2978 Coq.Init.Datatypes <> None constr
+R3020:3022 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2983:2991 Top.definitions P for_all def
+R3019:3019 Top.maps <> m:27 var
+R3004:3006 Coq.Init.Datatypes <> nat ind
+binder 3000:3000 <> v:29
+R3012:3015 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R3011:3011 Top.maps <> v:29 var
+R3023:3031 Top.definitions P for_all def
+R3060:3062 Top.definitions NatMap add def
+R3068:3068 Top.maps <> m:27 var
+R3064:3064 Top.maps <> i:28 var
+R3044:3046 Coq.Init.Datatypes <> nat ind
+binder 3040:3040 <> v:30
+R3052:3055 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R3051:3051 Top.maps <> v:30 var
+R3097:3105 Top.definitions P for_all def
+R3118:3127 Top.definitions P fold_add thm
+R3118:3127 Top.definitions P fold_add thm
+R3118:3127 Top.definitions P fold_add thm
+R3118:3127 Top.definitions P fold_add thm
+R3118:3127 Top.definitions P fold_add thm
+R3118:3127 Top.definitions P fold_add thm
+R3118:3127 Top.definitions P fold_add thm
+R3195:3212 Top.definitions P transpose_neqkey def
+R3261:3277 Top.definitions P.F not_find_in_iff thm
+R3261:3277 Top.definitions P.F not_find_in_iff thm
+R3261:3277 Top.definitions P.F not_find_in_iff thm
+prf 3304:3317 <> for_all_remove
+R3322:3327 Top.definitions <> monoid def
+binder 3320:3320 <> m:31
+R3333:3335 Coq.Init.Datatypes <> nat ind
+binder 3331:3331 <> n:32
+R3384:3387 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3377:3379 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3340:3348 Top.definitions P for_all def
+R3376:3376 Top.maps <> m:31 var
+R3361:3363 Coq.Init.Datatypes <> nat ind
+binder 3357:3357 <> v:33
+R3369:3372 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R3368:3368 Top.maps <> v:33 var
+R3380:3383 Coq.Init.Datatypes <> true constr
+R3443:3445 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3388:3396 Top.definitions P for_all def
+R3425:3437 Top.definitions NatMap remove def
+R3441:3441 Top.maps <> m:31 var
+R3439:3439 Top.maps <> n:32 var
+R3409:3411 Coq.Init.Datatypes <> nat ind
+binder 3405:3405 <> v:34
+R3417:3420 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R3416:3416 Top.maps <> v:34 var
+R3446:3449 Coq.Init.Datatypes <> true constr
+R3478:3486 Top.definitions P for_all def
+R3497:3512 Top.definitions P fold_rec_nodep thm
+R3497:3512 Top.definitions P fold_rec_nodep thm
+R3549:3561 Top.definitions P for_all_iff thm
+R3549:3561 Top.definitions P for_all_iff thm
+R3549:3561 Top.definitions P for_all_iff thm
+R3549:3561 Top.definitions P for_all_iff thm
+R3590:3599 Coq.Arith.PeanoNat Nat eq_dec thm
+R3590:3599 Coq.Arith.PeanoNat Nat eq_dec thm
+R3663:3681 Top.definitions P.F remove_mapsto_iff thm
+R3663:3681 Top.definitions P.F remove_mapsto_iff thm
+R3663:3681 Top.definitions P.F remove_mapsto_iff thm
+R3721:3727 Coq.Init.Logic <> eq_refl constr
+R3721:3727 Coq.Init.Logic <> eq_refl constr
+R3775:3793 Top.definitions P.F remove_mapsto_iff thm
+R3775:3793 Top.definitions P.F remove_mapsto_iff thm
+R3775:3793 Top.definitions P.F remove_mapsto_iff thm
+prf 3880:3892 <> for_all_add_0
+R3897:3902 Top.definitions <> monoid def
+binder 3895:3895 <> m:35
+R3908:3910 Coq.Init.Datatypes <> nat ind
+binder 3906:3906 <> i:36
+R3959:3962 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3952:3954 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3915:3923 Top.definitions P for_all def
+R3951:3951 Top.maps <> m:35 var
+R3936:3938 Coq.Init.Datatypes <> nat ind
+binder 3932:3932 <> v:37
+R3944:3947 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R3943:3943 Top.maps <> v:37 var
+R3955:3958 Coq.Init.Datatypes <> true constr
+R4010:4012 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3963:3971 Top.definitions P for_all def
+R4000:4002 Top.definitions NatMap add def
+R4008:4008 Top.maps <> m:35 var
+R4004:4004 Top.maps <> i:36 var
+R3984:3986 Coq.Init.Datatypes <> nat ind
+binder 3980:3980 <> v:38
+R3992:3995 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R3991:3991 Top.maps <> v:38 var
+R4013:4016 Coq.Init.Datatypes <> true constr
+R4072:4074 Top.definitions NatMap add def
+R4081:4093 Top.definitions NatMap remove def
+R4046:4059 Top.maps <> for_all_eq_map thm
+R4072:4074 Top.definitions NatMap add def
+R4081:4093 Top.definitions NatMap remove def
+R4046:4059 Top.maps <> for_all_eq_map thm
+R4072:4074 Top.definitions NatMap add def
+R4081:4093 Top.definitions NatMap remove def
+R4046:4059 Top.maps <> for_all_eq_map thm
+R4072:4074 Top.definitions NatMap add def
+R4081:4093 Top.definitions NatMap remove def
+R4046:4059 Top.maps <> for_all_eq_map thm
+R4118:4136 Top.maps <> for_all_add_0_notin thm
+R4118:4136 Top.maps <> for_all_add_0_notin thm
+R4118:4136 Top.maps <> for_all_add_0_notin thm
+R4118:4136 Top.maps <> for_all_add_0_notin thm
+R4148:4161 Top.maps <> for_all_remove thm
+R4148:4161 Top.maps <> for_all_remove thm
+R4187:4199 Top.definitions P.F remove_eq_o thm
+R4187:4199 Top.definitions P.F remove_eq_o thm
+R4187:4199 Top.definitions P.F remove_eq_o thm
+R4187:4199 Top.definitions P.F remove_eq_o thm
+R4223:4239 Top.maps <> eq_map_add_remove thm
+R4223:4239 Top.maps <> eq_map_add_remove thm
+def 4252:4270 <> for_all_add_S_notin
+R4275:4280 Top.definitions <> monoid def
+binder 4273:4273 <> m:39
+R4288:4290 Coq.Init.Datatypes <> nat ind
+binder 4284:4284 <> i:40
+binder 4286:4286 <> n:41
+R4317:4320 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4310:4312 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4295:4305 Top.definitions NatMap find def
+R4309:4309 Top.maps <> m:39 var
+R4307:4307 Top.maps <> i:40 var
+R4313:4316 Coq.Init.Datatypes <> None constr
+R4372:4374 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4321:4329 Top.definitions P for_all def
+R4358:4360 Top.definitions NatMap add def
+R4370:4370 Top.maps <> m:39 var
+R4365:4365 Coq.Init.Datatypes <> S constr
+R4367:4367 Top.maps <> n:41 var
+R4362:4362 Top.maps <> i:40 var
+R4342:4344 Coq.Init.Datatypes <> nat ind
+binder 4338:4338 <> v:42
+R4350:4353 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R4349:4349 Top.maps <> v:42 var
+R4375:4379 Coq.Init.Datatypes <> false constr
+R4407:4415 Top.definitions P for_all def
+R4428:4437 Top.definitions P fold_add thm
+R4428:4437 Top.definitions P fold_add thm
+R4428:4437 Top.definitions P fold_add thm
+R4428:4437 Top.definitions P fold_add thm
+R4428:4437 Top.definitions P fold_add thm
+R4428:4437 Top.definitions P fold_add thm
+R4428:4437 Top.definitions P fold_add thm
+R4502:4519 Top.definitions P transpose_neqkey def
+R4577:4593 Top.definitions P.F not_find_in_iff thm
+R4577:4593 Top.definitions P.F not_find_in_iff thm
+R4577:4593 Top.definitions P.F not_find_in_iff thm
+prf 4621:4633 <> for_all_add_S
+R4639:4644 Top.definitions <> monoid def
+binder 4637:4637 <> m:43
+R4652:4654 Coq.Init.Datatypes <> nat ind
+binder 4648:4648 <> i:44
+binder 4650:4650 <> n:45
+R4711:4713 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4660:4668 Top.definitions P for_all def
+R4697:4699 Top.definitions NatMap add def
+R4709:4709 Top.maps <> m:43 var
+R4704:4704 Coq.Init.Datatypes <> S constr
+R4706:4706 Top.maps <> n:45 var
+R4701:4701 Top.maps <> i:44 var
+R4681:4683 Coq.Init.Datatypes <> nat ind
+binder 4677:4677 <> v:46
+R4689:4692 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R4688:4688 Top.maps <> v:46 var
+R4714:4718 Coq.Init.Datatypes <> false constr
+R4764:4766 Top.definitions NatMap add def
+R4777:4789 Top.definitions NatMap remove def
+R4771:4771 Coq.Init.Datatypes <> S constr
+R4738:4751 Top.maps <> for_all_eq_map thm
+R4764:4766 Top.definitions NatMap add def
+R4777:4789 Top.definitions NatMap remove def
+R4771:4771 Coq.Init.Datatypes <> S constr
+R4738:4751 Top.maps <> for_all_eq_map thm
+R4764:4766 Top.definitions NatMap add def
+R4777:4789 Top.definitions NatMap remove def
+R4771:4771 Coq.Init.Datatypes <> S constr
+R4738:4751 Top.maps <> for_all_eq_map thm
+R4764:4766 Top.definitions NatMap add def
+R4777:4789 Top.definitions NatMap remove def
+R4771:4771 Coq.Init.Datatypes <> S constr
+R4738:4751 Top.maps <> for_all_eq_map thm
+R4808:4826 Top.maps <> for_all_add_S_notin def
+R4808:4826 Top.maps <> for_all_add_S_notin def
+R4836:4848 Top.definitions P.F remove_eq_o thm
+R4836:4848 Top.definitions P.F remove_eq_o thm
+R4877:4893 Top.maps <> eq_map_add_remove thm
+R4877:4893 Top.maps <> eq_map_add_remove thm
+R4877:4893 Top.maps <> eq_map_add_remove thm
+prf 4921:4935 <> for_all_add_add
+R4940:4945 Top.definitions <> monoid def
+binder 4938:4938 <> m:47
+R4958:4960 Coq.Init.Datatypes <> nat ind
+binder 4949:4950 <> n0:48
+binder 4952:4953 <> n1:49
+binder 4955:4955 <> i:50
+R5031:5033 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4966:4974 Top.definitions P for_all def
+R5009:5011 Top.definitions NatMap add def
+R5019:5021 Top.definitions NatMap add def
+R5028:5028 Top.maps <> m:47 var
+R5025:5026 Top.maps <> n0:48 var
+R5023:5023 Top.maps <> i:50 var
+R5015:5016 Top.maps <> n1:49 var
+R5013:5013 Top.maps <> i:50 var
+R4987:4989 Coq.Init.Datatypes <> nat ind
+binder 4983:4983 <> v:51
+R4996:4999 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R4995:4995 Top.maps <> v:51 var
+R5034:5042 Top.definitions P for_all def
+R5077:5079 Top.definitions NatMap add def
+R5086:5086 Top.maps <> m:47 var
+R5083:5084 Top.maps <> n1:49 var
+R5081:5081 Top.maps <> i:50 var
+R5055:5057 Coq.Init.Datatypes <> nat ind
+binder 5051:5051 <> v:52
+R5064:5067 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R5063:5063 Top.maps <> v:52 var
+R5133:5135 Top.definitions NatMap add def
+R5107:5120 Top.maps <> for_all_eq_map thm
+R5133:5135 Top.definitions NatMap add def
+R5107:5120 Top.maps <> for_all_eq_map thm
+R5133:5135 Top.definitions NatMap add def
+R5107:5120 Top.maps <> for_all_eq_map thm
+R5133:5135 Top.definitions NatMap add def
+R5107:5120 Top.maps <> for_all_eq_map thm
+R5178:5191 Top.maps <> eq_map_add_add thm
+R5178:5191 Top.maps <> eq_map_add_add thm
+R5178:5191 Top.maps <> eq_map_add_add thm
+prf 5220:5236 <> for_all_exist_pos
+R5242:5247 Top.definitions <> monoid def
+binder 5240:5240 <> m:53
+R5252:5252 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5307:5312 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5253:5260 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R5269:5271 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R5266:5268 Coq.Init.Datatypes <> nat ind
+binder 5261:5262 <> n':54
+R5266:5268 Coq.Init.Datatypes <> nat ind
+binder 5264:5264 <> r:55
+R5297:5300 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R5288:5290 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5272:5282 Top.definitions NatMap find def
+R5287:5287 Top.maps <> m:53 var
+R5284:5285 Top.maps <> n':54 var
+R5291:5294 Coq.Init.Datatypes <> Some constr
+R5296:5296 Top.maps <> r:55 var
+R5302:5305 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R5301:5301 Top.maps <> r:55 var
+R5350:5352 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5313:5321 Top.definitions P for_all def
+R5349:5349 Top.maps <> m:53 var
+R5334:5336 Coq.Init.Datatypes <> nat ind
+binder 5330:5330 <> v:56
+R5342:5345 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R5341:5341 Top.maps <> v:56 var
+R5353:5357 Coq.Init.Datatypes <> false constr
+R5466:5468 Top.definitions NatMap add def
+R5473:5473 Coq.Init.Datatypes <> S constr
+R5439:5452 Top.maps <> for_all_eq_map thm
+R5466:5468 Top.definitions NatMap add def
+R5473:5473 Coq.Init.Datatypes <> S constr
+R5439:5452 Top.maps <> for_all_eq_map thm
+R5466:5468 Top.definitions NatMap add def
+R5473:5473 Coq.Init.Datatypes <> S constr
+R5439:5452 Top.maps <> for_all_eq_map thm
+R5466:5468 Top.definitions NatMap add def
+R5473:5473 Coq.Init.Datatypes <> S constr
+R5439:5452 Top.maps <> for_all_eq_map thm
+R5493:5505 Top.maps <> for_all_add_S thm
+R5493:5505 Top.maps <> for_all_add_S thm
+R5519:5523 Top.definitions NatMap Equal def
+R5542:5551 Coq.Arith.PeanoNat Nat eq_dec thm
+R5542:5551 Coq.Arith.PeanoNat Nat eq_dec thm
+R5597:5606 Top.definitions P.F add_eq_o thm
+R5597:5606 Top.definitions P.F add_eq_o thm
+R5597:5606 Top.definitions P.F add_eq_o thm
+R5597:5606 Top.definitions P.F add_eq_o thm
+R5631:5641 Top.definitions P.F add_neq_o thm
+R5631:5641 Top.definitions P.F add_neq_o thm
+R5631:5641 Top.definitions P.F add_neq_o thm
+R5631:5641 Top.definitions P.F add_neq_o thm
+prf 5688:5703 <> get_coeff_eq_map
+R5712:5717 Top.definitions <> monoid def
+binder 5706:5707 <> m1:57
+binder 5709:5710 <> m2:58
+R5724:5727 Top.definitions <> poly ind
+binder 5722:5722 <> p:59
+R5748:5752 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5741:5743 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5732:5738 Top.definitions <> valid_b def
+R5740:5740 Top.maps <> p:59 var
+R5744:5747 Coq.Init.Datatypes <> true constr
+R5764:5767 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5753:5757 Top.definitions NatMap Equal def
+R5762:5763 Top.maps <> m2:58 var
+R5759:5760 Top.maps <> m1:57 var
+R5789:5791 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5768:5783 Top.definitions <> get_coefficient_ def
+R5785:5785 Top.maps <> p:59 var
+R5787:5788 Top.maps <> m1:57 var
+R5792:5807 Top.definitions <> get_coefficient_ def
+R5809:5809 Top.maps <> p:59 var
+R5811:5812 Top.maps <> m2:58 var
+R5900:5913 Top.maps <> for_all_eq_map thm
+R5900:5913 Top.maps <> for_all_eq_map thm
+R5900:5913 Top.maps <> for_all_eq_map thm
+R5900:5913 Top.maps <> for_all_eq_map thm
+R6046:6050 Top.definitions NatMap Equal def
+R6087:6097 Top.definitions NatMap find def
+R6105:6107 Coq.Init.Datatypes <> nat ind
+R6087:6097 Top.definitions NatMap find def
+R6105:6107 Coq.Init.Datatypes <> nat ind
+R6197:6207 Coq.Arith.PeanoNat Nat sub_0_r thm
+R6197:6207 Coq.Arith.PeanoNat Nat sub_0_r thm
+R6197:6207 Coq.Arith.PeanoNat Nat sub_0_r thm
+R6228:6230 Top.definitions NatMap add def
+R6242:6244 Top.definitions NatMap add def
+R6228:6230 Top.definitions NatMap add def
+R6242:6244 Top.definitions NatMap add def
+R6228:6230 Top.definitions NatMap add def
+R6242:6244 Top.definitions NatMap add def
+R6228:6230 Top.definitions NatMap add def
+R6242:6244 Top.definitions NatMap add def
+R6286:6300 Top.maps <> eq_map_add_each thm
+R6286:6300 Top.maps <> eq_map_add_each thm
+prf 6353:6369 <> get_coeff_add_add
+R6379:6381 Coq.Init.Datatypes <> nat ind
+binder 6372:6372 <> i:60
+binder 6374:6374 <> x:61
+binder 6376:6376 <> y:62
+R6387:6392 Top.definitions <> monoid def
+binder 6385:6385 <> m:63
+R6399:6402 Top.definitions <> poly ind
+binder 6397:6397 <> p:64
+R6423:6426 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6416:6418 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6407:6413 Top.definitions <> valid_b def
+R6415:6415 Top.maps <> p:64 var
+R6419:6422 Coq.Init.Datatypes <> true constr
+R6457:6459 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6427:6442 Top.definitions <> get_coefficient_ def
+R6444:6444 Top.maps <> p:64 var
+R6447:6449 Top.definitions NatMap add def
+R6455:6455 Top.maps <> m:63 var
+R6453:6453 Top.maps <> x:61 var
+R6451:6451 Top.maps <> i:60 var
+R6460:6475 Top.definitions <> get_coefficient_ def
+R6477:6477 Top.maps <> p:64 var
+R6480:6482 Top.definitions NatMap add def
+R6489:6491 Top.definitions NatMap add def
+R6497:6497 Top.maps <> m:63 var
+R6495:6495 Top.maps <> y:62 var
+R6493:6493 Top.maps <> i:60 var
+R6486:6486 Top.maps <> x:61 var
+R6484:6484 Top.maps <> i:60 var
+R6557:6559 Top.definitions NatMap add def
+R6566:6568 Top.definitions NatMap add def
+R6529:6544 Top.maps <> get_coeff_eq_map thm
+R6557:6559 Top.definitions NatMap add def
+R6566:6568 Top.definitions NatMap add def
+R6529:6544 Top.maps <> get_coeff_eq_map thm
+R6557:6559 Top.definitions NatMap add def
+R6566:6568 Top.definitions NatMap add def
+R6529:6544 Top.maps <> get_coeff_eq_map thm
+R6557:6559 Top.definitions NatMap add def
+R6566:6568 Top.definitions NatMap add def
+R6529:6544 Top.maps <> get_coeff_eq_map thm
+R6557:6559 Top.definitions NatMap add def
+R6566:6568 Top.definitions NatMap add def
+R6529:6544 Top.maps <> get_coeff_eq_map thm
+R6629:6642 Top.maps <> eq_map_add_add thm
+R6629:6642 Top.maps <> eq_map_add_add thm
+R6629:6642 Top.maps <> eq_map_add_add thm
