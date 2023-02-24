@@ -1,5 +1,5 @@
-Require Import definitions.
-Import ZArith.
+Require Import PolyDefs PolyVal Bool.
+Import ZArith Lia.
 Require Import PolyArith Valid.
 
 
@@ -30,7 +30,7 @@ Fixpoint eval_form (f:form) (val : nat -> bool) : bool :=
   end
 .  
 
-Hint Constructors form : core.
+#[local] Hint Constructors form : core.
 Notation "A ∧ B" := (f_and A B) (at level 30, right associativity).
 Notation "A ∨ B" := (f_or A B) (at level 35, right associativity).
 Notation "A → B" := (f_imp A B) (at level 49, right associativity, B at level 50).
@@ -115,7 +115,7 @@ idtac v.
 Abort.
 
 
-Definition sub_poly (p q:valid_pol) := sum_poly p (mul_poly (cst_poly (-1)%Z) q).
+Definition sub_poly (p q:valid_poly) := sum_poly p (mul_poly (cst_poly (-1)%Z) q).
 
 Lemma poly_val_cst (z:Z) (val:nat->Z) : (poly_val (cst_poly z) val) = z.
 Proof.
@@ -124,7 +124,7 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma poly_val_sub (p q : valid_pol) (val:nat->Z) : 
+Lemma poly_val_sub (p q : valid_poly) (val:nat->Z) : 
 poly_val (sub_poly p q) val = Z.sub (poly_val p val)  (poly_val q val) 
 .
 Proof.
@@ -136,7 +136,7 @@ Proof.
 Qed.
 
 
-Fixpoint to_poly (f:form) (val:nat->bool) : valid_pol := 
+Fixpoint to_poly (f:form) (val:nat->bool) : valid_poly := 
   match f with 
   |f_true => cst_poly 1%Z
   |f_false => cst_poly 0%Z
@@ -149,7 +149,7 @@ end.
 
 Definition z_of_bool := (fun x : bool => if x then 1%Z else 0%Z).
 
-Lemma eval_form_to_poly  (f:form) (val : nat -> bool) : 
+Theorem eval_form_to_poly  (f:form) (val : nat -> bool) : 
 z_of_bool (eval_form f val) = 
 poly_val (to_poly f val) (fun n => z_of_bool (val n)).
 Proof.
@@ -185,20 +185,46 @@ Definition eq_form (f1:form) (l1: list bool) (f2:form) (l2: list bool) :=
 
 Eval compute in (VP_value (to_poly (f_and f_true f_false) (fun n => false))).
 
-Ltac mytac e := eval compute in e.
 
-Check List.nth.
-
-Goal (eq_form (f_and f_false f_true) [] f_false [] ) .
+(* Example : here we can prove that (false || b) = false, in the environnement where b is true *)
+Goal (eq_form (f_and f_false (f_var 0)) [true] f_false [] ).
 unfold eq_form. 
 simpl.
 unfold cst_poly.
 intro.
 rewrite mul_poly_val.
+unfold poly_val.
+simpl.
+reflexivity.
+Qed.
 
-Abort.
+(* Example : here we can prove that (b0 || b1) = (b1 || b0), when b0 is true and b1 is false (in both environnements) *)
+Goal (eq_form (f_and (f_var 0) (f_var 1)) [true; false] (f_and (f_var 1) (f_var 0)) [true; false] ).
+unfold eq_form. 
+simpl.
+unfold cst_poly.
+intro.
+rewrite mul_poly_val.
+rewrite mul_poly_val.
+unfold poly_val.
+simpl.
+reflexivity.
+Qed.
 
-Goal forall b : bool , True .
-intros b.
-pose (v := (andb b ( negb b))).
-Abort.
+(* Example : here we can prove that ((b0 || b1) && b2) = (b2 && (b1 || b0)), when b0 is true and b1 is false (in both environnements) *)
+Goal (eq_form  (((# 0) ∨ (# 1)) ∧ # 2) [true; false; false] (# 2 ∧ ((# 1) ∨ (# 0))) [true; false; false] ).
+unfold eq_form. 
+simpl.
+unfold cst_poly.
+intro.
+rewrite mul_poly_val.
+rewrite mul_poly_val.
+unfold sub_poly.
+unfold cst_poly.
+rewrite sum_poly_val.
+rewrite sum_poly_val.
+rewrite sum_poly_val.
+rewrite sum_poly_val.
+simpl.
+reflexivity.
+Qed.

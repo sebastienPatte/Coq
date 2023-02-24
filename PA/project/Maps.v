@@ -1,4 +1,6 @@
-Require Import definitions.
+(* This file defines some lemmas on maps (used to represent monoids) *)
+
+Require Import PolyDefs.
 Require Import BoolHelp.
 Import ZArith Arith Bool Lia.
 Import FMapList NatMap P F Coq.FSets.FMapFacts.
@@ -176,7 +178,6 @@ Proof.
 	+ rewrite F.add_neq_o; [|assumption].
 	  reflexivity.
 Qed.
-
 
 Lemma get_coeff_eq_map (m1 m2:monoid)  (p:poly) : valid_b p = true -> 
 Equal m1 m2 ->

@@ -4,26 +4,26 @@ Inductive poly : Type :=
 | Cst : Z -> poly
 | Poly : poly -> nat -> poly -> poly .
 
-Inductive valid_poly : poly -> Prop := 
-|cst : forall (z:Z), valid_poly (Cst z)  
+Inductive valid_pol : poly -> Prop := 
+|cst : forall (z:Z), valid_pol (Cst z)  
 |compose_cst : 
 	forall (i :nat), 
 	forall (x y :Z), y <> 0%Z ->  
-	valid_poly (Poly (Cst x) i (Cst y)) 
+	valid_pol (Poly (Cst x) i (Cst y)) 
 |compose_l : 
 	forall (i j :nat), i < j ->
 	forall (x :Z),  x <> 0%Z -> 
-	forall (p q : poly), valid_poly (Poly p j q) -> 
-	valid_poly (Poly (Poly p j q) i (Cst x)) 
+	forall (p q : poly), valid_pol (Poly p j q) -> 
+	valid_pol (Poly (Poly p j q) i (Cst x)) 
 |compose_r : 
 	forall (i j :nat), i <= j ->
 	forall (x :Z),  
-	forall (p q : poly), valid_poly (Poly p j q) -> 
-	valid_poly (Poly (Cst x) i (Poly p j q)) 
+	forall (p q : poly), valid_pol (Poly p j q) -> 
+	valid_pol (Poly (Cst x) i (Poly p j q)) 
 |compose_lr : 
 	forall (i j j':nat), i < j /\ i <= j' ->
-	forall (p q p' q': poly), valid_poly (Poly p j q) /\ valid_poly (Poly p' j' q') -> 
-	valid_poly (Poly (Poly p j q) i (Poly p' j' q'))
+	forall (p q p' q': poly), valid_pol (Poly p j q) /\ valid_pol (Poly p' j' q') -> 
+	valid_pol (Poly (Poly p j q) i (Poly p' j' q'))
 .
 
 Fixpoint valid_b (pol:poly) : bool := 
@@ -42,15 +42,9 @@ match pol with
 end.
 
 
-Record valid_pol : Type :=
+Record valid_poly : Type :=
 { VP_value : poly ;
 VP_prop : valid_b VP_value = true }.
-
-Ltac andb_destr H := 
-  repeat (let H' := fresh H in apply andb_true_iff in H as [H H']; try andb_destr H').
-
-Ltac andb_split := 
-  repeat (apply andb_true_iff; split).
 
 
 Require Import FMapList.
@@ -63,8 +57,7 @@ Module F := P.F.
 
 Definition monoid : Type := NatMap.t nat.
 
-(* We could make a single definition [get_coefficient] with a dependent match to keep the polynomials proofs of validity at each recursive call, but it makes the proofs harder. Instead we use the following definitions, with the lemma [valid_b_more] to propagate the polynomials validity proofs at each recursive call *)
-
+(* We could make a single definition [get_coefficient] with a dependent match to keep the polynomials proofs of validity at each recursive call, but it would makes the proofs harder. Instead we use the following definitions, with the lemma [valid_b_more] to propagate the polynomials validity proofs at each recursive call *)
 Fixpoint get_coefficient_ (pol: poly) (m:monoid) := 
   match pol with 
   | Cst z => if (P.for_all (fun (k:nat) (v:nat) => v =? 0%nat ) m) then z else 0%Z 
@@ -75,7 +68,7 @@ Fixpoint get_coefficient_ (pol: poly) (m:monoid) :=
       end
 end.
 
-Definition get_coefficient (pol: valid_pol) (m:monoid) := get_coefficient_ (VP_value pol) m.
+Definition get_coefficient (pol: valid_poly) (m:monoid) := get_coefficient_ (VP_value pol) m.
 
 Lemma option_dec {A}: 
   forall (el: option A),
@@ -86,3 +79,15 @@ Proof.
   right; exists a; trivial.
   left; trivial.
 Qed.
+
+
+Fixpoint poly_val_ (pol:poly) (f : nat -> Z) := 
+  match pol with 
+  | Cst z => z
+  | Poly p i q => 
+    Z.add (poly_val_ p f) (Z.mul (f i) (poly_val_ q f))
+end.
+
+Definition poly_val (pol:valid_poly) (f : nat -> Z) := 
+ poly_val_ (VP_value pol) f 
+.

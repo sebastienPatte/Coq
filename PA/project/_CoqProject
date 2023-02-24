@@ -1,9 +1,9 @@
 -R . Top 
-project.v
 BoolHelp.v
 Maps.v
 Valid.v
-definitions.v
+PolyDefs.v
 PolyArith.v
 PolyVal.v
 Coeff.v
+BTauto.v

@@ -1,3 +1,5 @@
+(* This file contains some lemmas on boolean expressions, which are exported as global reslove hints, and the proof irrelenvance theorem for booleans *)
+
 Require Import ZArith Arith Bool Lia.
 
 Lemma ltb_correct (a b:nat) : a < b -> a <? b = true.
@@ -53,54 +55,6 @@ Proof.
   rewrite Nat.leb_le.
   apply Nat.lt_le_incl.
 Qed.
-
-
-(* Proof irrelevance on booleans *)
-
-Lemma b_dec : forall (b1 b2 : bool), b1 = b2 \/ b1 <> b2.
-  Proof.
-    intros.
-    destruct b1,b2; intuition.
-  Qed.
-
-  Local Definition comp [A] [x y y':A] (eq1:x = y) (eq2:x = y') : y = y' :=
-    eq_ind _ (fun a => a = y') eq2 _ eq1.
-
-    Local Definition trans_sym_eq [A] (x y:A) (u:x = y) : comp u u = eq_refl y.
-  Proof.
-    case u; trivial.
-  Qed.
-
-  Local Definition nu [x y:bool] (u:x = y) : x = y :=
-  match b_dec x y with     
-    | or_introl eqxy => eqxy 
-    | or_intror neqxy => False_ind _ (neqxy u)
-  end.
-
-  Local Definition nu_constant [x y:bool] (u v:x = y) : nu u = nu v.
-    unfold nu.
-    destruct (b_dec x y) as [Heq|Hneq].
-    - reflexivity.
-    - case Hneq; trivial.
-  Qed.
-
-  Local Definition nu_inv [x y:bool] (v:x = y) : x = y := comp (nu (eq_refl x)) v.
-
-  Local Definition nu_left_inv [x y:bool] (u:x = y) : nu_inv (nu u) = u.
-  Proof.
-    case u; unfold nu_inv.
-    case eq_refl.
-    apply trans_sym_eq.
-  Qed.
-
-  Lemma bool_irrel (x y:bool) (p1 p2:x = y) : p1 = p2.
-  Proof.
-    elim (nu_left_inv p1).
-    elim (nu_left_inv p2).
-    elim nu_constant with x y p1 p2.
-    reflexivity.
-  Qed.
-
   
 #[export] Hint Resolve leb_complete : core. 
 #[export] Hint Resolve leb_correct : core. 
@@ -108,3 +62,58 @@ Lemma b_dec : forall (b1 b2 : bool), b1 = b2 \/ b1 <> b2.
 #[export] Hint Resolve ltb_complete : core.
 #[export] Hint Resolve Nat.ltb_lt : core.
 #[export] Hint Resolve Nat.sub_0_r Nat.lt_le_incl ltb_imp_leb ltb_trans leb_trans ltb_leb_trans: core.
+
+Ltac andb_destr H := 
+  repeat (let H' := fresh H in apply andb_true_iff in H as [H H']; try andb_destr H').
+
+Ltac andb_split := 
+  repeat (apply andb_true_iff; split).
+
+
+  (* Proof irrelevance on booleans *)
+
+Lemma b_dec : forall (b1 b2 : bool), b1 = b2 \/ b1 <> b2.
+Proof.
+  intros.
+  destruct b1,b2; intuition.
+Qed.
+
+Local Definition comp [A] [x y y':A] (eq1:x = y) (eq2:x = y') : y = y' :=
+eq_ind _ (fun a => a = y') eq2 _ eq1.
+
+Local Definition trans_sym_eq [A] (x y:A) (u:x = y) : comp u u = eq_refl y.
+Proof.
+case u; trivial.
+Qed.
+
+Local Definition nu [x y:bool] (u:x = y) : x = y :=
+match b_dec x y with     
+| or_introl eqxy => eqxy 
+| or_intror neqxy => False_ind _ (neqxy u)
+end.
+
+Local Definition nu_constant [x y:bool] (u v:x = y) : nu u = nu v.
+unfold nu.
+destruct (b_dec x y) as [Heq|Hneq].
+- reflexivity.
+- case Hneq; trivial.
+Qed.
+
+Local Definition nu_inv [x y:bool] (v:x = y) : x = y := comp (nu (eq_refl x)) v.
+
+Local Definition nu_left_inv [x y:bool] (u:x = y) : nu_inv (nu u) = u.
+Proof.
+case u; unfold nu_inv.
+case eq_refl.
+apply trans_sym_eq.
+Qed.
+
+Lemma bool_irrel (x y:bool) (p1 p2:x = y) : p1 = p2.
+Proof.
+elim (nu_left_inv p1).
+elim (nu_left_inv p2).
+elim nu_constant with x y p1 p2.
+reflexivity.
+Qed.
+
+

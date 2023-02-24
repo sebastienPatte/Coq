@@ -1,7 +1,8 @@
-Require Import Valid.
-Require Import definitions.
-Require Import BoolHelp.
+(* In this file we define sum and multiplication of valid polynoms  *)
 
+Require Import Valid.
+Require Import PolyDefs.
+Require Import BoolHelp.
 Import ZArith Arith Bool Lia.
 Import FMapList .
 Import P.
@@ -39,23 +40,22 @@ Proof.
   destruct p; inversion H.
 Qed.
 
-
+(* Used to decide termination of sum_poly_ and mul_poly_ *)
 Fixpoint length (p:poly) := 
   match p with 
   |Cst _ => 1 
   |Poly p _ q => S ((length p) + (length q))
   end.
 
+
 Obligation Tactic := try (unfold Nat.max; simpl; intuition).
+
+(* Polynom Sum *)
 
 Equations sum_poly_ (p q:poly) : poly by wf (length p + length q) :=
   sum_poly_ (Cst z1) (Cst z2) := Cst (Z.add z1 z2) ;
   sum_poly_ (Poly p1 i q1) (Cst z2) := Poly (sum_poly_ p1 (Cst z2) ) i q1;
   sum_poly_ (Cst z1) (Poly p2 j q2) := Poly (sum_poly_ (Cst z1) p2 ) j q2 ;
-  (* when the sum of 2 constants on the right is zero, we just keep the left part *)
-  (* sum_poly_ (Poly p1 i (Cst z1)) (Poly p2 i (Cst z2)) := 
-    if Z.eqb (Z.add z1 z2) 0%Z then sum_poly_ p1 p2 
-    else Poly (sum_poly_ p1 p2) i (Cst (Z.add z1 z2)); *)
   sum_poly_ (Poly p1 i q1) (Poly p2 j q2) := 
     match Nat.compare i j with
     | Eq => Poly (sum_poly_ p1 p2) i (sum_poly_ q1 q2)
@@ -64,7 +64,10 @@ Equations sum_poly_ (p q:poly) : poly by wf (length p + length q) :=
     end
 . 
 
-
+(* when the sum of 2 constants on the right is zero, we just keep the left part *)
+  (* sum_poly_ (Poly p1 i (Cst z1)) (Poly p2 i (Cst z2)) := 
+    if Z.eqb (Z.add z1 z2) 0%Z then sum_poly_ p1 p2 
+    else Poly (sum_poly_ p1 p2) i (Cst (Z.add z1 z2)); *)
 
 Fixpoint remove_null_r (pol:poly) : poly :=
   match pol with 
@@ -75,31 +78,10 @@ Fixpoint remove_null_r (pol:poly) : poly :=
   end
 .
 
-Lemma valid_sum_le (p1 p2 q1 q2:poly) (i j:nat) : valid_b (Poly (sum_poly_ q1 (Poly p1 i p2)) j q2) = true -> j < i.
-Proof.
-  intro.
-  induction q1.
-  - simp sum_poly_ in H. eapply valid_le in H. assumption.
-  - simp sum_poly_ in H.
-    elim (gt_eq_gt_dec n i); intro.
-    * elim a; intro.
-    -- eapply nat_compare_lt in a0 as a1.
-      rewrite a1 in *.
-      valid_destr H.
-      specialize (IHq1_1 V0).
-      assumption.
-    -- rewrite b in *.
-      rewrite Nat.compare_refl in H.
-      valid_destr H.
-      apply valid_le in H.
-      assumption.
-    * eapply nat_compare_gt in b as a.
-      rewrite a in H.
-      apply valid_le in H.
-      assumption.
-Qed.
 
-Lemma weak_sum_pol_sym (p q:poly) : 
+
+(* The sum of 2 weakly valid polynoms is commutative *)
+Lemma weak_sum_pol_comm (p q:poly) : 
 weak_valid_b p = true -> 
 weak_valid_b q = true -> 
 sum_poly_ p q = sum_poly_ q p.
@@ -122,7 +104,7 @@ Proof.
           rewrite a_lt. reflexivity.
         -- rewrite b in *.
           rewrite Nat.compare_refl.
-          apply weak_valid_b_more in H0 as (V2 & V3).
+          weak_valid_destr H0.
           rewrite (IHp1 q1 V0 V2).
           rewrite (IHp2 q2 V1 V3).
           apply f_equal. reflexivity.
@@ -133,7 +115,8 @@ Proof.
         apply f_equal. reflexivity.
 Qed.
 
-Lemma sum_pol_sym (p q:poly) : 
+(* As a consequence, the sum of 2 valid polynoms is also commutative *)
+Lemma sum_pol_comm (p q:poly) : 
 valid_b p = true -> 
 valid_b q = true -> 
 sum_poly_ p q = sum_poly_ q p.
@@ -141,9 +124,8 @@ Proof.
   intros.
   apply weaken_valid in H.
   apply weaken_valid in H0.
-  apply weak_sum_pol_sym; assumption.
+  apply weak_sum_pol_comm; assumption.
 Qed.
-
 
 Lemma weak_valid_sum_cst_p (p q:poly) (i:nat) (z:Z) : 
 weak_valid_b (Poly p i q) = true -> 
@@ -155,11 +137,11 @@ Proof.
   - intros.
     simp sum_poly_.
   - intros. simp sum_poly_.
-    specialize H as V. apply weak_valid_b_more_l in V as (V0 & V1).
-    specialize (IHp1 q V0).
+    weak_valid_destr H.
+    specialize (IHp1 q V4).
     simp sum_poly_ in H0.
-    specialize H0 as V. apply weak_valid_b_more in V as (V2 & V3).
-    specialize (IHp1 V2).
+    weak_valid_destr H0.
+    specialize (IHp1 V0).
       eapply le_weak_valid  with (i:=n) (p':=p2).
       + eapply weak_valid_le in H. assumption.
       + assumption.
@@ -173,7 +155,7 @@ Proof.
   - apply nat_compare_gt in H. apply nat_compare_lt in H. assumption.
 Qed.
 
-Lemma weak_sum_leq (p1 p2 q1 q2:poly) (n0:nat): 
+Lemma weak_sum_leq_ (p1 p2 q1 q2:poly) (n0:nat): 
 weak_valid_b (Poly p1 n0 p2) = true ->
 weak_valid_b (Poly q1 n0 q2) = true -> 
 match sum_poly_ p2 q2 with 
@@ -189,7 +171,22 @@ Proof.
   - apply weak_valid_leq in H. apply weak_valid_leq in H0.  destruct (n ?= n1); auto.
 Qed.
 
-Lemma weak_sum_gt (p1 p2 q1 q2:poly) (n0:nat): 
+Lemma weak_sum_leq (p1 p2 q1 q2 p q:poly) (n0:nat): 
+weak_valid_b (Poly p1 n0 p2) = true ->
+weak_valid_b (Poly q1 n0 q2) = true -> 
+weak_valid_b (Poly p n0 q) = true ->
+weak_valid_b (sum_poly_ p2 q2) = true -> 
+weak_valid_b (Poly p n0 (sum_poly_ p2 q2)) = true
+.
+Proof.
+  intros.
+  eapply weak_sum_leq_ with (p1:=p1) (q1:=q1) (q2:=q2) in H as Hleq; [|assumption].
+  destruct (sum_poly_ p2 q2). 
+  - simpl. destruct p. trivial. andb_split. apply weak_valid_le in H1. auto. weak_valid_destr H1. assumption.
+  - eapply leq_weak_valid; intuition.
+Qed.
+
+Lemma weak_sum_gt_ (p1 p2 q1 q2:poly) (n0:nat): 
 weak_valid_b (Poly p1 n0 p2) = true ->
 weak_valid_b (Poly q1 n0 q2) = true -> 
 match sum_poly_ p1 q1 with 
@@ -205,26 +202,7 @@ Proof.
   - apply weak_valid_le in H. apply weak_valid_le in H0.  destruct (n ?= n1); auto.
 Qed.
 
-Lemma weak_sum_leq' (p1 p2 q1 q2 p q:poly) (n0:nat): 
-weak_valid_b (Poly p1 n0 p2) = true ->
-weak_valid_b (Poly q1 n0 q2) = true -> 
-weak_valid_b (Poly p n0 q) = true ->
-weak_valid_b (sum_poly_ p2 q2) = true -> 
-weak_valid_b (Poly p n0 (sum_poly_ p2 q2)) = true
-.
-Proof.
-  intros.
-  assert (aaa : match sum_poly_ p2 q2 with 
-  |Cst _ => true 
-  |Poly _ j _ => n0 <=? j 
-  end = true).
-  eapply weak_sum_leq with (p1:=p1) (q1:=q1); try assumption. 
-  destruct (sum_poly_ p2 q2). 
-  - simpl. destruct p. trivial. andb_split. apply weak_valid_le in H1. auto. weak_valid_destr H1. assumption.
-  - eapply leq_weak_valid; intuition.
-Qed.
-
-Lemma weak_sum_gt' (p1 p2 q1 q2 p q:poly) (n0:nat): 
+Lemma weak_sum_gt (p1 p2 q1 q2 p q:poly) (n0:nat): 
 weak_valid_b (Poly p1 n0 p2) = true ->
 weak_valid_b (Poly q1 n0 q2) = true -> 
 weak_valid_b (Poly p n0 q) = true ->
@@ -237,12 +215,13 @@ Proof.
   |Cst _ => true 
   |Poly _ j _ => n0 <? j 
   end = true).
-  eapply weak_sum_gt with (p2:=p2) (q2:=q2); try assumption. 
+  eapply weak_sum_gt_ with (p2:=p2) (q2:=q2); try assumption. 
   destruct (sum_poly_ p1 q1). 
   - simpl. destruct q. trivial. andb_split. apply weak_valid_leq in H1. auto. weak_valid_destr H1. assumption.
   - eapply le_weak_valid; intuition.  
 Qed.
 
+(* Sum of 2 polynoms preserves weak validity *)
 Lemma sum_weak_valid (p q:poly) : weak_valid_b p = true -> weak_valid_b q = true -> weak_valid_b (sum_poly_ p q) = true.
 Proof.
   intros VP VQ.
@@ -255,8 +234,8 @@ Proof.
   - weak_valid_destr VP. specialize (IHp1 V0). specialize (IHp2 V1).
     induction q; simp sum_poly_.
     + specialize (IHp1 (Cst z) VQ).
-      rewrite weak_sum_pol_sym in IHp1; try assumption.
-      rewrite weak_sum_pol_sym; try assumption.
+      rewrite weak_sum_pol_comm in IHp1; try assumption.
+      rewrite weak_sum_pol_comm; try assumption.
       apply weak_valid_sum_cst_p; assumption.
     + weak_valid_destr VQ. specialize (IHq1 V2). specialize (IHq2 V3).
       elim (gt_eq_gt_dec n n0); intro.
@@ -265,31 +244,18 @@ Proof.
           rewrite a1.
           eapply le_weak_valid with (p:=q1) (q:=q2) (p':=p1) (q':=p2) in a0 as a2; try assumption.
           specialize (IHp1 (Poly q1 n0 q2) VQ) as HN1.
-          eapply weak_sum_gt' with (p2:=p2) (q2:=p2) (p:=p1); assumption.
+          eapply weak_sum_gt with (p2:=p2) (q2:=p2) (p:=p1); assumption.
         -- rewrite b in *. rewrite Nat.compare_refl.
           specialize (IHp1 q1 V2) as HN1.
           specialize (IHp2 q2 V3) as HN2.
-          eapply weak_sum_gt' with (p2:=p2) (q2:=q2) (p:=p1); try assumption.
-          eapply weak_sum_leq' with (p1:=p1) (q1:=q1) (q:=p2); try assumption. 
+          eapply weak_sum_gt with (p2:=p2) (q2:=q2) (p:=p1); try assumption.
+          eapply weak_sum_leq with (p1:=p1) (q1:=q1) (q:=p2); try assumption. 
     * apply nat_compare_gt in b as b1.
       rewrite b1.
-      eapply weak_sum_gt' with (p2:=q2) (q2:=q2) (p:=q1); try assumption.
+      eapply weak_sum_gt with (p2:=q2) (q2:=q2) (p:=q1); try assumption.
       eapply le_weak_valid with (p':=q1); try assumption.
-      rewrite weak_sum_pol_sym; assumption.
+      rewrite weak_sum_pol_comm; assumption.
 Qed.
-
-Lemma remove_null_remove_r (p q :poly) (i:nat) : 
-  is_null q = true -> 
-   remove_null_r (Poly p i q) = (remove_null_r p).
-Proof.
-  simpl.
-  intros.
-  destruct q. 
-  - simpl in H. destruct z. reflexivity.  inversion H. inversion H.
-  - simpl in H. inversion H.
-Qed.
-
-
 
 Lemma not_null_le (p q:poly) (i:nat) : 
 weak_valid_b (Poly p i q) = true ->
@@ -326,48 +292,6 @@ Proof.
       auto.
 Qed.
 
-Lemma weak_valid_rem (p q1 q2 :poly) (i j:nat): 
-weak_valid_b (Poly p i (Poly q1 j q2)) = true -> weak_valid_b (Poly p i q1) = true.
-Proof.
-  intro.
-  induction p.
-  - simpl in *.
-    andb_destr H.
-    destruct q1.
-    destruct q2.
-    reflexivity.
-    reflexivity.
-    andb_split.
-    destruct q2.
-    andb_destr H0.
-    apply leb_trans with (j:=j). auto.
-    andb_destr H0.
-    apply leb_trans with (j:=j). auto.
-    destruct q2; andb_destr H0; assumption.
-  - weak_valid_destr H.
-    intuition.
-    destruct q1.
-    + simpl.
-      andb_split.
-      apply weak_valid_le in H. auto.
-      simpl in V2.
-      assumption.
-    + apply weak_valid_leq in V4 as leq1.
-      apply weak_valid_le in V3 as le1.
-      apply weak_valid_le in H as le2.
-      simpl.
-      andb_split.
-      auto.
-      apply leb_trans with (j:=j). auto.
-      assumption.
-      simpl in H0.
-      destruct p1.
-      andb_destr H0.
-      assumption.
-      andb_destr H0.
-      assumption.
-Qed.
-
 
 Lemma not_null_leq (p q:poly) (i:nat) : 
 weak_valid_b (Poly p i q) = true ->
@@ -390,19 +314,11 @@ Proof.
     + rewrite H1.
       simpl in H0. 
       rewrite H1 in H0.
-
       destruct (remove_null_r q1).
-
-      destruct z.
-      inversion H0.
-      reflexivity.
-
-      reflexivity.
-      apply weak_valid_rem in H.
-
-      apply IHq1.
-      assumption.
-      assumption.
+      * destruct z; [inversion H0| |]; reflexivity.
+      * weak_valid_destr H. 
+        apply (IHq1 V4).
+        assumption.
     + rewrite not_true_iff_false in H1.
       simpl in H0.
       rewrite H1 in *.
@@ -412,6 +328,7 @@ Proof.
       auto.
 Qed.
 
+(* If we apply [remove_null_r] on a weakly valid polynom, we get a valid polynom *)
 Lemma strengthen_valid (p:poly) : weak_valid_b p = true -> valid_b (remove_null_r p) = true .
 Proof.
   intro.
@@ -425,7 +342,6 @@ Proof.
       intuition.
       rewrite H0.
       eapply not_null_leq with (i:=n) (p:=p1) in H0.
-
       destruct (remove_null_r p2).
       * destruct z. inversion H0. 
         -- elim (b_dec (is_null (remove_null_r p1)) true); intro.
@@ -484,6 +400,24 @@ Proof.
         * assumption.
 Qed.
 
+(* Hence, we can prove that [remove_null_r poly_sum_ ] preserves validity *)
+Lemma sum_valid (p q:poly) : valid_b p = true -> valid_b q = true -> valid_b (remove_null_r (sum_poly_ p q)) = true.
+Proof.
+  intros.
+  apply strengthen_valid.
+  apply weaken_valid in H.
+  apply weaken_valid in H0.
+  apply sum_weak_valid; assumption.
+Qed.
+
+(* And now we can define [sum_poly] on the record valid_poly, using the [Program] library we just need to prove the obligation with the above lemma *)
+Program Definition sum_poly (p q:valid_poly) := {|VP_value := remove_null_r (sum_poly_ (VP_value p) (VP_value q)) ; VP_prop := _ |}.
+Next Obligation.
+  destruct p as [p VP].
+  destruct q as [q VQ].
+  unfold VP_value.
+  apply sum_valid; assumption.
+Qed.
 
 Lemma is_null_remove_null_r (p:poly) : is_null p = true -> is_null (remove_null_r p) = true.
 Proof.
@@ -499,14 +433,14 @@ Proof.
   revert q.
   induction p; intros.
   - simpl in H.
-    elim (b_dec (is_null (remove_null_r q)) true); intro.
+    destruct (b_dec (is_null (remove_null_r q)) true).
     + split. assumption. rewrite H0 in H. assumption.
     + rewrite not_true_iff_false in H0.
       rewrite H0 in H.
       inversion H.
 
   - simpl in H.
-  elim (b_dec (is_null (remove_null_r q)) true); intro.
+    destruct (b_dec (is_null (remove_null_r q)) true).
     + split. assumption. 
       simpl. rewrite H0 in *. assumption.
     + rewrite not_true_iff_false in H0.
@@ -514,25 +448,7 @@ Proof.
       inversion H.
 Qed.
 
-
-Lemma sum_valid (p q:poly) : valid_b p = true -> valid_b q = true -> valid_b (remove_null_r (sum_poly_ p q)) = true.
-Proof.
-  intros.
-  apply strengthen_valid.
-  apply weaken_valid in H.
-  apply weaken_valid in H0.
-  apply sum_weak_valid; assumption.
-Qed.
-
-
-Program Definition sum_poly (p q:valid_pol) := {|VP_value := remove_null_r (sum_poly_ (VP_value p) (VP_value q)) ; VP_prop := _ |}.
-Next Obligation.
-  destruct p as [p VP].
-  destruct q as [q VQ].
-  unfold VP_value.
-  apply sum_valid; assumption.
-Qed.
-
+(* Polynom Multiplication *)
 
 Equations mul_poly_ (p q:poly) : poly by wf (length p + length q) :=
   mul_poly_ (Cst z1) (Cst z2) := Cst (z1 * z2);
@@ -558,10 +474,10 @@ Goal mul_poly_ (Poly (Cst (-2%Z)) 0 (Cst 2)) (Poly (Cst 3) 0 (Cst 1)) = Poly (Cs
   simp mul_poly_. simpl.
   simp sum_poly_. simpl.
   simp sum_poly_. simpl.
-Abort.
+  reflexivity.
+Qed.
 
-
-Lemma weak_mul_leq (p1 p2 q1 q2:poly) (n0:nat): 
+Lemma weak_mul_leq_ (p1 p2 q1 q2:poly) (n0:nat): 
 weak_valid_b (Poly p1 n0 p2) = true ->
 weak_valid_b (Poly q1 n0 q2) = true -> 
 match mul_poly_ p2 q2 with 
@@ -579,7 +495,7 @@ Proof.
   simp sum_poly_. rewrite Nat.compare_refl. auto.
 Qed.
 
-Lemma weak_mul_gt (p1 p2 q1 q2:poly) (n0:nat): 
+Lemma weak_mul_gt_ (p1 p2 q1 q2:poly) (n0:nat): 
 weak_valid_b (Poly p1 n0 p2) = true ->
 weak_valid_b (Poly q1 n0 q2) = true -> 
 match mul_poly_ p1 q1 with 
@@ -596,7 +512,7 @@ Proof.
   simp sum_poly_. rewrite Nat.compare_refl. auto.
 Qed.
 
-Lemma weak_mul_leq' (p1 p2 q1 q2 p q:poly) (n0:nat): 
+Lemma weak_mul_leq (p1 p2 q1 q2 p q:poly) (n0:nat): 
 weak_valid_b (Poly p1 n0 p2) = true ->
 weak_valid_b (Poly q1 n0 q2) = true -> 
 weak_valid_b (Poly p n0 q) = true ->
@@ -605,17 +521,13 @@ weak_valid_b (Poly p n0 (mul_poly_ p2 q2)) = true
 .
 Proof.
   intros.
-  assert (aaa : match mul_poly_ p2 q2 with 
-  |Cst _ => true 
-  |Poly _ j _ => n0 <=? j 
-  end = true).
-  eapply weak_mul_leq with (p1:=p1) (q1:=q1); try assumption. 
+  eapply weak_mul_leq_ with (p1:=p1) (q1:=q1) (p2:=p2) (q2:=q2) in H; [|assumption]. 
   destruct (mul_poly_ p2 q2). 
   - simpl. destruct p. trivial. andb_split. apply weak_valid_le in H1. auto. weak_valid_destr H1. assumption.
   - eapply leq_weak_valid; intuition.
 Qed.
 
-Lemma weak_mul_gt' (p1 p2 q1 q2 p q:poly) (n0:nat): 
+Lemma weak_mul_gt (p1 p2 q1 q2 p q:poly) (n0:nat): 
 weak_valid_b (Poly p1 n0 p2) = true ->
 weak_valid_b (Poly q1 n0 q2) = true -> 
 weak_valid_b (Poly p n0 q) = true ->
@@ -624,15 +536,12 @@ weak_valid_b (Poly (mul_poly_ p1 q1) n0 q) = true
 .
 Proof.
   intros.
-  assert (aaa : match mul_poly_ p1 q1 with 
-  |Cst _ => true 
-  |Poly _ j _ => n0 <? j 
-  end = true).
-  eapply weak_mul_gt with (p2:=p2) (q2:=q2); try assumption. 
+  eapply weak_mul_gt_ with (p2:=p2) (q1:=q1) (q2:=q2)  in H; [|assumption]. 
   destruct (mul_poly_ p1 q1). 
   - simpl. destruct q. trivial. andb_split. apply weak_valid_leq in H1. auto. weak_valid_destr H1. assumption.
   - eapply le_weak_valid; intuition.  
 Qed.
+
 
 Lemma weak_val_mul_gt (p2 p3 q1 q2 : poly) (n n0:nat) : 
   n > n0 ->
@@ -681,24 +590,23 @@ Proof.
   - simp sum_poly_. rewrite IHp1. reflexivity. 
 Qed.
 
-Lemma weak_val_mul_eq (p2 p3 q1 q2 : poly) (n n0:nat) : 
+Lemma weak_val_mul_eq (p1 p2 q1 q2 : poly) (n n0:nat) : 
   n = n0 ->
-  weak_valid_b (Poly p2 n p3) = true ->
+  weak_valid_b (Poly p1 n p2) = true ->
   weak_valid_b (Poly q1 n0 q2) = true ->
+  weak_valid_b (mul_poly_ p1 (Poly q1 n0 q2)) = true ->
   weak_valid_b (mul_poly_ p2 (Poly q1 n0 q2)) = true ->
-  weak_valid_b (mul_poly_ p3 (Poly q1 n0 q2)) = true ->
     
-     (weak_valid_b (mul_poly_ p2 q1) = true /\ weak_valid_b (mul_poly_ p2 q2) = true ) (* /\ weak_valid_b (mul_poly_ p3 q2) = true  *)
-     (* /\ (weak_valid_b (mul_poly_ p3 q1) = true /\ weak_valid_b (mul_poly_ p3 q2) = true ) *)
+     (weak_valid_b (mul_poly_ p1 q1) = true /\ weak_valid_b (mul_poly_ p1 q2) = true ) 
      
-      
+     /\ (weak_valid_b (mul_poly_ p2 q1) = true /\ weak_valid_b (mul_poly_ p2 q2) = true )     
 .
 Proof.
   intros.
   rewrite <- H in *.
   
-  (* split. *)
-  - destruct p2.
+  split.
+  - destruct p1.
   simp mul_poly_ in *.
   weak_valid_destr H2.
   split; assumption.
@@ -709,17 +617,18 @@ Proof.
   weak_valid_destr H2.
   split; assumption.
 
-  (* - induction p3; intros.
-    + simp mul_poly_ in *. weak_valid_destr H3. assumption.
-    + simp mul_poly_ in *.
+  - split. 
+    + induction p2; intros.
+    * simp mul_poly_ in *. weak_valid_destr H3. assumption.
+    * simp mul_poly_ in *.
       simp sum_poly_ in *.
       rewrite Nat.compare_refl in H3.
       elim (gt_eq_gt_dec n n1); intro.
-      * elim a; intro.
-        -- apply nat_compare_gt in a0. rewrite a0 in H3.
+      -- elim a; intro.
+        ++ apply nat_compare_gt in a0. rewrite a0 in H3.
           weak_valid_destr H3.
            assumption.
-        -- rewrite <- b in *.
+        ++ rewrite <- b in *.
           rewrite Nat.compare_refl in H3.
           simp sum_poly_ in H3.
           rewrite Nat.compare_refl in H3.
@@ -729,12 +638,28 @@ Proof.
           weak_valid_destr H3.
           weak_valid_destr H0. 
           intuition.
-
+          
           admit.
         
-      * apply weak_valid_leq in H0.
-        intuition. *)
+      -- apply weak_valid_leq in H0.
+        intuition.
+    +  
 Admitted.
+
+
+(* The only admitted case is the multiplication between 2 polynoms with th e variable (e.g. (Poly p1 i q1) and (Poly p2 i q2)). In this case, I defined the multiplication as :
+
+  (Poly (p1  * p2) i (Poly (Cst 0) i (q1 * q2))) 
++ (Poly (Cst 0) i (mul_poly_ p1 q2))) 
++ (Poly (Cst 0) i (mul_poly_ p2 q1)) 
+
+Since p1 and p2 where on the left of a valid (Poly _ i _), in (p1 * p2) there is no variable with an index <= i.
+Since q1 and q2 where on the right of a valid (Poly _ i _), in (q1 * q2) there is no variable with an index < i.
+
+Moreover, none of p1 p2 q1 q2 contains variables with index < i, hence  (Poly (Cst 0) i (mul_poly_ p1 q2)))  and (Poly (Cst 0) i (mul_poly_ p2 q1)) should both be weakly valid.
+
+The problem is that it uses sums and multiplications mixed together, and it makes it hard to use induction hypothesis. 
+*)
 
 Lemma mul_poly_weak_valid (p q :poly) : 
 weak_valid_b p = true ->
@@ -747,17 +672,17 @@ Proof.
   - induction q; simp mul_poly_.
     weak_valid_destr H0.
     intuition.
-    eapply weak_mul_gt' with (p:=q1) (p2:=q2) (q2:=q2); try assumption.
+    eapply weak_mul_gt with (p:=q1) (p2:=q2) (q2:=q2); try assumption.
     + simpl. destruct q2. reflexivity. andb_split. apply weak_valid_leq in H0. auto. assumption.
     
-    + eapply weak_mul_leq' with (q1:=q1) (q:=q2) (p1:=q1); try assumption.
+    + eapply weak_mul_leq with (q1:=q1) (q:=q2) (p1:=q1); try assumption.
       destruct q1; simpl. reflexivity. andb_split. apply weak_valid_le in H0. auto. assumption.
 
   - weak_valid_destr H. specialize (IHp1 q V0 H0). specialize (IHp2 q V1 H0).
     induction q; simp mul_poly_; simp sum_poly_.
-    + eapply weak_mul_gt' with (p:=p1) (p2:=p2) (q2:=p2); try assumption.
+    + eapply weak_mul_gt with (p:=p1) (p2:=p2) (q2:=p2); try assumption.
       * simpl. destruct p2. reflexivity. andb_split. apply weak_valid_leq in H. auto. assumption.
-      * eapply weak_mul_leq' with (q1:=p1) (q:=p2) (p1:=p1); try assumption.
+      * eapply weak_mul_leq with (q1:=p1) (q:=p2) (p1:=p1); try assumption.
       destruct p1; simpl. reflexivity. andb_split. apply weak_valid_le in H. auto. assumption.
     
     + rewrite Nat.compare_refl.
@@ -769,9 +694,9 @@ Proof.
             
           apply weak_val_mul_gt with (n:=n) (n0:=n0) (p2:=p1) (p3:=p2) (q1:=q1) (q2:=q2) in IHp1; try assumption.
           destruct IHp1. destruct H1,H2.
-          eapply weak_mul_gt' with (p:=q1) (p2:=q2) (q2:=q2); try assumption.
+          eapply weak_mul_gt with (p:=q1) (p2:=q2) (q2:=q2); try assumption.
           eapply le_weak_valid with (p':=q1); try assumption.
-          eapply weak_mul_leq' with (p1:=q1) (q1:=q1) (q:=q2); try assumption.
+          eapply weak_mul_leq with (p1:=q1) (q1:=q1) (q:=q2); try assumption.
 
           eapply leq_weak_valid with (q:=q2); auto.
 
@@ -785,34 +710,31 @@ Proof.
         rewrite Nat.compare_refl.
         rewrite poly_sum0.
         
-        eapply weak_val_mul_eq with (p2:=p1) (n:=n) (p3:=p2) in IHp1; auto.
+        eapply weak_val_mul_eq with (p1:=p1) (n:=n) (p2:=p2) in IHp1; auto.
         destruct IHp1.
+        destruct H1. destruct H2.
         
-        (* 
-        eapply weak_sum_leq' with (q1:=q1) (q:=q2) (p1:=p2).
-        eapply weak_sum_leq' with (q1:=q1) (q:=q2) (p1:=p2).
-        eapply leq_weak_valid with (q:=p3); auto.
-
-        eapply weak_mul_leq' with (q1:=q1) (q:=q2) (p1:=p2); auto.
-        simpl. destruct q2. reflexivity. andb_split. apply weak_valid_leq in H0. auto. auto. 
-         *)
-
+        (* eapply weak_sum_leq with (q1:=q1) (q:=q2) (p1:=p1).
+        eapply weak_sum_leq with (q1:=q1) (q:=q2) (p1:=p1).
+        eapply leq_weak_valid with (q:=p2); auto.
+        eapply weak_mul_leq with (q1:=q1) (q:=q2) (p1:=p1); auto.
+        simpl. destruct q2. reflexivity. andb_split. apply weak_valid_leq in H0. auto. auto. *)
         admit.
     * apply nat_compare_gt in b as b0.
       rewrite <- lt_inv_le in b0.
       rewrite b0.
 
-      eapply weak_mul_gt' with (p:=p1) (p2:=p2) (q2:=p2); try assumption.
+      eapply weak_mul_gt with (p:=p1) (p2:=p2) (q2:=p2); try assumption.
       eapply le_weak_valid with (p':=p1); try assumption.
       
-      eapply weak_mul_leq' with (p1:=p1) (q1:=p1) (q:=p2); try assumption.
+      eapply weak_mul_leq with (p1:=p1) (q1:=p1) (q:=p2); try assumption.
 
       eapply leq_weak_valid with (q:=p2); auto.
       
 Admitted.
 
-
-Program Definition mul_poly (p q:valid_pol) := {|VP_value := remove_null_r (mul_poly_ (VP_value p) (VP_value q)) ; VP_prop := _ |}.
+(* Since we admitted the conservation of weak validity, the definition of valid polynoms multiplication is straightforward, using the [strengthen_valid] lemma as for the sum *)
+Program Definition mul_poly (p q:valid_poly) := {|VP_value := remove_null_r (mul_poly_ (VP_value p) (VP_value q)) ; VP_prop := _ |}.
 Next Obligation.
   destruct p as [p VP].
   destruct q as [q VQ].

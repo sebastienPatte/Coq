@@ -1,20 +1,53 @@
 Require Import Maps BoolHelp PolyArith Valid.
-Require Import definitions.
+Require Import PolyDefs.
 
 Import ZArith NatMap F P.
 
 Definition empty : monoid := NatMap.empty nat.
 
-Theorem leibniz : forall (p q : valid_pol), VP_value p = VP_value q -> p=q.
+
+Theorem poly_equivalence (p:poly) : valid_b p = true <-> valid_pol p.
+Proof.
+  unfold iff. split; intro.
+  - induction p.
+    + constructor.
+    + destruct p1,p2; simpl in H; andb_destr H; constructor.
+      * intro. rewrite H0 in H. inversion H. 
+      * auto.
+      * destruct z; andb_destr H; auto.
+      * destruct z; andb_destr H; intuition.
+      * intro. rewrite H0 in H. inversion H.
+      * destruct z; andb_destr H; intuition.
+      * split; auto.
+      * split; auto.
+  - induction p; inversion H.
+    + auto.
+    + destruct y; auto. 
+    + rewrite <- H0 in *. rewrite <- H2 in *. 
+      specialize (IHp1 H5). 
+      simpl in *.
+      destruct x; andb_split; auto.
+    + rewrite <- H0 in *. rewrite <- H3 in *.
+      specialize (IHp2 H4).
+      destruct x; andb_split; auto.
+    + rewrite <- H0 in *. rewrite <- H3 in *.
+      destruct H2. destruct H4.
+      specialize (IHp1 H4).
+      specialize (IHp2 H6).
+      simpl; andb_split; auto.
+Qed. 
+
+Theorem leibniz : forall (p q : valid_poly), VP_value p = VP_value q -> p=q.
 Proof.
   intros.
-  destruct p.
-  destruct q.  
+  destruct p, q.  
   simpl in H.
   subst.
   apply f_equal.
   apply BoolHelp.bool_irrel.
 Qed.
+
+
 
 Lemma coeff_n_pos (p q : poly) (i:nat) (m:monoid) : valid_b (Poly p i q) = true -> 
   (exists (n:nat), NatMap.find i m = Some (S n)) ->  
@@ -243,7 +276,7 @@ Proof.
         assumption.
 Qed.
 
-Theorem all_coeff_eq (p q : valid_pol) : (forall (m : monoid), get_coefficient p m = get_coefficient q m) -> p = q.
+Theorem all_coeff_eq (p q : valid_poly) : (forall (m : monoid), get_coefficient p m = get_coefficient q m) -> p = q.
 Proof.
   unfold get_coefficient.
   destruct p as [p propP]. 
