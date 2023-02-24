@@ -26,7 +26,6 @@ Inductive valid_poly : poly -> Prop :=
 	valid_poly (Poly (Poly p j q) i (Poly p' j' q'))
 .
 
-
 Fixpoint valid_b (pol:poly) : bool := 
 match pol with 
 |Cst _ => true
@@ -78,4 +77,12 @@ end.
 
 Definition get_coefficient (pol: valid_pol) (m:monoid) := get_coefficient_ (VP_value pol) m.
 
-
+Lemma option_dec {A}: 
+  forall (el: option A),
+    el = None \/ exists w: A, el = Some w.
+Proof.
+  intros.
+  destruct el.
+  right; exists a; trivial.
+  left; trivial.
+Qed.

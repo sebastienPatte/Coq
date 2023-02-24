@@ -1,21 +1,8 @@
 Require Import definitions.
-Require Import bool_help.
+Require Import BoolHelp.
 Import ZArith Arith Bool Lia.
-Import FMapList .
-Import P.
-Import F.
-Import NatMap.
-Import Coq.FSets.FMapFacts.
-
-
-Hint Resolve leb_complete : core. 
-Hint Resolve leb_correct : core. 
-Hint Resolve ltb_correct : core. 
-Hint Resolve ltb_complete : core.
-Hint Resolve Nat.ltb_lt : core.
-Hint Resolve Nat.sub_0_r Nat.lt_le_incl ltb_imp_leb ltb_trans leb_trans ltb_leb_trans: core.
-
-Require Import valid.
+Import FMapList NatMap P F Coq.FSets.FMapFacts.
+Require Import Valid.
 
 Lemma eq_map_add_add (i x y :nat) (m:monoid) : Equal (add i x m) (add i x (add i y m)).
 Proof.
@@ -143,7 +130,7 @@ Proof.
   - apply eq_map_add_remove.
 Qed.
 
-Let for_all_add_S_notin (m:monoid) (i n:nat) :
+Local Definition for_all_add_S_notin (m:monoid) (i n:nat) :
 NatMap.find i m = None -> P.for_all (fun _ v : nat => v =? 0) (add i (S n) m) = false.
 Proof.
   intro.

@@ -63,30 +63,30 @@ Lemma b_dec : forall (b1 b2 : bool), b1 = b2 \/ b1 <> b2.
     destruct b1,b2; intuition.
   Qed.
 
-  Let comp [A] [x y y':A] (eq1:x = y) (eq2:x = y') : y = y' :=
+  Local Definition comp [A] [x y y':A] (eq1:x = y) (eq2:x = y') : y = y' :=
     eq_ind _ (fun a => a = y') eq2 _ eq1.
 
-  Let trans_sym_eq [A] (x y:A) (u:x = y) : comp u u = eq_refl y.
+    Local Definition trans_sym_eq [A] (x y:A) (u:x = y) : comp u u = eq_refl y.
   Proof.
     case u; trivial.
   Qed.
 
-  Let nu [x y:bool] (u:x = y) : x = y :=
+  Local Definition nu [x y:bool] (u:x = y) : x = y :=
   match b_dec x y with     
     | or_introl eqxy => eqxy 
     | or_intror neqxy => False_ind _ (neqxy u)
   end.
 
-  Let nu_constant [x y:bool] (u v:x = y) : nu u = nu v.
+  Local Definition nu_constant [x y:bool] (u v:x = y) : nu u = nu v.
     unfold nu.
     destruct (b_dec x y) as [Heq|Hneq].
     - reflexivity.
     - case Hneq; trivial.
   Qed.
 
-  Let nu_inv [x y:bool] (v:x = y) : x = y := comp (nu (eq_refl x)) v.
+  Local Definition nu_inv [x y:bool] (v:x = y) : x = y := comp (nu (eq_refl x)) v.
 
-  Let nu_left_inv [x y:bool] (u:x = y) : nu_inv (nu u) = u.
+  Local Definition nu_left_inv [x y:bool] (u:x = y) : nu_inv (nu u) = u.
   Proof.
     case u; unfold nu_inv.
     case eq_refl.
@@ -101,11 +101,10 @@ Lemma b_dec : forall (b1 b2 : bool), b1 = b2 \/ b1 <> b2.
     reflexivity.
   Qed.
 
-  Eval compute in (comp (nu (eq_refl))).
-
-
   
-(* https://cstheory.stackexchange.com/questions/5158/prove-proof-irrelevance-in-coq *)
-(* https://www.di.ens.fr/~quyen/publication/ly10.pdf 
-https://github.com/fblanqui/color/blob/1e7b26553c1ca94c787ad5a1b938acabb8d47f2f/Util/Polynom/Polynom.v
-*)
+#[export] Hint Resolve leb_complete : core. 
+#[export] Hint Resolve leb_correct : core. 
+#[export] Hint Resolve ltb_correct : core. 
+#[export] Hint Resolve ltb_complete : core.
+#[export] Hint Resolve Nat.ltb_lt : core.
+#[export] Hint Resolve Nat.sub_0_r Nat.lt_le_incl ltb_imp_leb ltb_trans leb_trans ltb_leb_trans: core.

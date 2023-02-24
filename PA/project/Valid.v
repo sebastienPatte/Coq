@@ -1,34 +1,34 @@
 Require Import definitions.
 Require Import ZArith Arith Bool Lia.
+
 Require Import BoolHelp.
+
 
 Lemma valid_b_more (p q : poly) (i:nat) : 
 valid_b (Poly p i q) = true -> valid_b p = true /\ valid_b q = true.
 Proof.
-  intro.
-  split.
-  - induction p. 
-    + trivial.
-    + destruct q.
-      * destruct (Z.eq_dec z 0); destruct z; intuition; andb_destr H; intuition.
-      * andb_destr H.
-        simpl.
-        assumption.
-    - destruct p,q; simpl in H; intuition; andb_destr H; simpl; assumption.
+intro.
+split.
+induction p; simpl in H; intuition.
+- destruct q.
+elim (Z.eq_dec z 0); intro; destruct z; intuition; andb_destr H; intuition.
+  andb_destr H.
+  simpl.
+  assumption.
+- destruct p,q; simpl in H; intuition; andb_destr H; simpl; assumption.
 Qed.
 
 Lemma valid_b_more_r (p q1 q2 : poly) (n n0:nat) : 
-valid_b (Poly p n (Poly q1 n0 q2)) = true -> 
-valid_b (Poly p n q2) = true.
+valid_b (Poly p n (Poly q1 n0 q2)) = true -> valid_b (Poly p n q2) = true.
 Proof.
-  intro.
-  simpl in H.
-  destruct p; destruct q2; andb_destr H.
-  - destruct q1; destruct z0; intuition.
-  - destruct q1; andb_destr H0; simpl; andb_split; try assumption; try apply leb_trans with (j:= n0); intuition.
-  - destruct q1; destruct z; simpl; intuition.
-  - destruct q1; andb_destr H0; simpl; andb_split; try assumption; try apply leb_trans with (j:= n0); intuition.
-  Qed.
+intro.
+simpl in H.
+destruct p; destruct q2; andb_destr H.
+- destruct q1; destruct z0; intuition.
+- destruct q1; andb_destr H0; simpl; andb_split; try assumption; try apply leb_trans with (j:= n0); intuition.
+- destruct q1; destruct z; simpl; intuition.
+- destruct q1; andb_destr H0; simpl; andb_split; try assumption; try apply leb_trans with (j:= n0); intuition.
+Qed.
 
 Lemma valid_b_more_l (p1 p2 q : poly) (n n0:nat) : 
 valid_b (Poly (Poly p1 n0 p2) n q) = true -> valid_b (Poly p1 n q) = true /\ valid_b (Poly p2 n q) = true.
@@ -135,21 +135,6 @@ match type of H0 with
   apply valid_b_more in H0 as (H1 & H2) 
 end.
 
-Lemma leq_valid (p p' q q' : poly) (i j:nat)  : 
-i <= j -> 
-valid_b (Poly p i q) = true ->
-valid_b (Poly p' j q') = true -> 
-valid_b (Poly p i (Poly p' j q')) = true.
-Proof.
-intros.
-simpl in *.
-destruct p,q.
-- andb_split. auto. assumption.
-- andb_split. auto. assumption.
-- destruct z; [inversion H0| |]; andb_destr H0; andb_split; auto. 
-- andb_destr H0. andb_split; auto.
-Qed.
-
 Lemma le_valid (p p' q q' : poly) (i j:nat)  : 
 i>j -> 
 valid_b (Poly p i q) = true ->
@@ -158,15 +143,21 @@ valid_b (Poly (Poly p i q) j q') = true.
 Proof.
 intros.
 simpl in *.
-destruct p,p',q'.
-  - destruct z1; [inversion H1| |];  andb_split; intuition.
-	- andb_destr H1.  andb_split; intuition.
-	- destruct z0; [inversion H1| |];  andb_split; intuition.
-	- andb_destr H1.  andb_split; intuition.
-	- destruct z0; [inversion H1| |];  andb_split; intuition.
-	- andb_destr H1. andb_split; intuition.
-	- destruct z; [inversion H1| |];  andb_split; intuition.
-	- andb_destr H1. andb_split; intuition.
+destruct p.
+- destruct p'.
+  + destruct q'.
+	* destruct z1; [inversion H1| |];  andb_split; intuition.
+	* andb_destr H1.  andb_split; intuition.
+  +  destruct q'. 
+	* destruct z0; [inversion H1| |];  andb_split; intuition.
+	* andb_destr H1.  andb_split; intuition.
+- destruct p'.
+  + destruct q'.
+	* destruct z0; [inversion H1| |];  andb_split; intuition.
+	* andb_destr H1. andb_split; intuition.
+  +  destruct q'. 
+	* destruct z; [inversion H1| |];  andb_split; intuition.
+	* andb_destr H1.  andb_split; intuition.
 Qed.
 
 
@@ -186,6 +177,22 @@ simpl in H.
 destruct p; andb_destr H; apply leb_complete; assumption.
 Qed.
 
+
+
+Lemma leq_valid (p p' q q' : poly) (i j:nat)  : 
+i <= j -> 
+valid_b (Poly p i q) = true ->
+valid_b (Poly p' j q') = true -> 
+valid_b (Poly p i (Poly p' j q')) = true.
+Proof.
+intros.
+simpl in *.
+destruct p,q.
+- andb_split. auto. assumption.
+- andb_split. auto. assumption.
+- destruct z; [inversion H0| |]; andb_destr H0; andb_split; auto. 
+- andb_destr H0. andb_split; auto.
+Qed.
 
 (* For any polynom [Poly p i (Cst z)] the constant [z] is not 0 *)
 Lemma valid_not0 (p:poly) (i:nat) (z:Z) : valid_b (Poly p i (Cst z))  = true -> z <> 0%Z.

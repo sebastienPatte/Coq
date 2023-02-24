@@ -1,6 +1,9 @@
 -R . Top 
 project.v
-bool_help.v
-maps.v
-valid.v
+BoolHelp.v
+Maps.v
+Valid.v
 definitions.v
+PolyArith.v
+PolyVal.v
+Coeff.v

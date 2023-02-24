@@ -1,5 +1,5 @@
-DIGEST a0d5686d2bfd9f06deb58b0681fa392c
-FTop.bool_help
+DIGEST ed244375acb46efa307f839e5a93d259
+FTop.BoolHelp
 R15:20 Coq.ZArith.ZArith <> <> lib
 R22:26 Coq.Arith.Arith <> <> lib
 R28:31 Coq.Bool.Bool <> <> lib
@@ -10,12 +10,12 @@ binder 58:58 <> a:1
 binder 60:60 <> b:2
 R74:77 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R70:72 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
-R69:69 Top.bool_help <> a:1 var
-R73:73 Top.bool_help <> b:2 var
+R69:69 Top.BoolHelp <> a:1 var
+R73:73 Top.BoolHelp <> b:2 var
 R84:86 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R79:82 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
-R78:78 Top.bool_help <> a:1 var
-R83:83 Top.bool_help <> b:2 var
+R78:78 Top.BoolHelp <> a:1 var
+R83:83 Top.BoolHelp <> b:2 var
 R87:90 Coq.Init.Datatypes <> true constr
 R101:110 Coq.Arith.PeanoNat Nat ltb_lt thm
 R101:110 Coq.Arith.PeanoNat Nat ltb_lt thm
@@ -26,12 +26,12 @@ binder 153:153 <> b:4
 R175:178 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R168:170 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R163:166 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
-R162:162 Top.bool_help <> a:3 var
-R167:167 Top.bool_help <> b:4 var
+R162:162 Top.BoolHelp <> a:3 var
+R167:167 Top.BoolHelp <> b:4 var
 R171:174 Coq.Init.Datatypes <> true constr
 R180:182 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
-R179:179 Top.bool_help <> a:3 var
-R183:183 Top.bool_help <> b:4 var
+R179:179 Top.BoolHelp <> a:3 var
+R183:183 Top.BoolHelp <> b:4 var
 R194:203 Coq.Arith.PeanoNat Nat ltb_lt thm
 R194:203 Coq.Arith.PeanoNat Nat ltb_lt thm
 prf 230:240 <> ltb_imp_leb
@@ -42,14 +42,14 @@ R270:273 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R255:255 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R262:265 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R257:260 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
-R256:256 Top.bool_help <> i:5 var
-R261:261 Top.bool_help <> j:6 var
+R256:256 Top.BoolHelp <> i:5 var
+R261:261 Top.BoolHelp <> j:6 var
 R266:269 Coq.Init.Datatypes <> true constr
 R274:274 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R282:285 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R276:280 Coq.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
-R275:275 Top.bool_help <> i:5 var
-R281:281 Top.bool_help <> j:6 var
+R275:275 Top.BoolHelp <> i:5 var
+R281:281 Top.BoolHelp <> j:6 var
 R286:289 Coq.Init.Datatypes <> true constr
 R318:327 Coq.Arith.PeanoNat Nat leb_le thm
 R318:327 Coq.Arith.PeanoNat Nat leb_le thm
@@ -69,20 +69,20 @@ R448:451 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
 R433:433 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R440:443 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R435:438 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
-R434:434 Top.bool_help <> i:7 var
-R439:439 Top.bool_help <> j:8 var
+R434:434 Top.BoolHelp <> i:7 var
+R439:439 Top.BoolHelp <> j:8 var
 R444:447 Coq.Init.Datatypes <> true constr
 R452:452 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R459:462 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R454:457 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
-R453:453 Top.bool_help <> j:8 var
-R458:458 Top.bool_help <> n:9 var
+R453:453 Top.BoolHelp <> j:8 var
+R458:458 Top.BoolHelp <> n:9 var
 R463:466 Coq.Init.Datatypes <> true constr
 R471:471 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R478:481 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R473:476 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
-R472:472 Top.bool_help <> i:7 var
-R477:477 Top.bool_help <> n:9 var
+R472:472 Top.BoolHelp <> i:7 var
+R477:477 Top.BoolHelp <> n:9 var
 R482:485 Coq.Init.Datatypes <> true constr
 R529:538 Coq.Arith.PeanoNat Nat ltb_lt thm
 R529:538 Coq.Arith.PeanoNat Nat ltb_lt thm
@@ -105,20 +105,20 @@ R697:700 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
 R681:681 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R689:692 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R683:687 Coq.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
-R682:682 Top.bool_help <> i:10 var
-R688:688 Top.bool_help <> j:11 var
+R682:682 Top.BoolHelp <> i:10 var
+R688:688 Top.BoolHelp <> j:11 var
 R693:696 Coq.Init.Datatypes <> true constr
 R701:701 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R709:712 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R703:707 Coq.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
-R702:702 Top.bool_help <> j:11 var
-R708:708 Top.bool_help <> n:12 var
+R702:702 Top.BoolHelp <> j:11 var
+R708:708 Top.BoolHelp <> n:12 var
 R713:716 Coq.Init.Datatypes <> true constr
 R721:721 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R729:732 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R723:727 Coq.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
-R722:722 Top.bool_help <> i:10 var
-R728:728 Top.bool_help <> n:12 var
+R722:722 Top.BoolHelp <> i:10 var
+R728:728 Top.BoolHelp <> n:12 var
 R733:736 Coq.Init.Datatypes <> true constr
 R780:789 Coq.Arith.PeanoNat Nat leb_le thm
 R780:789 Coq.Arith.PeanoNat Nat leb_le thm
@@ -141,20 +141,20 @@ R951:954 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
 R936:936 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R943:946 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R938:941 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
-R937:937 Top.bool_help <> i:13 var
-R942:942 Top.bool_help <> j:14 var
+R937:937 Top.BoolHelp <> i:13 var
+R942:942 Top.BoolHelp <> j:14 var
 R947:950 Coq.Init.Datatypes <> true constr
 R955:955 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R963:966 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R957:961 Coq.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
-R956:956 Top.bool_help <> j:14 var
-R962:962 Top.bool_help <> n:15 var
+R956:956 Top.BoolHelp <> j:14 var
+R962:962 Top.BoolHelp <> n:15 var
 R967:970 Coq.Init.Datatypes <> true constr
 R975:975 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R982:985 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R977:980 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
-R976:976 Top.bool_help <> i:13 var
-R981:981 Top.bool_help <> n:15 var
+R976:976 Top.BoolHelp <> i:13 var
+R981:981 Top.BoolHelp <> n:15 var
 R986:989 Coq.Init.Datatypes <> true constr
 R1033:1042 Coq.Arith.PeanoNat Nat ltb_lt thm
 R1033:1042 Coq.Arith.PeanoNat Nat ltb_lt thm
@@ -175,14 +175,14 @@ R1203:1206 Coq.Init.Logic <> ::type_scope:x_'->'_x not
 R1188:1188 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R1195:1198 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R1190:1193 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
-R1189:1189 Top.bool_help <> i:16 var
-R1194:1194 Top.bool_help <> j:17 var
+R1189:1189 Top.BoolHelp <> i:16 var
+R1194:1194 Top.BoolHelp <> j:17 var
 R1199:1202 Coq.Init.Datatypes <> true constr
 R1207:1207 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R1215:1218 Coq.Init.Logic <> ::type_scope:x_'='_x not
 R1209:1213 Coq.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
-R1208:1208 Top.bool_help <> i:16 var
-R1214:1214 Top.bool_help <> j:17 var
+R1208:1208 Top.BoolHelp <> i:16 var
+R1214:1214 Top.BoolHelp <> j:17 var
 R1219:1222 Coq.Init.Datatypes <> true constr
 R1242:1251 Coq.Arith.PeanoNat Nat ltb_lt thm
 R1242:1251 Coq.Arith.PeanoNat Nat ltb_lt thm
@@ -198,137 +198,134 @@ binder 1366:1367 <> b1:18
 binder 1369:1370 <> b2:19
 R1388:1391 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
 R1383:1385 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1381:1382 Top.bool_help <> b1:18 var
-R1386:1387 Top.bool_help <> b2:19 var
+R1381:1382 Top.BoolHelp <> b1:18 var
+R1386:1387 Top.BoolHelp <> b2:19 var
 R1394:1397 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
-R1392:1393 Top.bool_help <> b1:18 var
-R1398:1399 Top.bool_help <> b2:19 var
-def 1468:1471 <> comp
-binder 1474:1474 <> A:20
-R1485:1485 Top.bool_help <> A:20 var
-binder 1478:1478 <> x:21
-binder 1480:1480 <> y:22
-binder 1482:1483 <> y':23
-R1494:1496 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1493:1493 Top.bool_help <> x:21 var
-R1497:1497 Top.bool_help <> y:22 var
-binder 1489:1491 <> eq1:24
-R1506:1508 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1505:1505 Top.bool_help <> x:21 var
-R1509:1510 Top.bool_help <> y':23 var
-binder 1501:1503 <> eq2:25
-R1516:1518 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1515:1515 Top.bool_help <> y:22 var
-R1519:1520 Top.bool_help <> y':23 var
-R1529:1534 Coq.Init.Logic <> eq_ind scheme
-R1562:1564 Top.bool_help <> eq1:24 var
-R1556:1558 Top.bool_help <> eq2:25 var
-binder 1543:1543 <> a:26
-R1549:1551 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1548:1548 Top.bool_help <> a:26 var
-R1552:1553 Top.bool_help <> y':23 var
-def 1574:1585 <> trans_sym_eq
-binder 1588:1588 <> A:27
-R1596:1596 Top.bool_help <> A:27 var
-binder 1592:1592 <> x:28
-binder 1594:1594 <> y:29
-R1603:1605 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1602:1602 Top.bool_help <> x:28 var
-R1606:1606 Top.bool_help <> y:29 var
-binder 1600:1600 <> u:30
-R1619:1621 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1611:1614 Top.bool_help <> comp def
-R1618:1618 Top.bool_help <> u:30 var
-R1616:1616 Top.bool_help <> u:30 var
-R1622:1628 Coq.Init.Logic <> eq_refl constr
-R1630:1630 Top.bool_help <> y:29 var
-def 1677:1678 <> nu
-R1685:1688 Coq.Init.Datatypes <> bool ind
-binder 1681:1681 <> x:31
-binder 1683:1683 <> y:32
-R1695:1697 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1694:1694 Top.bool_help <> x:31 var
-R1698:1698 Top.bool_help <> y:32 var
-binder 1692:1692 <> u:33
-R1704:1706 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1703:1703 Top.bool_help <> x:31 var
-R1707:1707 Top.bool_help <> y:32 var
-R1720:1724 Top.bool_help <> b_dec thm
-R1726:1726 Top.bool_help <> x:31 var
-R1728:1728 Top.bool_help <> y:32 var
-R1746:1754 Coq.Init.Logic <> or_introl constr
-R1776:1784 Coq.Init.Logic <> or_intror constr
-R1795:1803 Coq.Init.Logic <> False_ind scheme
-R1814:1814 Top.bool_help <> u:33 var
-def 1831:1841 <> nu_constant
-R1848:1851 Coq.Init.Datatypes <> bool ind
-binder 1844:1844 <> x:34
-binder 1846:1846 <> y:35
-R1860:1862 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1859:1859 Top.bool_help <> x:34 var
-R1863:1863 Top.bool_help <> y:35 var
-binder 1855:1855 <> u:36
-binder 1857:1857 <> v:37
-R1872:1874 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R1868:1869 Top.bool_help <> nu def
-R1871:1871 Top.bool_help <> u:36 var
-R1875:1876 Top.bool_help <> nu def
-R1878:1878 Top.bool_help <> v:37 var
-R1892:1893 Top.bool_help <> nu def
-R1910:1914 Top.bool_help <> b_dec thm
-R1910:1914 Top.bool_help <> b_dec thm
-def 1995:2000 <> nu_inv
-R2007:2010 Coq.Init.Datatypes <> bool ind
-binder 2003:2003 <> x:38
-binder 2005:2005 <> y:39
-R2017:2019 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R2016:2016 Top.bool_help <> x:38 var
-R2020:2020 Top.bool_help <> y:39 var
-binder 2014:2014 <> v:40
-R2026:2028 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R2025:2025 Top.bool_help <> x:38 var
-R2029:2029 Top.bool_help <> y:39 var
-R2034:2037 Top.bool_help <> comp def
-R2056:2056 Top.bool_help <> v:40 var
-R2040:2041 Top.bool_help <> nu def
-R2044:2050 Coq.Init.Logic <> eq_refl constr
-R2052:2052 Top.bool_help <> x:38 var
-def 2066:2076 <> nu_left_inv
-R2083:2086 Coq.Init.Datatypes <> bool ind
-binder 2079:2079 <> x:41
-binder 2081:2081 <> y:42
+R1392:1393 Top.BoolHelp <> b1:18 var
+R1398:1399 Top.BoolHelp <> b2:19 var
+def 1481:1484 <> comp
+binder 1487:1487 <> A:20
+R1498:1498 Top.BoolHelp <> A:20 var
+binder 1491:1491 <> x:21
+binder 1493:1493 <> y:22
+binder 1495:1496 <> y':23
+R1507:1509 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1506:1506 Top.BoolHelp <> x:21 var
+R1510:1510 Top.BoolHelp <> y:22 var
+binder 1502:1504 <> eq1:24
+R1519:1521 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1518:1518 Top.BoolHelp <> x:21 var
+R1522:1523 Top.BoolHelp <> y':23 var
+binder 1514:1516 <> eq2:25
+R1529:1531 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1528:1528 Top.BoolHelp <> y:22 var
+R1532:1533 Top.BoolHelp <> y':23 var
+R1542:1547 Coq.Init.Logic <> eq_ind scheme
+R1575:1577 Top.BoolHelp <> eq1:24 var
+R1569:1571 Top.BoolHelp <> eq2:25 var
+binder 1556:1556 <> a:26
+R1562:1564 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1561:1561 Top.BoolHelp <> a:26 var
+R1565:1566 Top.BoolHelp <> y':23 var
+def 1602:1613 <> trans_sym_eq
+binder 1616:1616 <> A:27
+R1624:1624 Top.BoolHelp <> A:27 var
+binder 1620:1620 <> x:28
+binder 1622:1622 <> y:29
+R1631:1633 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1630:1630 Top.BoolHelp <> x:28 var
+R1634:1634 Top.BoolHelp <> y:29 var
+binder 1628:1628 <> u:30
+R1647:1649 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1639:1642 Top.BoolHelp <> comp def
+R1646:1646 Top.BoolHelp <> u:30 var
+R1644:1644 Top.BoolHelp <> u:30 var
+R1650:1656 Coq.Init.Logic <> eq_refl constr
+R1658:1658 Top.BoolHelp <> y:29 var
+def 1718:1719 <> nu
+R1726:1729 Coq.Init.Datatypes <> bool ind
+binder 1722:1722 <> x:31
+binder 1724:1724 <> y:32
+R1736:1738 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1735:1735 Top.BoolHelp <> x:31 var
+R1739:1739 Top.BoolHelp <> y:32 var
+binder 1733:1733 <> u:33
+R1745:1747 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1744:1744 Top.BoolHelp <> x:31 var
+R1748:1748 Top.BoolHelp <> y:32 var
+R1761:1765 Top.BoolHelp <> b_dec thm
+R1767:1767 Top.BoolHelp <> x:31 var
+R1769:1769 Top.BoolHelp <> y:32 var
+R1787:1795 Coq.Init.Logic <> or_introl constr
+R1817:1825 Coq.Init.Logic <> or_intror constr
+R1836:1844 Coq.Init.Logic <> False_ind scheme
+R1855:1855 Top.BoolHelp <> u:33 var
+def 1885:1895 <> nu_constant
+R1902:1905 Coq.Init.Datatypes <> bool ind
+binder 1898:1898 <> x:34
+binder 1900:1900 <> y:35
+R1914:1916 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1913:1913 Top.BoolHelp <> x:34 var
+R1917:1917 Top.BoolHelp <> y:35 var
+binder 1909:1909 <> u:36
+binder 1911:1911 <> v:37
+R1926:1928 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1922:1923 Top.BoolHelp <> nu def
+R1925:1925 Top.BoolHelp <> u:36 var
+R1929:1930 Top.BoolHelp <> nu def
+R1932:1932 Top.BoolHelp <> v:37 var
+R1946:1947 Top.BoolHelp <> nu def
+R1964:1968 Top.BoolHelp <> b_dec thm
+R1964:1968 Top.BoolHelp <> b_dec thm
+def 2062:2067 <> nu_inv
+R2074:2077 Coq.Init.Datatypes <> bool ind
+binder 2070:2070 <> x:38
+binder 2072:2072 <> y:39
+R2084:2086 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2083:2083 Top.BoolHelp <> x:38 var
+R2087:2087 Top.BoolHelp <> y:39 var
+binder 2081:2081 <> v:40
 R2093:2095 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R2092:2092 Top.bool_help <> x:41 var
-R2096:2096 Top.bool_help <> y:42 var
-binder 2090:2090 <> u:43
-R2114:2116 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R2101:2106 Top.bool_help <> nu_inv def
-R2109:2110 Top.bool_help <> nu def
-R2112:2112 Top.bool_help <> u:43 var
-R2117:2117 Top.bool_help <> u:43 var
-R2148:2153 Top.bool_help <> nu_inv def
-R2165:2171 Coq.Init.Logic <> eq_refl constr
-R2165:2171 Coq.Init.Logic <> eq_refl constr
-R2184:2195 Top.bool_help <> trans_sym_eq def
-R2184:2195 Top.bool_help <> trans_sym_eq def
-prf 2214:2223 <> bool_irrel
-R2230:2233 Coq.Init.Datatypes <> bool ind
-binder 2226:2226 <> x:44
-binder 2228:2228 <> y:45
-R2244:2246 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R2243:2243 Top.bool_help <> x:44 var
-R2247:2247 Top.bool_help <> y:45 var
-binder 2237:2238 <> p1:46
-binder 2240:2241 <> p2:47
-R2254:2256 Coq.Init.Logic <> ::type_scope:x_'='_x not
-R2252:2253 Top.bool_help <> p1:46 var
-R2257:2258 Top.bool_help <> p2:47 var
-R2280:2290 Top.bool_help <> nu_left_inv def
-R2280:2290 Top.bool_help <> nu_left_inv def
-R2307:2317 Top.bool_help <> nu_left_inv def
-R2307:2317 Top.bool_help <> nu_left_inv def
-R2333:2343 Top.bool_help <> nu_constant def
-R2333:2343 Top.bool_help <> nu_constant def
-R2405:2408 Top.bool_help <> comp def
-R2411:2412 Top.bool_help <> nu def
-R2415:2421 Coq.Init.Logic <> eq_refl constr
+R2092:2092 Top.BoolHelp <> x:38 var
+R2096:2096 Top.BoolHelp <> y:39 var
+R2101:2104 Top.BoolHelp <> comp def
+R2123:2123 Top.BoolHelp <> v:40 var
+R2107:2108 Top.BoolHelp <> nu def
+R2111:2117 Coq.Init.Logic <> eq_refl constr
+R2119:2119 Top.BoolHelp <> x:38 var
+def 2146:2156 <> nu_left_inv
+R2163:2166 Coq.Init.Datatypes <> bool ind
+binder 2159:2159 <> x:41
+binder 2161:2161 <> y:42
+R2173:2175 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2172:2172 Top.BoolHelp <> x:41 var
+R2176:2176 Top.BoolHelp <> y:42 var
+binder 2170:2170 <> u:43
+R2194:2196 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2181:2186 Top.BoolHelp <> nu_inv def
+R2189:2190 Top.BoolHelp <> nu def
+R2192:2192 Top.BoolHelp <> u:43 var
+R2197:2197 Top.BoolHelp <> u:43 var
+R2228:2233 Top.BoolHelp <> nu_inv def
+R2245:2251 Coq.Init.Logic <> eq_refl constr
+R2245:2251 Coq.Init.Logic <> eq_refl constr
+R2264:2275 Top.BoolHelp <> trans_sym_eq def
+R2264:2275 Top.BoolHelp <> trans_sym_eq def
+prf 2294:2303 <> bool_irrel
+R2310:2313 Coq.Init.Datatypes <> bool ind
+binder 2306:2306 <> x:44
+binder 2308:2308 <> y:45
+R2324:2326 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2323:2323 Top.BoolHelp <> x:44 var
+R2327:2327 Top.BoolHelp <> y:45 var
+binder 2317:2318 <> p1:46
+binder 2320:2321 <> p2:47
+R2334:2336 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2332:2333 Top.BoolHelp <> p1:46 var
+R2337:2338 Top.BoolHelp <> p2:47 var
+R2360:2370 Top.BoolHelp <> nu_left_inv def
+R2360:2370 Top.BoolHelp <> nu_left_inv def
+R2387:2397 Top.BoolHelp <> nu_left_inv def
+R2387:2397 Top.BoolHelp <> nu_left_inv def
+R2413:2423 Top.BoolHelp <> nu_constant def
+R2413:2423 Top.BoolHelp <> nu_constant def
