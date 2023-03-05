@@ -69,7 +69,8 @@ Definition ex_e (A:Type) (P:A->Prop) (p: ex A P) (Q:Prop) (f:forall (a:A) (b:P a
 Definition equ (A:Type) (a b:A) : Type := 
 	forall (P:A->Prop), P a -> P b.
 
-Definition equ_refl (A:Type) (a b:A) (p: equ A a b)  : equ A b a  := 	todo
+Definition equ_refl (A:Type) (x:A) : equ A x x  :=
+	fun P h => h
 	.
 
 Definition equ_ind : todo := todo.

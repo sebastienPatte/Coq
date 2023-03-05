@@ -1,6 +1,165 @@
+Print nat_rect.
+
+Check Prop.
+Check nat.
+
+
+Inductive bar : Type := Bar : bar.
+Check bar.
+
+Parameter (A : Type).
+Parameter (B : A -> Type).
+Check forall x:A, B x.
+Check eq_refl.
+Check exist.
+Print sig.
+
+Check ((forall P:Prop, P ) : Type ).
+(*  *)
+Check sig.
+Parameter (P : nat -> Prop).
+Check (fun x : nat => P x).
+
+Check  @sig nat . (* constructor argmuents types sorts in sig are Set and Prop *)
+Print sig.
+Eval compute in (@sig nat ).
+Check True:Set.
+
+Print or.
+Check True.
+Check unit.
+Check unit_rec.
+Check True_rect.
+
+
+Fail Check Prop:Set.
+Check forall (B:nat->Prop), @sig nat B .
+Definition d := { x : nat | P x }.
+Print d.
+
+Fail Definition t2 (P : nat -> Prop) : (exists x : nat, P x) -> { x : nat | P x } :=
+    fun e => match e return (sig (fun x : nat => P x)) with 
+            | ex_intro _ n p => exist _ n p
+    end.
+
+
+
+Check ((forall S:Set, S) : Set).
+
+Definition eee : {x:nat | x= 3} := @exist nat (fun x => x=3) 3 eq_refl.
+
+Inductive tree : Set :=
+| L : nat -> tree
+| N : nat -> tree -> tree -> tree.
+
+Fixpoint mult (t : tree) : nat :=
+  match t with
+  | L n => n
+  | N n l r => n * mult l * mult r
+  end.
 
 Inductive and (A:Prop) (B:Prop) : Prop :=
 | conj : A -> B -> and A B.
+
+Inductive aexpr (N : Type) :=
+ | cst : N -> aexpr N 
+ | var : nat -> aexpr N
+ | add : aexpr N -> aexpr N -> aexpr N.
+
+ Inductive e (A:Prop) : Set := C (_:A).
+
+
+
+ Check C.
+
+
+
+Definition rec_typ := 
+forall (N:Type) (P : aexpr N -> Type),
+(forall n:N, P (cst N n)) -> 
+(forall n:nat, P (var N n)) -> 
+(forall a:aexpr N, P a -> forall a0:aexpr N, P a0 -> P (add N a a0)) ->
+forall a : aexpr N, P a
+.
+
+Definition rec_typ_nodep := 
+forall (N:Type) (P : Type),
+(forall n:N, P ) -> 
+(forall n:nat, P ) -> 
+(aexpr N -> P -> aexpr N -> P -> P ) ->
+aexpr N -> P 
+.
+
+Check (aexpr_rect : rec_typ).
+
+
+
+
+Fixpoint aexpr_iter (N:Type) (P: Type) 
+  (Pcst : N -> P) 
+  (Pvar : nat -> P)
+  (Padd : aexpr N -> P -> aexpr N -> P -> P)
+  (e: aexpr N ) : P := 
+  match e with 
+  | cst _ n => Pcst n 
+  | var _ v => Pvar v 
+  | add _ e1 e2 => 
+    Padd e1 (aexpr_iter N P Pcst Pvar Padd e1)  
+         e2 (aexpr_iter N P Pcst Pvar Padd e2) 
+end.
+
+Print aexpr_iter.
+Check (aexpr_iter : rec_typ_nodep).
+
+Require Import List.
+
+Print list_rect.
+
+Inductive even : nat -> Prop :=
+E0 : even O
+| ESS (n:nat) (e:even n) : even (S (S n)).
+
+Check even_ind.
+
+Scheme even_ind_dep := Induction for even Sort Prop.
+Check even_ind_dep.
+
+Print even_ind_dep.
+
+Definition even_rectd 
+  (P : forall n : nat, even n -> Type) 
+  (f : P 0 E0)
+  (f0 : forall (n : nat) (e : even n), P n e -> P (S (S n)) (ESS n e)) :=
+fix F (n : nat) (e : even n) {struct e} : P n e :=
+  match e as e0 in (even n0) return (P n0 e0) with
+  | E0 => f
+  | ESS n0 e0 => f0 n0 e0 (F n0 e0)
+  end.
+
+Inductive vect (A:Type) : nat -> Type :=
+| niln : vect A O
+| consn : A -> forall n:nat, vect A n -> vect A (S n).
+
+Print vect_rect.
+
+
+Scheme eq_ind_dep := Induction for eq Sort Prop.
+Check eq_ind_dep.
+
+(* Check (fun x:bool => eq_ind_dep bool x (fun a => eq_refl a)). *)
+
+Lemma proo_irrel (x y : bool) (H:x=y) (H':x=y) : H=H'
+.
+Proof.
+  apply   in  H.
+Qed.
+
+
+Inductive iff (A B : Prop) : Prop := 
+  |iff_intro : (A -> B) -> (B -> A) -> iff A B
+.
+
+Check iff.
 
 Check (and_ind).
 
@@ -94,7 +253,14 @@ Inductive nat : Set :=
 | O : nat
 | S : nat -> nat.
 
-Check forall A : Type, list A -> nat.
+Check forall A : Set, list A -> nat.
+Check forall A, A -> nat.
+
+Inductive tuple (A:Type) :=
+| C0 : A -> tuple A
+| CS : tuple (A*A) -> tuple A.
+
+Check tuple_ind.
 
 Definition even_ind_dep 
   (P : forall n : nat, even n -> Prop)

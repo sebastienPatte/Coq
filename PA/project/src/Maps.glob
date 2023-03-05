@@ -1,0 +1,662 @@
+DIGEST a344ec3fba03657e667cbc86aa0fd8ad
+FTop.Maps
+R88:95 Top.PolyDefs <> <> lib
+R113:120 Top.BoolHelp <> <> lib
+R216:220 Top.Valid <> <> lib
+prf 230:243 <> eq_map_add_add
+R253:255 Coq.Init.Datatypes <> nat ind
+binder 246:246 <> i:1
+binder 248:248 <> x:2
+binder 250:250 <> y:3
+R261:266 Top.PolyDefs <> monoid def
+binder 259:259 <> m:4
+R271:275 Top.PolyDefs NatMap Equal def
+R290:292 Top.PolyDefs NatMap add def
+R299:301 Top.PolyDefs NatMap add def
+R307:307 Top.Maps <> m:4 var
+R305:305 Top.Maps <> y:3 var
+R303:303 Top.Maps <> i:1 var
+R296:296 Top.Maps <> x:2 var
+R294:294 Top.Maps <> i:1 var
+R278:280 Top.PolyDefs NatMap add def
+R286:286 Top.Maps <> m:4 var
+R284:284 Top.Maps <> x:2 var
+R282:282 Top.Maps <> i:1 var
+R328:332 Top.PolyDefs NatMap Equal def
+R353:362 Coq.Arith.PeanoNat Nat eq_dec thm
+R353:362 Coq.Arith.PeanoNat Nat eq_dec thm
+R390:399 Top.PolyDefs P.F add_eq_o thm
+R390:399 Top.PolyDefs P.F add_eq_o thm
+R390:399 Top.PolyDefs P.F add_eq_o thm
+R390:399 Top.PolyDefs P.F add_eq_o thm
+R427:436 Top.PolyDefs P.F add_eq_o thm
+R427:436 Top.PolyDefs P.F add_eq_o thm
+R427:436 Top.PolyDefs P.F add_eq_o thm
+R427:436 Top.PolyDefs P.F add_eq_o thm
+R480:490 Top.PolyDefs P.F add_neq_o thm
+R480:490 Top.PolyDefs P.F add_neq_o thm
+R480:490 Top.PolyDefs P.F add_neq_o thm
+R480:490 Top.PolyDefs P.F add_neq_o thm
+R518:528 Top.PolyDefs P.F add_neq_o thm
+R518:528 Top.PolyDefs P.F add_neq_o thm
+R518:528 Top.PolyDefs P.F add_neq_o thm
+R518:528 Top.PolyDefs P.F add_neq_o thm
+R556:566 Top.PolyDefs P.F add_neq_o thm
+R556:566 Top.PolyDefs P.F add_neq_o thm
+R556:566 Top.PolyDefs P.F add_neq_o thm
+R556:566 Top.PolyDefs P.F add_neq_o thm
+prf 610:624 <> eq_map_add_each
+R632:634 Coq.Init.Datatypes <> nat ind
+binder 627:627 <> i:5
+binder 629:629 <> x:6
+R644:649 Top.PolyDefs <> monoid def
+binder 638:639 <> m1:7
+binder 641:642 <> m2:8
+R665:668 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R654:658 Top.PolyDefs NatMap Equal def
+R663:664 Top.Maps <> m2:8 var
+R660:661 Top.Maps <> m1:7 var
+R669:673 Top.PolyDefs NatMap Equal def
+R689:691 Top.PolyDefs NatMap add def
+R697:698 Top.Maps <> m2:8 var
+R695:695 Top.Maps <> x:6 var
+R693:693 Top.Maps <> i:5 var
+R676:678 Top.PolyDefs NatMap add def
+R684:685 Top.Maps <> m1:7 var
+R682:682 Top.Maps <> x:6 var
+R680:680 Top.Maps <> i:5 var
+R718:722 Top.PolyDefs NatMap Equal def
+R743:752 Coq.Arith.PeanoNat Nat eq_dec thm
+R743:752 Coq.Arith.PeanoNat Nat eq_dec thm
+R779:788 Top.PolyDefs P.F add_eq_o thm
+R779:788 Top.PolyDefs P.F add_eq_o thm
+R779:788 Top.PolyDefs P.F add_eq_o thm
+R779:788 Top.PolyDefs P.F add_eq_o thm
+R816:825 Top.PolyDefs P.F add_eq_o thm
+R816:825 Top.PolyDefs P.F add_eq_o thm
+R816:825 Top.PolyDefs P.F add_eq_o thm
+R816:825 Top.PolyDefs P.F add_eq_o thm
+R869:879 Top.PolyDefs P.F add_neq_o thm
+R869:879 Top.PolyDefs P.F add_neq_o thm
+R869:879 Top.PolyDefs P.F add_neq_o thm
+R869:879 Top.PolyDefs P.F add_neq_o thm
+R907:917 Top.PolyDefs P.F add_neq_o thm
+R907:917 Top.PolyDefs P.F add_neq_o thm
+R907:917 Top.PolyDefs P.F add_neq_o thm
+R907:917 Top.PolyDefs P.F add_neq_o thm
+prf 958:974 <> eq_map_add_remove
+R982:984 Coq.Init.Datatypes <> nat ind
+binder 977:977 <> i:9
+binder 979:979 <> x:10
+R990:995 Top.PolyDefs <> monoid def
+binder 988:988 <> m:11
+R1000:1004 Top.PolyDefs NatMap Equal def
+R1019:1021 Top.PolyDefs NatMap add def
+R1028:1040 Top.PolyDefs NatMap remove def
+R1044:1044 Top.Maps <> m:11 var
+R1042:1042 Top.Maps <> i:9 var
+R1025:1025 Top.Maps <> x:10 var
+R1023:1023 Top.Maps <> i:9 var
+R1007:1009 Top.PolyDefs NatMap add def
+R1015:1015 Top.Maps <> m:11 var
+R1013:1013 Top.Maps <> x:10 var
+R1011:1011 Top.Maps <> i:9 var
+R1065:1069 Top.PolyDefs NatMap Equal def
+R1090:1099 Coq.Arith.PeanoNat Nat eq_dec thm
+R1090:1099 Coq.Arith.PeanoNat Nat eq_dec thm
+R1126:1135 Top.PolyDefs P.F add_eq_o thm
+R1126:1135 Top.PolyDefs P.F add_eq_o thm
+R1126:1135 Top.PolyDefs P.F add_eq_o thm
+R1126:1135 Top.PolyDefs P.F add_eq_o thm
+R1163:1172 Top.PolyDefs P.F add_eq_o thm
+R1163:1172 Top.PolyDefs P.F add_eq_o thm
+R1163:1172 Top.PolyDefs P.F add_eq_o thm
+R1163:1172 Top.PolyDefs P.F add_eq_o thm
+R1216:1226 Top.PolyDefs P.F add_neq_o thm
+R1216:1226 Top.PolyDefs P.F add_neq_o thm
+R1216:1226 Top.PolyDefs P.F add_neq_o thm
+R1216:1226 Top.PolyDefs P.F add_neq_o thm
+R1254:1264 Top.PolyDefs P.F add_neq_o thm
+R1254:1264 Top.PolyDefs P.F add_neq_o thm
+R1254:1264 Top.PolyDefs P.F add_neq_o thm
+R1254:1264 Top.PolyDefs P.F add_neq_o thm
+R1292:1305 Top.PolyDefs P.F remove_neq_o thm
+R1292:1305 Top.PolyDefs P.F remove_neq_o thm
+R1292:1305 Top.PolyDefs P.F remove_neq_o thm
+R1292:1305 Top.PolyDefs P.F remove_neq_o thm
+prf 1349:1366 <> eq_map_add_same_in
+R1374:1376 Coq.Init.Datatypes <> nat ind
+binder 1369:1369 <> i:12
+binder 1371:1371 <> n:13
+R1382:1387 Top.PolyDefs <> monoid def
+binder 1380:1380 <> m:14
+R1416:1420 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1407:1409 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1392:1402 Top.PolyDefs NatMap find def
+R1406:1406 Top.Maps <> m:14 var
+R1404:1404 Top.Maps <> i:12 var
+R1410:1413 Coq.Init.Datatypes <> Some constr
+R1415:1415 Top.Maps <> n:13 var
+R1421:1425 Top.PolyDefs NatMap Equal def
+R1430:1432 Top.PolyDefs NatMap add def
+R1438:1438 Top.Maps <> m:14 var
+R1436:1436 Top.Maps <> n:13 var
+R1434:1434 Top.Maps <> i:12 var
+R1427:1427 Top.Maps <> m:14 var
+R1459:1463 Top.PolyDefs NatMap Equal def
+R1484:1493 Coq.Arith.PeanoNat Nat eq_dec thm
+R1484:1493 Coq.Arith.PeanoNat Nat eq_dec thm
+R1534:1543 Top.PolyDefs P.F add_eq_o thm
+R1534:1543 Top.PolyDefs P.F add_eq_o thm
+R1534:1543 Top.PolyDefs P.F add_eq_o thm
+R1534:1543 Top.PolyDefs P.F add_eq_o thm
+R1569:1579 Top.PolyDefs P.F add_neq_o thm
+R1569:1579 Top.PolyDefs P.F add_neq_o thm
+R1569:1579 Top.PolyDefs P.F add_neq_o thm
+R1569:1579 Top.PolyDefs P.F add_neq_o thm
+prf 1605:1619 <> eq_map_add_swap
+R1631:1633 Coq.Init.Datatypes <> nat ind
+binder 1622:1622 <> i:15
+binder 1624:1624 <> j:16
+binder 1626:1626 <> x:17
+binder 1628:1628 <> y:18
+R1639:1644 Top.PolyDefs <> monoid def
+binder 1637:1637 <> m:19
+R1655:1658 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1650:1653 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R1649:1649 Top.Maps <> i:15 var
+R1654:1654 Top.Maps <> j:16 var
+R1659:1663 Top.PolyDefs NatMap Equal def
+R1688:1690 Top.PolyDefs NatMap add def
+R1697:1699 Top.PolyDefs NatMap add def
+R1705:1705 Top.Maps <> m:19 var
+R1703:1703 Top.Maps <> x:17 var
+R1701:1701 Top.Maps <> i:15 var
+R1694:1694 Top.Maps <> y:18 var
+R1692:1692 Top.Maps <> j:16 var
+R1666:1668 Top.PolyDefs NatMap add def
+R1675:1677 Top.PolyDefs NatMap add def
+R1683:1683 Top.Maps <> m:19 var
+R1681:1681 Top.Maps <> y:18 var
+R1679:1679 Top.Maps <> j:16 var
+R1672:1672 Top.Maps <> x:17 var
+R1670:1670 Top.Maps <> i:15 var
+R1728:1732 Top.PolyDefs NatMap Equal def
+R1753:1762 Coq.Arith.PeanoNat Nat eq_dec thm
+R1753:1762 Coq.Arith.PeanoNat Nat eq_dec thm
+R1790:1799 Top.PolyDefs P.F add_eq_o thm
+R1790:1799 Top.PolyDefs P.F add_eq_o thm
+R1790:1799 Top.PolyDefs P.F add_eq_o thm
+R1790:1799 Top.PolyDefs P.F add_eq_o thm
+R1825:1835 Top.PolyDefs P.F add_neq_o thm
+R1825:1835 Top.PolyDefs P.F add_neq_o thm
+R1825:1835 Top.PolyDefs P.F add_neq_o thm
+R1825:1835 Top.PolyDefs P.F add_neq_o thm
+R1861:1870 Top.PolyDefs P.F add_eq_o thm
+R1861:1870 Top.PolyDefs P.F add_eq_o thm
+R1861:1870 Top.PolyDefs P.F add_eq_o thm
+R1861:1870 Top.PolyDefs P.F add_eq_o thm
+R1913:1923 Top.PolyDefs P.F add_neq_o thm
+R1913:1923 Top.PolyDefs P.F add_neq_o thm
+R1913:1923 Top.PolyDefs P.F add_neq_o thm
+R1913:1923 Top.PolyDefs P.F add_neq_o thm
+R1947:1956 Coq.Arith.PeanoNat Nat eq_dec thm
+R1947:1956 Coq.Arith.PeanoNat Nat eq_dec thm
+R1983:1992 Top.PolyDefs P.F add_eq_o thm
+R1983:1992 Top.PolyDefs P.F add_eq_o thm
+R1983:1992 Top.PolyDefs P.F add_eq_o thm
+R1983:1992 Top.PolyDefs P.F add_eq_o thm
+R2020:2029 Top.PolyDefs P.F add_eq_o thm
+R2020:2029 Top.PolyDefs P.F add_eq_o thm
+R2020:2029 Top.PolyDefs P.F add_eq_o thm
+R2020:2029 Top.PolyDefs P.F add_eq_o thm
+R2073:2083 Top.PolyDefs P.F add_neq_o thm
+R2073:2083 Top.PolyDefs P.F add_neq_o thm
+R2073:2083 Top.PolyDefs P.F add_neq_o thm
+R2073:2083 Top.PolyDefs P.F add_neq_o thm
+R2111:2121 Top.PolyDefs P.F add_neq_o thm
+R2111:2121 Top.PolyDefs P.F add_neq_o thm
+R2111:2121 Top.PolyDefs P.F add_neq_o thm
+R2111:2121 Top.PolyDefs P.F add_neq_o thm
+R2149:2159 Top.PolyDefs P.F add_neq_o thm
+R2149:2159 Top.PolyDefs P.F add_neq_o thm
+R2149:2159 Top.PolyDefs P.F add_neq_o thm
+R2149:2159 Top.PolyDefs P.F add_neq_o thm
+prf 2204:2217 <> for_all_eq_map
+R2227:2232 Top.PolyDefs <> monoid def
+binder 2220:2221 <> m1:20
+binder 2223:2224 <> m2:21
+R2248:2251 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2237:2241 Top.PolyDefs NatMap Equal def
+R2246:2247 Top.Maps <> m2:21 var
+R2243:2244 Top.Maps <> m1:20 var
+R2290:2292 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2252:2260 Top.PolyDefs P for_all def
+R2288:2289 Top.Maps <> m1:20 var
+R2273:2275 Coq.Init.Datatypes <> nat ind
+binder 2269:2269 <> v:22
+R2281:2284 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R2280:2280 Top.Maps <> v:22 var
+R2293:2301 Top.PolyDefs P for_all def
+R2329:2330 Top.Maps <> m2:21 var
+R2314:2316 Coq.Init.Datatypes <> nat ind
+binder 2310:2310 <> v:23
+R2322:2325 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R2321:2321 Top.Maps <> v:23 var
+R2358:2366 Top.PolyDefs P for_all def
+R2379:2390 Top.PolyDefs P fold_Equal thm
+R2379:2390 Top.PolyDefs P fold_Equal thm
+R2379:2390 Top.PolyDefs P fold_Equal thm
+R2379:2390 Top.PolyDefs P fold_Equal thm
+R2379:2390 Top.PolyDefs P fold_Equal thm
+R2379:2390 Top.PolyDefs P fold_Equal thm
+R2379:2390 Top.PolyDefs P fold_Equal thm
+R2463:2480 Top.PolyDefs P transpose_neqkey def
+prf 2547:2557 <> find_eq_map
+R2567:2572 Top.PolyDefs <> monoid def
+binder 2560:2561 <> m1:24
+binder 2563:2564 <> m2:25
+R2578:2580 Coq.Init.Datatypes <> nat ind
+binder 2576:2576 <> x:26
+R2596:2599 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2585:2589 Top.PolyDefs NatMap Equal def
+R2594:2595 Top.Maps <> m2:25 var
+R2591:2592 Top.Maps <> m1:24 var
+R2616:2618 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2600:2610 Top.PolyDefs NatMap find def
+R2614:2615 Top.Maps <> m1:24 var
+R2612:2612 Top.Maps <> x:26 var
+R2619:2629 Top.PolyDefs NatMap find def
+R2633:2634 Top.Maps <> m2:25 var
+R2631:2631 Top.Maps <> x:26 var
+R2652:2659 Top.PolyDefs P.F find_m def
+R2652:2659 Top.PolyDefs P.F find_m def
+prf 2687:2705 <> for_all_add_0_notin
+R2710:2715 Top.PolyDefs <> monoid def
+binder 2708:2708 <> m:27
+R2721:2723 Coq.Init.Datatypes <> nat ind
+binder 2719:2719 <> i:28
+R2750:2753 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2743:2745 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2728:2738 Top.PolyDefs NatMap find def
+R2742:2742 Top.Maps <> m:27 var
+R2740:2740 Top.Maps <> i:28 var
+R2746:2749 Coq.Init.Datatypes <> None constr
+R2791:2793 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2754:2762 Top.PolyDefs P for_all def
+R2790:2790 Top.Maps <> m:27 var
+R2775:2777 Coq.Init.Datatypes <> nat ind
+binder 2771:2771 <> v:29
+R2783:2786 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R2782:2782 Top.Maps <> v:29 var
+R2794:2802 Top.PolyDefs P for_all def
+R2831:2833 Top.PolyDefs NatMap add def
+R2839:2839 Top.Maps <> m:27 var
+R2835:2835 Top.Maps <> i:28 var
+R2815:2817 Coq.Init.Datatypes <> nat ind
+binder 2811:2811 <> v:30
+R2823:2826 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R2822:2822 Top.Maps <> v:30 var
+R2868:2876 Top.PolyDefs P for_all def
+R2889:2898 Top.PolyDefs P fold_add thm
+R2889:2898 Top.PolyDefs P fold_add thm
+R2889:2898 Top.PolyDefs P fold_add thm
+R2889:2898 Top.PolyDefs P fold_add thm
+R2889:2898 Top.PolyDefs P fold_add thm
+R2889:2898 Top.PolyDefs P fold_add thm
+R2889:2898 Top.PolyDefs P fold_add thm
+R2966:2983 Top.PolyDefs P transpose_neqkey def
+R3032:3048 Top.PolyDefs P.F not_find_in_iff thm
+R3032:3048 Top.PolyDefs P.F not_find_in_iff thm
+R3032:3048 Top.PolyDefs P.F not_find_in_iff thm
+prf 3075:3088 <> for_all_remove
+R3093:3098 Top.PolyDefs <> monoid def
+binder 3091:3091 <> m:31
+R3104:3106 Coq.Init.Datatypes <> nat ind
+binder 3102:3102 <> n:32
+R3155:3158 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3148:3150 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3111:3119 Top.PolyDefs P for_all def
+R3147:3147 Top.Maps <> m:31 var
+R3132:3134 Coq.Init.Datatypes <> nat ind
+binder 3128:3128 <> v:33
+R3140:3143 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R3139:3139 Top.Maps <> v:33 var
+R3151:3154 Coq.Init.Datatypes <> true constr
+R3214:3216 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3159:3167 Top.PolyDefs P for_all def
+R3196:3208 Top.PolyDefs NatMap remove def
+R3212:3212 Top.Maps <> m:31 var
+R3210:3210 Top.Maps <> n:32 var
+R3180:3182 Coq.Init.Datatypes <> nat ind
+binder 3176:3176 <> v:34
+R3188:3191 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R3187:3187 Top.Maps <> v:34 var
+R3217:3220 Coq.Init.Datatypes <> true constr
+R3249:3257 Top.PolyDefs P for_all def
+R3268:3283 Top.PolyDefs P fold_rec_nodep thm
+R3268:3283 Top.PolyDefs P fold_rec_nodep thm
+R3320:3332 Top.PolyDefs P for_all_iff thm
+R3320:3332 Top.PolyDefs P for_all_iff thm
+R3320:3332 Top.PolyDefs P for_all_iff thm
+R3320:3332 Top.PolyDefs P for_all_iff thm
+R3361:3370 Coq.Arith.PeanoNat Nat eq_dec thm
+R3361:3370 Coq.Arith.PeanoNat Nat eq_dec thm
+R3434:3452 Top.PolyDefs P.F remove_mapsto_iff thm
+R3434:3452 Top.PolyDefs P.F remove_mapsto_iff thm
+R3434:3452 Top.PolyDefs P.F remove_mapsto_iff thm
+R3492:3498 Coq.Init.Logic <> eq_refl constr
+R3492:3498 Coq.Init.Logic <> eq_refl constr
+R3546:3564 Top.PolyDefs P.F remove_mapsto_iff thm
+R3546:3564 Top.PolyDefs P.F remove_mapsto_iff thm
+R3546:3564 Top.PolyDefs P.F remove_mapsto_iff thm
+prf 3651:3663 <> for_all_add_0
+R3668:3673 Top.PolyDefs <> monoid def
+binder 3666:3666 <> m:35
+R3679:3681 Coq.Init.Datatypes <> nat ind
+binder 3677:3677 <> i:36
+R3730:3733 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3723:3725 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3686:3694 Top.PolyDefs P for_all def
+R3722:3722 Top.Maps <> m:35 var
+R3707:3709 Coq.Init.Datatypes <> nat ind
+binder 3703:3703 <> v:37
+R3715:3718 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R3714:3714 Top.Maps <> v:37 var
+R3726:3729 Coq.Init.Datatypes <> true constr
+R3781:3783 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3734:3742 Top.PolyDefs P for_all def
+R3771:3773 Top.PolyDefs NatMap add def
+R3779:3779 Top.Maps <> m:35 var
+R3775:3775 Top.Maps <> i:36 var
+R3755:3757 Coq.Init.Datatypes <> nat ind
+binder 3751:3751 <> v:38
+R3763:3766 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R3762:3762 Top.Maps <> v:38 var
+R3784:3787 Coq.Init.Datatypes <> true constr
+R3843:3845 Top.PolyDefs NatMap add def
+R3852:3864 Top.PolyDefs NatMap remove def
+R3817:3830 Top.Maps <> for_all_eq_map thm
+R3843:3845 Top.PolyDefs NatMap add def
+R3852:3864 Top.PolyDefs NatMap remove def
+R3817:3830 Top.Maps <> for_all_eq_map thm
+R3843:3845 Top.PolyDefs NatMap add def
+R3852:3864 Top.PolyDefs NatMap remove def
+R3817:3830 Top.Maps <> for_all_eq_map thm
+R3843:3845 Top.PolyDefs NatMap add def
+R3852:3864 Top.PolyDefs NatMap remove def
+R3817:3830 Top.Maps <> for_all_eq_map thm
+R3889:3907 Top.Maps <> for_all_add_0_notin thm
+R3889:3907 Top.Maps <> for_all_add_0_notin thm
+R3889:3907 Top.Maps <> for_all_add_0_notin thm
+R3889:3907 Top.Maps <> for_all_add_0_notin thm
+R3919:3932 Top.Maps <> for_all_remove thm
+R3919:3932 Top.Maps <> for_all_remove thm
+R3958:3970 Top.PolyDefs P.F remove_eq_o thm
+R3958:3970 Top.PolyDefs P.F remove_eq_o thm
+R3958:3970 Top.PolyDefs P.F remove_eq_o thm
+R3958:3970 Top.PolyDefs P.F remove_eq_o thm
+R3994:4010 Top.Maps <> eq_map_add_remove thm
+R3994:4010 Top.Maps <> eq_map_add_remove thm
+def 4036:4054 <> for_all_add_S_notin
+R4059:4064 Top.PolyDefs <> monoid def
+binder 4057:4057 <> m:39
+R4072:4074 Coq.Init.Datatypes <> nat ind
+binder 4068:4068 <> i:40
+binder 4070:4070 <> n:41
+R4101:4104 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4094:4096 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4079:4089 Top.PolyDefs NatMap find def
+R4093:4093 Top.Maps <> m:39 var
+R4091:4091 Top.Maps <> i:40 var
+R4097:4100 Coq.Init.Datatypes <> None constr
+R4156:4158 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4105:4113 Top.PolyDefs P for_all def
+R4142:4144 Top.PolyDefs NatMap add def
+R4154:4154 Top.Maps <> m:39 var
+R4149:4149 Coq.Init.Datatypes <> S constr
+R4151:4151 Top.Maps <> n:41 var
+R4146:4146 Top.Maps <> i:40 var
+R4126:4128 Coq.Init.Datatypes <> nat ind
+binder 4122:4122 <> v:42
+R4134:4137 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R4133:4133 Top.Maps <> v:42 var
+R4159:4163 Coq.Init.Datatypes <> false constr
+R4191:4199 Top.PolyDefs P for_all def
+R4212:4221 Top.PolyDefs P fold_add thm
+R4212:4221 Top.PolyDefs P fold_add thm
+R4212:4221 Top.PolyDefs P fold_add thm
+R4212:4221 Top.PolyDefs P fold_add thm
+R4212:4221 Top.PolyDefs P fold_add thm
+R4212:4221 Top.PolyDefs P fold_add thm
+R4212:4221 Top.PolyDefs P fold_add thm
+R4286:4303 Top.PolyDefs P transpose_neqkey def
+R4361:4377 Top.PolyDefs P.F not_find_in_iff thm
+R4361:4377 Top.PolyDefs P.F not_find_in_iff thm
+R4361:4377 Top.PolyDefs P.F not_find_in_iff thm
+prf 4405:4417 <> for_all_add_S
+R4423:4428 Top.PolyDefs <> monoid def
+binder 4421:4421 <> m:43
+R4436:4438 Coq.Init.Datatypes <> nat ind
+binder 4432:4432 <> i:44
+binder 4434:4434 <> n:45
+R4495:4497 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4444:4452 Top.PolyDefs P for_all def
+R4481:4483 Top.PolyDefs NatMap add def
+R4493:4493 Top.Maps <> m:43 var
+R4488:4488 Coq.Init.Datatypes <> S constr
+R4490:4490 Top.Maps <> n:45 var
+R4485:4485 Top.Maps <> i:44 var
+R4465:4467 Coq.Init.Datatypes <> nat ind
+binder 4461:4461 <> v:46
+R4473:4476 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R4472:4472 Top.Maps <> v:46 var
+R4498:4502 Coq.Init.Datatypes <> false constr
+R4548:4550 Top.PolyDefs NatMap add def
+R4561:4573 Top.PolyDefs NatMap remove def
+R4555:4555 Coq.Init.Datatypes <> S constr
+R4522:4535 Top.Maps <> for_all_eq_map thm
+R4548:4550 Top.PolyDefs NatMap add def
+R4561:4573 Top.PolyDefs NatMap remove def
+R4555:4555 Coq.Init.Datatypes <> S constr
+R4522:4535 Top.Maps <> for_all_eq_map thm
+R4548:4550 Top.PolyDefs NatMap add def
+R4561:4573 Top.PolyDefs NatMap remove def
+R4555:4555 Coq.Init.Datatypes <> S constr
+R4522:4535 Top.Maps <> for_all_eq_map thm
+R4548:4550 Top.PolyDefs NatMap add def
+R4561:4573 Top.PolyDefs NatMap remove def
+R4555:4555 Coq.Init.Datatypes <> S constr
+R4522:4535 Top.Maps <> for_all_eq_map thm
+R4592:4610 Top.Maps <> for_all_add_S_notin def
+R4592:4610 Top.Maps <> for_all_add_S_notin def
+R4620:4632 Top.PolyDefs P.F remove_eq_o thm
+R4620:4632 Top.PolyDefs P.F remove_eq_o thm
+R4661:4677 Top.Maps <> eq_map_add_remove thm
+R4661:4677 Top.Maps <> eq_map_add_remove thm
+R4661:4677 Top.Maps <> eq_map_add_remove thm
+prf 4705:4719 <> for_all_add_add
+R4724:4729 Top.PolyDefs <> monoid def
+binder 4722:4722 <> m:47
+R4742:4744 Coq.Init.Datatypes <> nat ind
+binder 4733:4734 <> n0:48
+binder 4736:4737 <> n1:49
+binder 4739:4739 <> i:50
+R4815:4817 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4750:4758 Top.PolyDefs P for_all def
+R4793:4795 Top.PolyDefs NatMap add def
+R4803:4805 Top.PolyDefs NatMap add def
+R4812:4812 Top.Maps <> m:47 var
+R4809:4810 Top.Maps <> n0:48 var
+R4807:4807 Top.Maps <> i:50 var
+R4799:4800 Top.Maps <> n1:49 var
+R4797:4797 Top.Maps <> i:50 var
+R4771:4773 Coq.Init.Datatypes <> nat ind
+binder 4767:4767 <> v:51
+R4780:4783 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R4779:4779 Top.Maps <> v:51 var
+R4818:4826 Top.PolyDefs P for_all def
+R4861:4863 Top.PolyDefs NatMap add def
+R4870:4870 Top.Maps <> m:47 var
+R4867:4868 Top.Maps <> n1:49 var
+R4865:4865 Top.Maps <> i:50 var
+R4839:4841 Coq.Init.Datatypes <> nat ind
+binder 4835:4835 <> v:52
+R4848:4851 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R4847:4847 Top.Maps <> v:52 var
+R4917:4919 Top.PolyDefs NatMap add def
+R4891:4904 Top.Maps <> for_all_eq_map thm
+R4917:4919 Top.PolyDefs NatMap add def
+R4891:4904 Top.Maps <> for_all_eq_map thm
+R4917:4919 Top.PolyDefs NatMap add def
+R4891:4904 Top.Maps <> for_all_eq_map thm
+R4917:4919 Top.PolyDefs NatMap add def
+R4891:4904 Top.Maps <> for_all_eq_map thm
+R4962:4975 Top.Maps <> eq_map_add_add thm
+R4962:4975 Top.Maps <> eq_map_add_add thm
+R4962:4975 Top.Maps <> eq_map_add_add thm
+prf 5004:5020 <> for_all_exist_pos
+R5026:5031 Top.PolyDefs <> monoid def
+binder 5024:5024 <> m:53
+R5036:5036 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5091:5096 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5037:5044 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R5053:5055 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R5050:5052 Coq.Init.Datatypes <> nat ind
+binder 5045:5046 <> n':54
+R5050:5052 Coq.Init.Datatypes <> nat ind
+binder 5048:5048 <> r:55
+R5081:5084 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R5072:5074 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5056:5066 Top.PolyDefs NatMap find def
+R5071:5071 Top.Maps <> m:53 var
+R5068:5069 Top.Maps <> n':54 var
+R5075:5078 Coq.Init.Datatypes <> Some constr
+R5080:5080 Top.Maps <> r:55 var
+R5086:5089 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R5085:5085 Top.Maps <> r:55 var
+R5134:5136 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5097:5105 Top.PolyDefs P for_all def
+R5133:5133 Top.Maps <> m:53 var
+R5118:5120 Coq.Init.Datatypes <> nat ind
+binder 5114:5114 <> v:56
+R5126:5129 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R5125:5125 Top.Maps <> v:56 var
+R5137:5141 Coq.Init.Datatypes <> false constr
+R5250:5252 Top.PolyDefs NatMap add def
+R5257:5257 Coq.Init.Datatypes <> S constr
+R5223:5236 Top.Maps <> for_all_eq_map thm
+R5250:5252 Top.PolyDefs NatMap add def
+R5257:5257 Coq.Init.Datatypes <> S constr
+R5223:5236 Top.Maps <> for_all_eq_map thm
+R5250:5252 Top.PolyDefs NatMap add def
+R5257:5257 Coq.Init.Datatypes <> S constr
+R5223:5236 Top.Maps <> for_all_eq_map thm
+R5250:5252 Top.PolyDefs NatMap add def
+R5257:5257 Coq.Init.Datatypes <> S constr
+R5223:5236 Top.Maps <> for_all_eq_map thm
+R5277:5289 Top.Maps <> for_all_add_S thm
+R5277:5289 Top.Maps <> for_all_add_S thm
+R5303:5307 Top.PolyDefs NatMap Equal def
+R5326:5335 Coq.Arith.PeanoNat Nat eq_dec thm
+R5326:5335 Coq.Arith.PeanoNat Nat eq_dec thm
+R5381:5390 Top.PolyDefs P.F add_eq_o thm
+R5381:5390 Top.PolyDefs P.F add_eq_o thm
+R5381:5390 Top.PolyDefs P.F add_eq_o thm
+R5381:5390 Top.PolyDefs P.F add_eq_o thm
+R5415:5425 Top.PolyDefs P.F add_neq_o thm
+R5415:5425 Top.PolyDefs P.F add_neq_o thm
+R5415:5425 Top.PolyDefs P.F add_neq_o thm
+R5415:5425 Top.PolyDefs P.F add_neq_o thm
+prf 5471:5486 <> get_coeff_eq_map
+R5495:5500 Top.PolyDefs <> monoid def
+binder 5489:5490 <> m1:57
+binder 5492:5493 <> m2:58
+R5507:5510 Top.PolyDefs <> poly ind
+binder 5505:5505 <> p:59
+R5531:5535 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5524:5526 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5515:5521 Top.PolyDefs <> valid_b def
+R5523:5523 Top.Maps <> p:59 var
+R5527:5530 Coq.Init.Datatypes <> true constr
+R5547:5550 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5536:5540 Top.PolyDefs NatMap Equal def
+R5545:5546 Top.Maps <> m2:58 var
+R5542:5543 Top.Maps <> m1:57 var
+R5572:5574 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5551:5566 Top.PolyDefs <> get_coefficient_ def
+R5568:5568 Top.Maps <> p:59 var
+R5570:5571 Top.Maps <> m1:57 var
+R5575:5590 Top.PolyDefs <> get_coefficient_ def
+R5592:5592 Top.Maps <> p:59 var
+R5594:5595 Top.Maps <> m2:58 var
+R5683:5696 Top.Maps <> for_all_eq_map thm
+R5683:5696 Top.Maps <> for_all_eq_map thm
+R5683:5696 Top.Maps <> for_all_eq_map thm
+R5683:5696 Top.Maps <> for_all_eq_map thm
+R5829:5833 Top.PolyDefs NatMap Equal def
+R5870:5880 Top.PolyDefs NatMap find def
+R5888:5890 Coq.Init.Datatypes <> nat ind
+R5870:5880 Top.PolyDefs NatMap find def
+R5888:5890 Coq.Init.Datatypes <> nat ind
+R5980:5990 Coq.Arith.PeanoNat Nat sub_0_r thm
+R5980:5990 Coq.Arith.PeanoNat Nat sub_0_r thm
+R5980:5990 Coq.Arith.PeanoNat Nat sub_0_r thm
+R6011:6013 Top.PolyDefs NatMap add def
+R6025:6027 Top.PolyDefs NatMap add def
+R6011:6013 Top.PolyDefs NatMap add def
+R6025:6027 Top.PolyDefs NatMap add def
+R6011:6013 Top.PolyDefs NatMap add def
+R6025:6027 Top.PolyDefs NatMap add def
+R6011:6013 Top.PolyDefs NatMap add def
+R6025:6027 Top.PolyDefs NatMap add def
+R6069:6083 Top.Maps <> eq_map_add_each thm
+R6069:6083 Top.Maps <> eq_map_add_each thm
+prf 6136:6152 <> get_coeff_add_add
+R6162:6164 Coq.Init.Datatypes <> nat ind
+binder 6155:6155 <> i:60
+binder 6157:6157 <> x:61
+binder 6159:6159 <> y:62
+R6170:6175 Top.PolyDefs <> monoid def
+binder 6168:6168 <> m:63
+R6182:6185 Top.PolyDefs <> poly ind
+binder 6180:6180 <> p:64
+R6206:6209 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6199:6201 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6190:6196 Top.PolyDefs <> valid_b def
+R6198:6198 Top.Maps <> p:64 var
+R6202:6205 Coq.Init.Datatypes <> true constr
+R6240:6242 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6210:6225 Top.PolyDefs <> get_coefficient_ def
+R6227:6227 Top.Maps <> p:64 var
+R6230:6232 Top.PolyDefs NatMap add def
+R6238:6238 Top.Maps <> m:63 var
+R6236:6236 Top.Maps <> x:61 var
+R6234:6234 Top.Maps <> i:60 var
+R6243:6258 Top.PolyDefs <> get_coefficient_ def
+R6260:6260 Top.Maps <> p:64 var
+R6263:6265 Top.PolyDefs NatMap add def
+R6272:6274 Top.PolyDefs NatMap add def
+R6280:6280 Top.Maps <> m:63 var
+R6278:6278 Top.Maps <> y:62 var
+R6276:6276 Top.Maps <> i:60 var
+R6269:6269 Top.Maps <> x:61 var
+R6267:6267 Top.Maps <> i:60 var
+R6340:6342 Top.PolyDefs NatMap add def
+R6349:6351 Top.PolyDefs NatMap add def
+R6312:6327 Top.Maps <> get_coeff_eq_map thm
+R6340:6342 Top.PolyDefs NatMap add def
+R6349:6351 Top.PolyDefs NatMap add def
+R6312:6327 Top.Maps <> get_coeff_eq_map thm
+R6340:6342 Top.PolyDefs NatMap add def
+R6349:6351 Top.PolyDefs NatMap add def
+R6312:6327 Top.Maps <> get_coeff_eq_map thm
+R6340:6342 Top.PolyDefs NatMap add def
+R6349:6351 Top.PolyDefs NatMap add def
+R6312:6327 Top.Maps <> get_coeff_eq_map thm
+R6340:6342 Top.PolyDefs NatMap add def
+R6349:6351 Top.PolyDefs NatMap add def
+R6312:6327 Top.Maps <> get_coeff_eq_map thm
+R6412:6425 Top.Maps <> eq_map_add_add thm
+R6412:6425 Top.Maps <> eq_map_add_add thm
+R6412:6425 Top.Maps <> eq_map_add_add thm

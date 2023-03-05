@@ -8,6 +8,10 @@ Check Type.
 
 Universes i j.
 
+Parameter (A:Type@{i}).
+Parameter (B:nat -> Type@{i}).
+Check forall x:nat, B x.
+
 Fail Constraint i < Set.
 Fail Constraint i = Set.
 

@@ -1,0 +1,593 @@
+DIGEST 9ce36d25cbfd237c99b73d53a7f6db04
+FTop.BTauto
+R15:22 Top.PolyDefs <> <> lib
+R24:30 Top.PolyVal <> <> lib
+R32:35 Coq.Bool.Bool <> <> lib
+R72:80 Top.PolyArith <> <> lib
+R82:86 Top.Valid <> <> lib
+def 127:130 <> impb
+R140:143 Coq.Init.Datatypes <> bool ind
+binder 133:134 <> b1:1
+binder 136:137 <> b2:2
+R152:153 Top.BTauto <> b1:1 var
+R168:171 Coq.Init.Datatypes <> true constr
+R160:161 Top.BTauto <> b2:2 var
+def 185:192 <> cst_poly
+R197:197 Coq.Numbers.BinNums <> Z ind
+binder 195:195 <> z:3
+R206:213 Top.PolyDefs <> VP_value proj
+R206:213 Top.PolyDefs <> VP_value proj
+R227:233 Top.PolyDefs <> VP_prop proj
+R219:221 Top.PolyDefs <> Cst constr
+R223:223 Top.BTauto <> z:3 var
+R238:244 Coq.Init.Logic <> eq_refl constr
+ind 261:264 <> form
+constr 277:282 <> f_true
+constr 295:301 <> f_false
+constr 315:319 <> f_var
+constr 339:343 <> f_and
+constr 372:375 <> f_or
+constr 404:408 <> f_not
+constr 428:432 <> f_imp
+R287:290 Top.BTauto <> form:4 ind
+R307:310 Top.BTauto <> form:4 ind
+R327:330 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R324:326 Coq.Init.Datatypes <> nat ind
+R331:334 Top.BTauto <> form:4 ind
+R352:355 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R348:351 Top.BTauto <> form:4 ind
+R360:363 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R356:359 Top.BTauto <> form:4 ind
+R364:367 Top.BTauto <> form:4 ind
+R385:388 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R381:384 Top.BTauto <> form:4 ind
+R393:396 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R389:392 Top.BTauto <> form:4 ind
+R397:400 Top.BTauto <> form:4 ind
+R417:420 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R413:416 Top.BTauto <> form:4 ind
+R421:424 Top.BTauto <> form:4 ind
+R441:444 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R437:440 Top.BTauto <> form:4 ind
+R449:452 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R445:448 Top.BTauto <> form:4 ind
+R453:456 Top.BTauto <> form:4 ind
+def 470:478 <> eval_form
+R483:486 Top.BTauto <> form ind
+binder 481:481 <> f:6
+R499:502 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R496:498 Coq.Init.Datatypes <> nat ind
+R503:506 Coq.Init.Datatypes <> bool ind
+binder 490:492 <> val:7
+R511:514 Coq.Init.Datatypes <> bool ind
+R528:528 Top.BTauto <> f:6 var
+R540:545 Top.BTauto <> f_true constr
+R550:553 Coq.Init.Datatypes <> true constr
+R559:565 Top.BTauto <> f_false constr
+R570:574 Coq.Init.Datatypes <> false constr
+R580:584 Top.BTauto <> f_var constr
+R591:593 Top.BTauto <> val:7 var
+R601:605 Top.BTauto <> f_and constr
+R632:635 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R616:624 Top.BTauto <> eval_form:8 def
+R629:631 Top.BTauto <> val:7 var
+R636:644 Top.BTauto <> eval_form:8 def
+R649:651 Top.BTauto <> val:7 var
+R657:660 Top.BTauto <> f_or constr
+R687:690 Coq.Init.Datatypes <> ::bool_scope:x_'||'_x not
+R671:679 Top.BTauto <> eval_form:8 def
+R684:686 Top.BTauto <> val:7 var
+R691:699 Top.BTauto <> eval_form:8 def
+R704:706 Top.BTauto <> val:7 var
+R712:716 Top.BTauto <> f_not constr
+R724:727 Coq.Init.Datatypes <> negb def
+R730:738 Top.BTauto <> eval_form:8 def
+R743:745 Top.BTauto <> val:7 var
+R753:757 Top.BTauto <> f_imp constr
+R768:771 Top.BTauto <> impb def
+R774:782 Top.BTauto <> eval_form:8 def
+R787:789 Top.BTauto <> val:7 var
+R793:801 Top.BTauto <> eval_form:8 def
+R806:808 Top.BTauto <> val:7 var
+R849:852 Top.BTauto <> form ind
+R885:889 Top.BTauto <> f_and constr
+not 871:871 <> :::x_'∧'_x
+R955:958 Top.BTauto <> f_or constr
+not 941:941 <> :::x_'∨'_x
+R1024:1028 Top.BTauto <> f_imp constr
+not 1010:1010 <> :::x_'→'_x
+R1105:1110 Top.BTauto <> f_true constr
+not 1095:1095 <> :::'⊤'
+R1146:1152 Top.BTauto <> f_false constr
+not 1136:1136 <> :::'⊥'
+R1188:1192 Top.BTauto <> f_var constr
+not 1178:1178 <> :::'#'_x
+R1231:1235 Top.BTauto <> f_not constr
+not 1221:1221 <> :::'!'_x
+def 1268:1276 <> valuation
+binder 1286:1286 <> x:10
+R1297:1297 Top.BTauto <> x:10 var
+R1310:1314 Coq.Init.Datatypes <> false constr
+R1321:1324 Coq.Init.Datatypes <> true constr
+R1350:1358 Top.BTauto <> eval_form def
+R1364:1368 Top.BTauto <> :::x_'∨'_x not
+R1361:1362 Top.BTauto <> :::'#'_x not
+R1369:1370 Top.BTauto <> :::'#'_x not
+R1374:1382 Top.BTauto <> valuation def
+R1577:1580 Coq.Lists.List <> <> lib
+R1675:1676 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R1675:1676 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R1713:1716 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1713:1716 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1750:1753 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1750:1753 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1801:1801 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1804:1806 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1809:1810 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1801:1801 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1804:1806 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1809:1810 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1824:1825 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1827:1829 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1836:1837 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1831:1834 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1782:1782 Coq.Init.Datatypes <> S constr
+R1731:1732 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1734:1736 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1738:1739 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1690:1691 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1693:1695 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1702:1703 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1697:1700 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1917:1920 Coq.Init.Datatypes <> negb def
+R1917:1920 Coq.Init.Datatypes <> negb def
+R2008:2011 Coq.Init.Datatypes <> andb def
+R2008:2011 Coq.Init.Datatypes <> andb def
+R2157:2159 Coq.Init.Datatypes <> orb def
+R2157:2159 Coq.Init.Datatypes <> orb def
+R2304:2307 Top.BTauto <> impb def
+R2304:2307 Top.BTauto <> impb def
+R2454:2458 Coq.Init.Datatypes <> false constr
+R2454:2458 Coq.Init.Datatypes <> false constr
+R2487:2490 Coq.Init.Datatypes <> true constr
+R2487:2490 Coq.Init.Datatypes <> true constr
+R2555:2555 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2558:2560 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2564:2564 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2555:2555 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2558:2560 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2564:2564 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2578:2579 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2587:2589 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2592:2592 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2580:2584 Top.BTauto <> f_var constr
+R2503:2503 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2510:2512 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2514:2514 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2504:2509 Top.BTauto <> f_true constr
+R2471:2471 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2479:2481 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2483:2483 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2472:2478 Top.BTauto <> f_false constr
+R2350:2350 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2354:2356 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2360:2360 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2350:2350 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2354:2356 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2360:2360 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2397:2397 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2401:2403 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2408:2408 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2397:2397 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2401:2403 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2408:2408 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2421:2422 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2434:2436 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2440:2440 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2423:2427 Top.BTauto <> f_imp constr
+R2201:2201 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2205:2207 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2211:2211 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2201:2201 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2205:2207 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2211:2211 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2248:2248 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2252:2254 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2259:2259 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2248:2248 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2252:2254 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2259:2259 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2272:2273 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2284:2286 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2290:2290 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2274:2277 Top.BTauto <> f_or constr
+R2053:2053 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2057:2059 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2063:2063 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2053:2053 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2057:2059 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2063:2063 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2100:2100 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2104:2106 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2111:2111 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2100:2100 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2104:2106 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2111:2111 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2124:2125 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2137:2139 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2143:2143 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2126:2130 Top.BTauto <> f_and constr
+R1960:1960 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1964:1966 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1970:1970 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1960:1960 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1964:1966 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1970:1970 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1983:1984 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1993:1995 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1998:1998 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1985:1989 Top.BTauto <> f_not constr
+R2643:2645 Coq.Init.Datatypes <> nil constr
+R2647:2650 Coq.Init.Datatypes <> bool ind
+def 2655:2681 <> Unnamed_thm
+R2671:2674 Coq.Init.Datatypes <> bool ind
+binder 2667:2667 <> b:12
+R2678:2681 Coq.Init.Logic <> True ind
+R2715:2718 Coq.Init.Datatypes <> andb def
+R2724:2727 Coq.Init.Datatypes <> negb def
+R2715:2718 Coq.Init.Datatypes <> andb def
+R2724:2727 Coq.Init.Datatypes <> negb def
+R2765:2767 Coq.Init.Datatypes <> orb def
+R2772:2775 Coq.Init.Datatypes <> negb def
+R2779:2782 Coq.Init.Datatypes <> negb def
+R2765:2767 Coq.Init.Datatypes <> orb def
+R2772:2775 Coq.Init.Datatypes <> negb def
+R2779:2782 Coq.Init.Datatypes <> negb def
+R2821:2824 Coq.Init.Datatypes <> andb def
+R2829:2832 Coq.Init.Datatypes <> negb def
+R2834:2838 Coq.Init.Datatypes <> false constr
+R2821:2824 Coq.Init.Datatypes <> andb def
+R2829:2832 Coq.Init.Datatypes <> negb def
+R2834:2838 Coq.Init.Datatypes <> false constr
+R2874:2876 Coq.Init.Datatypes <> orb def
+R2891:2894 Coq.Init.Datatypes <> true constr
+R2879:2882 Coq.Init.Datatypes <> negb def
+R2884:2888 Coq.Init.Datatypes <> false constr
+R2874:2876 Coq.Init.Datatypes <> orb def
+R2891:2894 Coq.Init.Datatypes <> true constr
+R2879:2882 Coq.Init.Datatypes <> negb def
+R2884:2888 Coq.Init.Datatypes <> false constr
+R2929:2932 Top.BTauto <> impb def
+R2935:2938 Coq.Init.Datatypes <> negb def
+R2943:2946 Coq.Init.Datatypes <> true constr
+R2929:2932 Top.BTauto <> impb def
+R2935:2938 Coq.Init.Datatypes <> negb def
+R2943:2946 Coq.Init.Datatypes <> true constr
+R2981:2984 Top.BTauto <> impb def
+R2987:2991 Coq.Init.Datatypes <> false constr
+R2994:2997 Coq.Init.Datatypes <> true constr
+R2981:2984 Top.BTauto <> impb def
+R2987:2991 Coq.Init.Datatypes <> false constr
+R2994:2997 Coq.Init.Datatypes <> true constr
+def 3032:3039 <> sub_poly
+R3046:3055 Top.PolyDefs <> valid_poly rec
+binder 3042:3042 <> p:13
+binder 3044:3044 <> q:14
+R3061:3068 Top.PolyArith <> sum_poly def
+R3070:3070 Top.BTauto <> p:13 var
+R3073:3080 Top.PolyArith <> mul_poly def
+R3083:3090 Top.BTauto <> cst_poly def
+R3100:3100 Top.BTauto <> q:14 var
+prf 3111:3122 <> poly_val_cst
+R3127:3127 Coq.Numbers.BinNums <> Z ind
+binder 3125:3125 <> z:15
+R3138:3139 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3135:3137 Coq.Init.Datatypes <> nat ind
+R3140:3140 Coq.Numbers.BinNums <> Z ind
+binder 3131:3133 <> val:16
+R3145:3145 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3171:3174 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3146:3153 Top.PolyDefs <> poly_val def
+R3156:3163 Top.BTauto <> cst_poly def
+R3165:3165 Top.BTauto <> z:15 var
+R3168:3170 Top.BTauto <> val:16 var
+R3175:3175 Top.BTauto <> z:15 var
+R3194:3201 Top.PolyDefs <> poly_val def
+R3211:3218 Top.BTauto <> cst_poly def
+prf 3257:3268 <> poly_val_sub
+R3277:3286 Top.PolyDefs <> valid_poly rec
+binder 3271:3271 <> p:17
+binder 3273:3273 <> q:18
+R3297:3298 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3294:3296 Coq.Init.Datatypes <> nat ind
+R3299:3299 Coq.Numbers.BinNums <> Z ind
+binder 3290:3292 <> val:19
+R3332:3334 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3305:3312 Top.PolyDefs <> poly_val def
+R3315:3322 Top.BTauto <> sub_poly def
+R3324:3324 Top.BTauto <> p:17 var
+R3326:3326 Top.BTauto <> q:18 var
+R3329:3331 Top.BTauto <> val:19 var
+R3335:3339 Coq.ZArith.BinInt Z sub def
+R3342:3349 Top.PolyDefs <> poly_val def
+R3351:3351 Top.BTauto <> p:17 var
+R3353:3355 Top.BTauto <> val:19 var
+R3360:3367 Top.PolyDefs <> poly_val def
+R3369:3369 Top.BTauto <> q:18 var
+R3371:3373 Top.BTauto <> val:19 var
+R3395:3402 Top.BTauto <> sub_poly def
+R3415:3426 Top.PolyVal <> sum_poly_val thm
+R3415:3426 Top.PolyVal <> sum_poly_val thm
+R3415:3426 Top.PolyVal <> sum_poly_val thm
+R3439:3450 Top.PolyVal <> mul_poly_val prfax
+R3439:3450 Top.PolyVal <> mul_poly_val prfax
+R3439:3450 Top.PolyVal <> mul_poly_val prfax
+R3474:3481 Top.PolyDefs <> poly_val def
+R3474:3481 Top.PolyDefs <> poly_val def
+def 3518:3524 <> to_poly
+R3529:3532 Top.BTauto <> form ind
+binder 3527:3527 <> f:20
+R3543:3544 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3540:3542 Coq.Init.Datatypes <> nat ind
+R3545:3548 Coq.Init.Datatypes <> bool ind
+binder 3536:3538 <> val:21
+R3553:3562 Top.PolyDefs <> valid_poly rec
+R3576:3576 Top.BTauto <> f:20 var
+R3587:3592 Top.BTauto <> f_true constr
+R3597:3604 Top.BTauto <> cst_poly def
+R3613:3619 Top.BTauto <> f_false constr
+R3624:3631 Top.BTauto <> cst_poly def
+R3640:3644 Top.BTauto <> f_and constr
+R3653:3660 Top.PolyArith <> mul_poly def
+R3663:3669 Top.BTauto <> to_poly:22 def
+R3673:3675 Top.BTauto <> val:21 var
+R3679:3685 Top.BTauto <> to_poly:22 def
+R3689:3691 Top.BTauto <> val:21 var
+R3697:3700 Top.BTauto <> f_or constr
+R3709:3716 Top.BTauto <> sub_poly def
+R3719:3726 Top.PolyArith <> sum_poly def
+R3729:3735 Top.BTauto <> to_poly:22 def
+R3739:3741 Top.BTauto <> val:21 var
+R3745:3751 Top.BTauto <> to_poly:22 def
+R3755:3757 Top.BTauto <> val:21 var
+R3762:3769 Top.PolyArith <> mul_poly def
+R3772:3778 Top.BTauto <> to_poly:22 def
+R3782:3784 Top.BTauto <> val:21 var
+R3788:3794 Top.BTauto <> to_poly:22 def
+R3798:3800 Top.BTauto <> val:21 var
+R3807:3811 Top.BTauto <> f_not constr
+R3819:3826 Top.BTauto <> sub_poly def
+R3829:3836 Top.BTauto <> cst_poly def
+R3844:3850 Top.BTauto <> to_poly:22 def
+R3854:3856 Top.BTauto <> val:21 var
+R3862:3866 Top.BTauto <> f_var constr
+R3877:3879 Top.BTauto <> val:21 var
+R3907:3914 Top.BTauto <> cst_poly def
+R3889:3896 Top.BTauto <> cst_poly def
+R3922:3926 Top.BTauto <> f_imp constr
+R3935:3942 Top.BTauto <> sub_poly def
+R3945:3952 Top.PolyArith <> sum_poly def
+R3955:3962 Top.BTauto <> sub_poly def
+R3965:3972 Top.BTauto <> cst_poly def
+R3980:3986 Top.BTauto <> to_poly:22 def
+R3990:3992 Top.BTauto <> val:21 var
+R3997:4003 Top.BTauto <> to_poly:22 def
+R4007:4009 Top.BTauto <> val:21 var
+R4014:4021 Top.PolyArith <> mul_poly def
+R4024:4031 Top.BTauto <> sub_poly def
+R4034:4041 Top.BTauto <> cst_poly def
+R4049:4055 Top.BTauto <> to_poly:22 def
+R4059:4061 Top.BTauto <> val:21 var
+R4066:4072 Top.BTauto <> to_poly:22 def
+R4076:4078 Top.BTauto <> val:21 var
+def 4099:4107 <> z_of_bool
+R4121:4124 Coq.Init.Datatypes <> bool ind
+binder 4117:4117 <> x:24
+R4132:4132 Top.BTauto <> x:24 var
+prf 4163:4179 <> eval_form_to_poly
+R4185:4188 Top.BTauto <> form ind
+binder 4183:4183 <> f:25
+R4201:4204 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4198:4200 Coq.Init.Datatypes <> nat ind
+R4205:4208 Coq.Init.Datatypes <> bool ind
+binder 4192:4194 <> val:26
+R4241:4244 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4214:4222 Top.BTauto <> z_of_bool def
+R4225:4233 Top.BTauto <> eval_form def
+R4235:4235 Top.BTauto <> f:25 var
+R4237:4239 Top.BTauto <> val:26 var
+R4245:4252 Top.PolyDefs <> poly_val def
+R4255:4261 Top.BTauto <> to_poly def
+R4263:4263 Top.BTauto <> f:25 var
+R4265:4267 Top.BTauto <> val:26 var
+binder 4275:4275 <> n:27
+R4280:4288 Top.BTauto <> z_of_bool def
+R4291:4293 Top.BTauto <> val:26 var
+R4295:4295 Top.BTauto <> n:27 var
+R4435:4446 Top.PolyVal <> mul_poly_val prfax
+R4435:4446 Top.PolyVal <> mul_poly_val prfax
+R4435:4446 Top.PolyVal <> mul_poly_val prfax
+R4501:4509 Top.BTauto <> eval_form def
+R4501:4509 Top.BTauto <> eval_form def
+R4534:4544 Coq.Bool.Bool <> andb_true_l thm
+R4534:4544 Coq.Bool.Bool <> andb_true_l thm
+R4534:4544 Coq.Bool.Bool <> andb_true_l thm
+R4584:4595 Coq.Bool.Bool <> andb_false_l thm
+R4584:4595 Coq.Bool.Bool <> andb_false_l thm
+R4584:4595 Coq.Bool.Bool <> andb_false_l thm
+R4632:4643 Top.BTauto <> poly_val_sub thm
+R4632:4643 Top.BTauto <> poly_val_sub thm
+R4632:4643 Top.BTauto <> poly_val_sub thm
+R4654:4665 Top.PolyVal <> sum_poly_val thm
+R4654:4665 Top.PolyVal <> sum_poly_val thm
+R4654:4665 Top.PolyVal <> sum_poly_val thm
+R4676:4687 Top.PolyVal <> mul_poly_val prfax
+R4676:4687 Top.PolyVal <> mul_poly_val prfax
+R4676:4687 Top.PolyVal <> mul_poly_val prfax
+R4744:4752 Top.BTauto <> eval_form def
+R4744:4752 Top.BTauto <> eval_form def
+R4797:4805 Top.BTauto <> eval_form def
+R4797:4805 Top.BTauto <> eval_form def
+R4866:4877 Top.BTauto <> poly_val_sub thm
+R4866:4877 Top.BTauto <> poly_val_sub thm
+R4866:4877 Top.BTauto <> poly_val_sub thm
+R4892:4903 Top.BTauto <> poly_val_cst thm
+R4892:4903 Top.BTauto <> poly_val_cst thm
+R4892:4903 Top.BTauto <> poly_val_cst thm
+R4943:4951 Top.BTauto <> eval_form def
+R4943:4951 Top.BTauto <> eval_form def
+R4993:5004 Top.BTauto <> poly_val_sub thm
+R4993:5004 Top.BTauto <> poly_val_sub thm
+R4993:5004 Top.BTauto <> poly_val_sub thm
+R5015:5026 Top.PolyVal <> sum_poly_val thm
+R5015:5026 Top.PolyVal <> sum_poly_val thm
+R5015:5026 Top.PolyVal <> sum_poly_val thm
+R5041:5052 Top.PolyVal <> mul_poly_val prfax
+R5041:5052 Top.PolyVal <> mul_poly_val prfax
+R5041:5052 Top.PolyVal <> mul_poly_val prfax
+R5063:5074 Top.BTauto <> poly_val_sub thm
+R5063:5074 Top.BTauto <> poly_val_sub thm
+R5063:5074 Top.BTauto <> poly_val_sub thm
+R5127:5138 Top.BTauto <> poly_val_cst thm
+R5127:5138 Top.BTauto <> poly_val_cst thm
+R5127:5138 Top.BTauto <> poly_val_cst thm
+R5156:5164 Top.BTauto <> eval_form def
+R5156:5164 Top.BTauto <> eval_form def
+def 5226:5232 <> eq_form
+R5238:5241 Top.BTauto <> form ind
+binder 5235:5236 <> f1:28
+R5249:5252 Coq.Init.Datatypes <> list ind
+R5254:5257 Coq.Init.Datatypes <> bool ind
+binder 5245:5246 <> l1:29
+R5264:5267 Top.BTauto <> form ind
+binder 5261:5262 <> f2:30
+R5275:5278 Coq.Init.Datatypes <> list ind
+R5280:5283 Coq.Init.Datatypes <> bool ind
+binder 5271:5272 <> l2:31
+R5306:5307 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5303:5305 Coq.Init.Datatypes <> nat ind
+R5308:5308 Coq.Numbers.BinNums <> Z ind
+binder 5299:5301 <> val:32
+R5371:5373 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5315:5322 Top.PolyDefs <> poly_val def
+R5325:5331 Top.BTauto <> to_poly def
+R5333:5334 Top.BTauto <> f1:28 var
+binder 5341:5341 <> n:33
+R5346:5353 Coq.Lists.List <> nth def
+R5360:5364 Coq.Init.Datatypes <> false constr
+R5357:5358 Top.BTauto <> l1:29 var
+R5355:5355 Top.BTauto <> n:33 var
+R5368:5370 Top.BTauto <> val:32 var
+R5374:5381 Top.PolyDefs <> poly_val def
+R5384:5390 Top.BTauto <> to_poly def
+R5392:5393 Top.BTauto <> f2:30 var
+binder 5400:5400 <> n:34
+R5405:5412 Coq.Lists.List <> nth def
+R5419:5423 Coq.Init.Datatypes <> false constr
+R5416:5417 Top.BTauto <> l1:29 var
+R5414:5414 Top.BTauto <> n:34 var
+R5427:5429 Top.BTauto <> val:32 var
+R5454:5461 Top.PolyDefs <> VP_value proj
+R5464:5470 Top.BTauto <> to_poly def
+R5473:5477 Top.BTauto <> f_and constr
+R5479:5484 Top.BTauto <> f_true constr
+R5486:5492 Top.BTauto <> f_false constr
+binder 5500:5500 <> n:35
+R5505:5509 Coq.Init.Datatypes <> false constr
+def 5615:5673 <> Unnamed_thm
+R5621:5627 Top.BTauto <> eq_form def
+R5630:5634 Top.BTauto <> f_and constr
+R5636:5642 Top.BTauto <> f_false constr
+R5645:5649 Top.BTauto <> f_var constr
+R5655:5655 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5660:5660 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5656:5659 Coq.Init.Datatypes <> true constr
+R5662:5668 Top.BTauto <> f_false constr
+R5670:5671 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R5683:5689 Top.BTauto <> eq_form def
+R5707:5714 Top.BTauto <> cst_poly def
+R5732:5743 Top.PolyVal <> mul_poly_val prfax
+R5732:5743 Top.PolyVal <> mul_poly_val prfax
+R5732:5743 Top.PolyVal <> mul_poly_val prfax
+R5753:5760 Top.PolyDefs <> poly_val def
+def 5910:6008 <> Unnamed_thm0
+R5916:5922 Top.BTauto <> eq_form def
+R5925:5929 Top.BTauto <> f_and constr
+R5932:5936 Top.BTauto <> f_var constr
+R5942:5946 Top.BTauto <> f_var constr
+R5952:5952 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5957:5958 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5964:5964 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5953:5956 Coq.Init.Datatypes <> true constr
+R5959:5963 Coq.Init.Datatypes <> false constr
+R5967:5971 Top.BTauto <> f_and constr
+R5974:5978 Top.BTauto <> f_var constr
+R5984:5988 Top.BTauto <> f_var constr
+R5994:5994 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5999:6000 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6006:6006 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5995:5998 Coq.Init.Datatypes <> true constr
+R6001:6005 Coq.Init.Datatypes <> false constr
+R6018:6024 Top.BTauto <> eq_form def
+R6042:6049 Top.BTauto <> cst_poly def
+R6067:6078 Top.PolyVal <> mul_poly_val prfax
+R6067:6078 Top.PolyVal <> mul_poly_val prfax
+R6067:6078 Top.PolyVal <> mul_poly_val prfax
+R6089:6100 Top.PolyVal <> mul_poly_val prfax
+R6089:6100 Top.PolyVal <> mul_poly_val prfax
+R6089:6100 Top.PolyVal <> mul_poly_val prfax
+R6110:6117 Top.PolyDefs <> poly_val def
+def 6283:6396 <> Unnamed_thm1
+R6289:6295 Top.BTauto <> eq_form def
+R6299:6299 Top.BTauto <> :::x_'∧'_x not
+R6315:6320 Top.BTauto <> :::x_'∧'_x not
+R6300:6300 Top.BTauto <> :::x_'∨'_x not
+R6304:6310 Top.BTauto <> :::x_'∨'_x not
+R6314:6314 Top.BTauto <> :::x_'∨'_x not
+R6301:6302 Top.BTauto <> :::'#'_x not
+R6311:6312 Top.BTauto <> :::'#'_x not
+R6321:6322 Top.BTauto <> :::'#'_x not
+R6326:6326 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6331:6332 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6338:6339 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6345:6345 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6327:6330 Coq.Init.Datatypes <> true constr
+R6333:6337 Coq.Init.Datatypes <> false constr
+R6340:6344 Coq.Init.Datatypes <> false constr
+R6351:6356 Top.BTauto <> :::x_'∧'_x not
+R6372:6372 Top.BTauto <> :::x_'∧'_x not
+R6348:6349 Top.BTauto <> :::'#'_x not
+R6357:6357 Top.BTauto <> :::x_'∨'_x not
+R6361:6367 Top.BTauto <> :::x_'∨'_x not
+R6371:6371 Top.BTauto <> :::x_'∨'_x not
+R6358:6359 Top.BTauto <> :::'#'_x not
+R6368:6369 Top.BTauto <> :::'#'_x not
+R6375:6375 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6380:6381 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6387:6388 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6394:6394 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R6376:6379 Coq.Init.Datatypes <> true constr
+R6382:6386 Coq.Init.Datatypes <> false constr
+R6389:6393 Coq.Init.Datatypes <> false constr
+R6406:6412 Top.BTauto <> eq_form def
+R6430:6437 Top.BTauto <> cst_poly def
+R6455:6466 Top.PolyVal <> mul_poly_val prfax
+R6455:6466 Top.PolyVal <> mul_poly_val prfax
+R6455:6466 Top.PolyVal <> mul_poly_val prfax
+R6477:6488 Top.PolyVal <> mul_poly_val prfax
+R6477:6488 Top.PolyVal <> mul_poly_val prfax
+R6477:6488 Top.PolyVal <> mul_poly_val prfax
+R6498:6505 Top.BTauto <> sub_poly def
+R6515:6522 Top.BTauto <> cst_poly def
+R6533:6544 Top.PolyVal <> sum_poly_val thm
+R6533:6544 Top.PolyVal <> sum_poly_val thm
+R6533:6544 Top.PolyVal <> sum_poly_val thm
+R6555:6566 Top.PolyVal <> sum_poly_val thm
+R6555:6566 Top.PolyVal <> sum_poly_val thm
+R6555:6566 Top.PolyVal <> sum_poly_val thm
+R6577:6588 Top.PolyVal <> sum_poly_val thm
+R6577:6588 Top.PolyVal <> sum_poly_val thm
+R6577:6588 Top.PolyVal <> sum_poly_val thm
+R6599:6610 Top.PolyVal <> sum_poly_val thm
+R6599:6610 Top.PolyVal <> sum_poly_val thm
+R6599:6610 Top.PolyVal <> sum_poly_val thm

@@ -1,0 +1,772 @@
+DIGEST c9c540ba5324932290b4581d102d7d36
+FTop.Valid
+R347:354 Top.PolyDefs <> <> lib
+R372:377 Coq.ZArith.ZArith <> <> lib
+R379:383 Coq.Arith.Arith <> <> lib
+R385:388 Coq.Bool.Bool <> <> lib
+R390:392 Coq.micromega.Lia <> <> lib
+R410:417 Top.BoolHelp <> <> lib
+prf 434:445 <> valid_b_more
+R454:457 Top.PolyDefs <> poly ind
+binder 448:448 <> p:1
+binder 450:450 <> q:2
+R463:465 Coq.Init.Datatypes <> nat ind
+binder 461:461 <> i:3
+R498:501 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R491:493 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R471:477 Top.PolyDefs <> valid_b def
+R480:483 Top.PolyDefs <> Poly constr
+R485:485 Top.Valid <> p:1 var
+R487:487 Top.Valid <> i:3 var
+R489:489 Top.Valid <> q:2 var
+R494:497 Coq.Init.Datatypes <> true constr
+R518:521 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R511:513 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R502:508 Top.PolyDefs <> valid_b def
+R510:510 Top.Valid <> p:1 var
+R514:517 Coq.Init.Datatypes <> true constr
+R531:533 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R522:528 Top.PolyDefs <> valid_b def
+R530:530 Top.Valid <> q:2 var
+R534:537 Coq.Init.Datatypes <> true constr
+R633:640 Coq.ZArith.BinInt Z eq_dec def
+R633:640 Coq.ZArith.BinInt Z eq_dec def
+prf 833:846 <> valid_b_more_r
+R859:862 Top.PolyDefs <> poly ind
+binder 849:849 <> p:4
+binder 851:852 <> q1:5
+binder 854:855 <> q2:6
+R871:873 Coq.Init.Datatypes <> nat ind
+binder 866:866 <> n:7
+binder 868:869 <> n0:8
+R920:923 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R913:915 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R879:885 Top.PolyDefs <> valid_b def
+R888:891 Top.PolyDefs <> Poly constr
+R893:893 Top.Valid <> p:4 var
+R895:895 Top.Valid <> n:7 var
+R898:901 Top.PolyDefs <> Poly constr
+R903:904 Top.Valid <> q1:5 var
+R906:907 Top.Valid <> n0:8 var
+R909:910 Top.Valid <> q2:6 var
+R916:919 Coq.Init.Datatypes <> true constr
+R945:947 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R924:930 Top.PolyDefs <> valid_b def
+R933:936 Top.PolyDefs <> Poly constr
+R938:938 Top.Valid <> p:4 var
+R940:940 Top.Valid <> n:7 var
+R942:943 Top.Valid <> q2:6 var
+R948:951 Coq.Init.Datatypes <> true constr
+R1143:1151 Top.BoolHelp <> leb_trans thm
+R1143:1151 Top.BoolHelp <> leb_trans thm
+R1143:1151 Top.BoolHelp <> leb_trans thm
+R1303:1311 Top.BoolHelp <> leb_trans thm
+R1303:1311 Top.BoolHelp <> leb_trans thm
+R1303:1311 Top.BoolHelp <> leb_trans thm
+prf 1357:1370 <> valid_b_more_l
+R1383:1386 Top.PolyDefs <> poly ind
+binder 1373:1374 <> p1:9
+binder 1376:1377 <> p2:10
+binder 1379:1379 <> q:11
+R1395:1397 Coq.Init.Datatypes <> nat ind
+binder 1390:1390 <> n:12
+binder 1392:1393 <> n0:13
+R1444:1447 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1437:1439 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1403:1409 Top.PolyDefs <> valid_b def
+R1412:1415 Top.PolyDefs <> Poly constr
+R1418:1421 Top.PolyDefs <> Poly constr
+R1423:1424 Top.Valid <> p1:9 var
+R1426:1427 Top.Valid <> n0:13 var
+R1429:1430 Top.Valid <> p2:10 var
+R1433:1433 Top.Valid <> n:12 var
+R1435:1435 Top.Valid <> q:11 var
+R1440:1443 Coq.Init.Datatypes <> true constr
+R1476:1479 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R1469:1471 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1448:1454 Top.PolyDefs <> valid_b def
+R1457:1460 Top.PolyDefs <> Poly constr
+R1462:1463 Top.Valid <> p1:9 var
+R1465:1465 Top.Valid <> n:12 var
+R1467:1467 Top.Valid <> q:11 var
+R1472:1475 Coq.Init.Datatypes <> true constr
+R1501:1503 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1480:1486 Top.PolyDefs <> valid_b def
+R1489:1492 Top.PolyDefs <> Poly constr
+R1494:1495 Top.Valid <> p2:10 var
+R1497:1497 Top.Valid <> n:12 var
+R1499:1499 Top.Valid <> q:11 var
+R1504:1507 Coq.Init.Datatypes <> true constr
+R1639:1651 Top.BoolHelp <> ltb_leb_trans thm
+R1639:1651 Top.BoolHelp <> ltb_leb_trans thm
+R1639:1651 Top.BoolHelp <> ltb_leb_trans thm
+R1749:1761 Top.BoolHelp <> ltb_leb_trans thm
+R1749:1761 Top.BoolHelp <> ltb_leb_trans thm
+R1928:1936 Top.BoolHelp <> ltb_trans thm
+R1928:1936 Top.BoolHelp <> ltb_trans thm
+R1928:1936 Top.BoolHelp <> ltb_trans thm
+R2001:2009 Top.BoolHelp <> ltb_trans thm
+R2001:2009 Top.BoolHelp <> ltb_trans thm
+R2089:2097 Top.BoolHelp <> ltb_trans thm
+R2089:2097 Top.BoolHelp <> ltb_trans thm
+R2089:2097 Top.BoolHelp <> ltb_trans thm
+R2089:2097 Top.BoolHelp <> ltb_trans thm
+R2225:2233 Top.BoolHelp <> ltb_trans thm
+R2225:2233 Top.BoolHelp <> ltb_trans thm
+R2380:2392 Top.BoolHelp <> ltb_leb_trans thm
+R2380:2392 Top.BoolHelp <> ltb_leb_trans thm
+R2380:2392 Top.BoolHelp <> ltb_leb_trans thm
+R2572:2580 Top.BoolHelp <> ltb_trans thm
+R2572:2580 Top.BoolHelp <> ltb_trans thm
+R2625:2633 Top.BoolHelp <> ltb_trans thm
+R2625:2633 Top.BoolHelp <> ltb_trans thm
+R2720:2728 Top.BoolHelp <> ltb_trans thm
+R2720:2728 Top.BoolHelp <> ltb_trans thm
+R2914:2926 Top.BoolHelp <> ltb_leb_trans thm
+R2914:2926 Top.BoolHelp <> ltb_leb_trans thm
+R3046:3048 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3004:3010 Top.PolyDefs <> valid_b def
+R3013:3016 Top.PolyDefs <> Poly constr
+R3019:3022 Top.PolyDefs <> Poly constr
+R3034:3037 Top.PolyDefs <> Poly constr
+R3049:3052 Coq.Init.Datatypes <> true constr
+R3046:3048 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3004:3010 Top.PolyDefs <> valid_b def
+R3013:3016 Top.PolyDefs <> Poly constr
+R3019:3022 Top.PolyDefs <> Poly constr
+R3034:3037 Top.PolyDefs <> Poly constr
+R3049:3052 Coq.Init.Datatypes <> true constr
+R3077:3079 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3057:3063 Top.PolyDefs <> valid_b def
+R3066:3069 Top.PolyDefs <> Poly constr
+R3080:3083 Coq.Init.Datatypes <> true constr
+R3077:3079 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3057:3063 Top.PolyDefs <> valid_b def
+R3066:3069 Top.PolyDefs <> Poly constr
+R3080:3083 Coq.Init.Datatypes <> true constr
+R3491:3493 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3464:3470 Top.PolyDefs <> valid_b def
+R3473:3476 Top.PolyDefs <> Poly constr
+R3494:3497 Coq.Init.Datatypes <> true constr
+R3491:3493 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3464:3470 Top.PolyDefs <> valid_b def
+R3473:3476 Top.PolyDefs <> Poly constr
+R3494:3497 Coq.Init.Datatypes <> true constr
+R3523:3525 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3502:3508 Top.PolyDefs <> valid_b def
+R3511:3514 Top.PolyDefs <> Poly constr
+R3526:3529 Coq.Init.Datatypes <> true constr
+R3523:3525 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3502:3508 Top.PolyDefs <> valid_b def
+R3511:3514 Top.PolyDefs <> Poly constr
+R3526:3529 Coq.Init.Datatypes <> true constr
+R3700:3702 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3673:3679 Top.PolyDefs <> valid_b def
+R3682:3685 Top.PolyDefs <> Poly constr
+R3703:3706 Coq.Init.Datatypes <> true constr
+R3700:3702 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3673:3679 Top.PolyDefs <> valid_b def
+R3682:3685 Top.PolyDefs <> Poly constr
+R3703:3706 Coq.Init.Datatypes <> true constr
+R3732:3734 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3711:3717 Top.PolyDefs <> valid_b def
+R3720:3723 Top.PolyDefs <> Poly constr
+R3735:3738 Coq.Init.Datatypes <> true constr
+R3732:3734 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3711:3717 Top.PolyDefs <> valid_b def
+R3720:3723 Top.PolyDefs <> Poly constr
+R3735:3738 Coq.Init.Datatypes <> true constr
+R3858:3860 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3838:3844 Top.PolyDefs <> valid_b def
+R3847:3850 Top.PolyDefs <> Poly constr
+R3861:3864 Coq.Init.Datatypes <> true constr
+R3858:3860 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3838:3844 Top.PolyDefs <> valid_b def
+R3847:3850 Top.PolyDefs <> Poly constr
+R3861:3864 Coq.Init.Datatypes <> true constr
+R3880:3882 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3869:3875 Top.PolyDefs <> valid_b def
+R3883:3886 Coq.Init.Datatypes <> true constr
+R3880:3882 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R3869:3875 Top.PolyDefs <> valid_b def
+R3883:3886 Coq.Init.Datatypes <> true constr
+R3946:3957 Top.Valid <> valid_b_more thm
+R3776:3789 Top.Valid <> valid_b_more_r thm
+R3592:3605 Top.Valid <> valid_b_more_l thm
+R3296:3309 Top.Valid <> valid_b_more_l thm
+R3336:3349 Top.Valid <> valid_b_more_r thm
+R3372:3383 Top.Valid <> valid_b_more thm
+R4269:4271 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4227:4233 Top.PolyDefs <> valid_b def
+R4236:4239 Top.PolyDefs <> Poly constr
+R4242:4245 Top.PolyDefs <> Poly constr
+R4257:4260 Top.PolyDefs <> Poly constr
+R4272:4275 Coq.Init.Datatypes <> true constr
+R4269:4271 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4227:4233 Top.PolyDefs <> valid_b def
+R4236:4239 Top.PolyDefs <> Poly constr
+R4242:4245 Top.PolyDefs <> Poly constr
+R4257:4260 Top.PolyDefs <> Poly constr
+R4272:4275 Coq.Init.Datatypes <> true constr
+R4656:4658 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4625:4631 Top.PolyDefs <> valid_b def
+R4634:4637 Top.PolyDefs <> Poly constr
+R4644:4647 Top.PolyDefs <> Poly constr
+R4659:4662 Coq.Init.Datatypes <> true constr
+R4656:4658 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4625:4631 Top.PolyDefs <> valid_b def
+R4634:4637 Top.PolyDefs <> Poly constr
+R4644:4647 Top.PolyDefs <> Poly constr
+R4659:4662 Coq.Init.Datatypes <> true constr
+R4904:4906 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4873:4879 Top.PolyDefs <> valid_b def
+R4882:4885 Top.PolyDefs <> Poly constr
+R4888:4891 Top.PolyDefs <> Poly constr
+R4907:4910 Coq.Init.Datatypes <> true constr
+R4904:4906 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4873:4879 Top.PolyDefs <> valid_b def
+R4882:4885 Top.PolyDefs <> Poly constr
+R4888:4891 Top.PolyDefs <> Poly constr
+R4907:4910 Coq.Init.Datatypes <> true constr
+R5150:5152 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5130:5136 Top.PolyDefs <> valid_b def
+R5139:5142 Top.PolyDefs <> Poly constr
+R5153:5156 Coq.Init.Datatypes <> true constr
+R5150:5152 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5130:5136 Top.PolyDefs <> valid_b def
+R5139:5142 Top.PolyDefs <> Poly constr
+R5153:5156 Coq.Init.Datatypes <> true constr
+R5221:5232 Top.Valid <> valid_b_more thm
+R5048:5059 Top.Valid <> valid_b_more thm
+R5090:5103 Top.Valid <> valid_b_more_l thm
+R4801:4812 Top.Valid <> valid_b_more thm
+R4843:4856 Top.Valid <> valid_b_more_r thm
+R4510:4521 Top.Valid <> valid_b_more thm
+R4552:4565 Top.Valid <> valid_b_more_l thm
+R4595:4608 Top.Valid <> valid_b_more_r thm
+prf 5266:5273 <> le_valid
+R5288:5291 Top.PolyDefs <> poly ind
+binder 5276:5276 <> p:14
+binder 5278:5279 <> p':15
+binder 5281:5281 <> q:16
+binder 5283:5284 <> q':17
+R5299:5301 Coq.Init.Datatypes <> nat ind
+binder 5295:5295 <> i:18
+binder 5297:5297 <> j:19
+R5311:5315 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5309:5309 Coq.Init.Peano <> ::nat_scope:x_'>'_x not
+R5308:5308 Top.Valid <> i:18 var
+R5310:5310 Top.Valid <> j:19 var
+R5343:5346 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5336:5338 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5316:5322 Top.PolyDefs <> valid_b def
+R5325:5328 Top.PolyDefs <> Poly constr
+R5330:5330 Top.Valid <> p:14 var
+R5332:5332 Top.Valid <> i:18 var
+R5334:5334 Top.Valid <> q:16 var
+R5339:5342 Coq.Init.Datatypes <> true constr
+R5376:5380 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5369:5371 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5347:5353 Top.PolyDefs <> valid_b def
+R5356:5359 Top.PolyDefs <> Poly constr
+R5361:5362 Top.Valid <> p':15 var
+R5364:5364 Top.Valid <> j:19 var
+R5366:5367 Top.Valid <> q':17 var
+R5372:5375 Coq.Init.Datatypes <> true constr
+R5413:5415 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5381:5387 Top.PolyDefs <> valid_b def
+R5390:5393 Top.PolyDefs <> Poly constr
+R5396:5399 Top.PolyDefs <> Poly constr
+R5401:5401 Top.Valid <> p:14 var
+R5403:5403 Top.Valid <> i:18 var
+R5405:5405 Top.Valid <> q:16 var
+R5408:5408 Top.Valid <> j:19 var
+R5410:5411 Top.Valid <> q':17 var
+R5416:5419 Coq.Init.Datatypes <> true constr
+prf 5760:5767 <> valid_le
+R5778:5781 Top.PolyDefs <> poly ind
+binder 5770:5770 <> p:20
+binder 5772:5773 <> q1:21
+binder 5775:5776 <> q2:22
+R5789:5791 Coq.Init.Datatypes <> nat ind
+binder 5785:5785 <> i:23
+binder 5787:5787 <> j:24
+R5836:5839 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5829:5831 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5796:5802 Top.PolyDefs <> valid_b def
+R5805:5808 Top.PolyDefs <> Poly constr
+R5811:5814 Top.PolyDefs <> Poly constr
+R5816:5816 Top.Valid <> p:20 var
+R5818:5818 Top.Valid <> i:23 var
+R5820:5821 Top.Valid <> q1:21 var
+R5824:5824 Top.Valid <> j:24 var
+R5826:5827 Top.Valid <> q2:22 var
+R5832:5835 Coq.Init.Datatypes <> true constr
+R5841:5843 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
+R5840:5840 Top.Valid <> j:24 var
+R5844:5844 Top.Valid <> i:23 var
+R5946:5957 Top.BoolHelp <> ltb_complete thm
+R5946:5957 Top.BoolHelp <> ltb_complete thm
+R5946:5957 Top.BoolHelp <> ltb_complete thm
+R5996:6007 Top.BoolHelp <> ltb_complete thm
+R5996:6007 Top.BoolHelp <> ltb_complete thm
+prf 6034:6042 <> valid_leq
+R6053:6056 Top.PolyDefs <> poly ind
+binder 6045:6045 <> p:25
+binder 6047:6048 <> q1:26
+binder 6050:6051 <> q2:27
+R6064:6066 Coq.Init.Datatypes <> nat ind
+binder 6060:6060 <> i:28
+binder 6062:6062 <> j:29
+R6113:6116 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6105:6108 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6071:6077 Top.PolyDefs <> valid_b def
+R6080:6083 Top.PolyDefs <> Poly constr
+R6085:6085 Top.Valid <> p:25 var
+R6087:6087 Top.Valid <> i:28 var
+R6090:6093 Top.PolyDefs <> Poly constr
+R6095:6096 Top.Valid <> q1:26 var
+R6098:6098 Top.Valid <> j:29 var
+R6100:6101 Top.Valid <> q2:27 var
+R6109:6112 Coq.Init.Datatypes <> true constr
+R6118:6121 Coq.Init.Peano <> ::nat_scope:x_'<='_x not
+R6117:6117 Top.Valid <> i:28 var
+R6122:6122 Top.Valid <> j:29 var
+R6189:6200 Coq.Arith.Compare_dec <> leb_complete thm
+R6189:6200 Coq.Arith.Compare_dec <> leb_complete thm
+R6189:6200 Coq.Arith.Compare_dec <> leb_complete thm
+prf 6227:6235 <> leq_valid
+R6250:6253 Top.PolyDefs <> poly ind
+binder 6238:6238 <> p:30
+binder 6240:6241 <> p':31
+binder 6243:6243 <> q:32
+binder 6245:6246 <> q':33
+R6261:6263 Coq.Init.Datatypes <> nat ind
+binder 6257:6257 <> i:34
+binder 6259:6259 <> j:35
+R6276:6280 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6271:6274 Coq.Init.Peano <> ::nat_scope:x_'<='_x not
+R6270:6270 Top.Valid <> i:34 var
+R6275:6275 Top.Valid <> j:35 var
+R6308:6311 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6301:6303 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6281:6287 Top.PolyDefs <> valid_b def
+R6290:6293 Top.PolyDefs <> Poly constr
+R6295:6295 Top.Valid <> p:30 var
+R6297:6297 Top.Valid <> i:34 var
+R6299:6299 Top.Valid <> q:32 var
+R6304:6307 Coq.Init.Datatypes <> true constr
+R6341:6345 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6334:6336 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6312:6318 Top.PolyDefs <> valid_b def
+R6321:6324 Top.PolyDefs <> Poly constr
+R6326:6327 Top.Valid <> p':31 var
+R6329:6329 Top.Valid <> j:35 var
+R6331:6332 Top.Valid <> q':33 var
+R6337:6340 Coq.Init.Datatypes <> true constr
+R6379:6381 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6346:6352 Top.PolyDefs <> valid_b def
+R6355:6358 Top.PolyDefs <> Poly constr
+R6360:6360 Top.Valid <> p:30 var
+R6362:6362 Top.Valid <> i:34 var
+R6365:6368 Top.PolyDefs <> Poly constr
+R6370:6371 Top.Valid <> p':31 var
+R6373:6373 Top.Valid <> j:35 var
+R6375:6376 Top.Valid <> q':33 var
+R6382:6385 Coq.Init.Datatypes <> true constr
+prf 6694:6703 <> valid_not0
+R6708:6711 Top.PolyDefs <> poly ind
+binder 6706:6706 <> p:36
+R6717:6719 Coq.Init.Datatypes <> nat ind
+binder 6715:6715 <> i:37
+R6725:6725 Coq.Numbers.BinNums <> Z ind
+binder 6723:6723 <> z:38
+R6764:6767 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6756:6759 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6730:6736 Top.PolyDefs <> valid_b def
+R6739:6742 Top.PolyDefs <> Poly constr
+R6744:6744 Top.Valid <> p:36 var
+R6746:6746 Top.Valid <> i:37 var
+R6749:6751 Top.PolyDefs <> Cst constr
+R6753:6753 Top.Valid <> z:38 var
+R6760:6763 Coq.Init.Datatypes <> true constr
+R6769:6772 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R6768:6768 Top.Valid <> z:38 var
+def 7158:7169 <> weak_valid_b
+R7176:7179 Top.PolyDefs <> poly ind
+binder 7172:7174 <> pol:39
+R7184:7187 Coq.Init.Datatypes <> bool ind
+R7201:7203 Top.Valid <> pol:39 var
+R7213:7215 Top.PolyDefs <> Cst constr
+R7222:7225 Coq.Init.Datatypes <> true constr
+R7230:7233 Top.PolyDefs <> Poly constr
+R7272:7274 Top.PolyDefs <> Cst constr
+R7281:7283 Top.PolyDefs <> Cst constr
+R7291:7294 Coq.Init.Datatypes <> true constr
+R7304:7307 Top.PolyDefs <> Poly constr
+R7319:7321 Top.PolyDefs <> Cst constr
+R7329:7329 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R7337:7341 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R7331:7334 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
+R7342:7353 Top.Valid <> weak_valid_b:40 def
+R7365:7367 Top.PolyDefs <> Cst constr
+R7375:7378 Top.PolyDefs <> Poly constr
+R7393:7393 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R7402:7406 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R7395:7399 Coq.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
+R7407:7418 Top.Valid <> weak_valid_b:40 def
+R7429:7432 Top.PolyDefs <> Poly constr
+R7447:7450 Top.PolyDefs <> Poly constr
+R7520:7530 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R7495:7505 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R7472:7472 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R7480:7485 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R7494:7494 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R7474:7477 Coq.Arith.PeanoNat <> ::nat_scope:x_'<?'_x not
+R7487:7491 Coq.Arith.PeanoNat <> ::nat_scope:x_'<=?'_x not
+R7506:7517 Top.Valid <> weak_valid_b:40 def
+R7531:7542 Top.Valid <> weak_valid_b:40 def
+prf 7570:7581 <> weaken_valid
+R7586:7589 Top.PolyDefs <> poly ind
+binder 7584:7584 <> p:44
+R7604:7606 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R7595:7601 Top.PolyDefs <> valid_b def
+R7603:7603 Top.Valid <> p:44 var
+R7607:7610 Coq.Init.Datatypes <> true constr
+binder 7593:7593 <> H:45
+R7629:7631 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R7615:7626 Top.Valid <> weak_valid_b def
+R7628:7628 Top.Valid <> p:44 var
+R7632:7635 Coq.Init.Datatypes <> true constr
+prf 8054:8066 <> weak_valid_le
+R8077:8080 Top.PolyDefs <> poly ind
+binder 8069:8069 <> p:46
+binder 8071:8072 <> q1:47
+binder 8074:8075 <> q2:48
+R8088:8090 Coq.Init.Datatypes <> nat ind
+binder 8084:8084 <> i:49
+binder 8086:8086 <> j:50
+R8140:8143 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8133:8135 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8095:8106 Top.Valid <> weak_valid_b def
+R8109:8112 Top.PolyDefs <> Poly constr
+R8115:8118 Top.PolyDefs <> Poly constr
+R8120:8120 Top.Valid <> p:46 var
+R8122:8122 Top.Valid <> i:49 var
+R8124:8125 Top.Valid <> q1:47 var
+R8128:8128 Top.Valid <> j:50 var
+R8130:8131 Top.Valid <> q2:48 var
+R8136:8139 Coq.Init.Datatypes <> true constr
+R8145:8147 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
+R8144:8144 Top.Valid <> j:50 var
+R8148:8148 Top.Valid <> i:49 var
+R8250:8261 Top.BoolHelp <> ltb_complete thm
+R8250:8261 Top.BoolHelp <> ltb_complete thm
+R8250:8261 Top.BoolHelp <> ltb_complete thm
+R8250:8261 Top.BoolHelp <> ltb_complete thm
+R8300:8311 Top.BoolHelp <> ltb_complete thm
+R8300:8311 Top.BoolHelp <> ltb_complete thm
+prf 8338:8351 <> weak_valid_leq
+R8362:8365 Top.PolyDefs <> poly ind
+binder 8354:8354 <> p:51
+binder 8356:8357 <> q1:52
+binder 8359:8360 <> q2:53
+R8373:8375 Coq.Init.Datatypes <> nat ind
+binder 8369:8369 <> i:54
+binder 8371:8371 <> j:55
+R8427:8430 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8419:8422 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8380:8391 Top.Valid <> weak_valid_b def
+R8394:8397 Top.PolyDefs <> Poly constr
+R8399:8399 Top.Valid <> p:51 var
+R8401:8401 Top.Valid <> i:54 var
+R8404:8407 Top.PolyDefs <> Poly constr
+R8409:8410 Top.Valid <> q1:52 var
+R8412:8412 Top.Valid <> j:55 var
+R8414:8415 Top.Valid <> q2:53 var
+R8423:8426 Coq.Init.Datatypes <> true constr
+R8432:8435 Coq.Init.Peano <> ::nat_scope:x_'<='_x not
+R8431:8431 Top.Valid <> i:54 var
+R8436:8436 Top.Valid <> j:55 var
+R8503:8514 Coq.Arith.Compare_dec <> leb_complete thm
+R8503:8514 Coq.Arith.Compare_dec <> leb_complete thm
+R8503:8514 Coq.Arith.Compare_dec <> leb_complete thm
+prf 8541:8553 <> le_weak_valid
+R8568:8571 Top.PolyDefs <> poly ind
+binder 8556:8556 <> p:56
+binder 8558:8559 <> p':57
+binder 8561:8561 <> q:58
+binder 8563:8564 <> q':59
+R8579:8581 Coq.Init.Datatypes <> nat ind
+binder 8575:8575 <> i:60
+binder 8577:8577 <> j:61
+R8591:8595 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8589:8589 Coq.Init.Peano <> ::nat_scope:x_'>'_x not
+R8588:8588 Top.Valid <> i:60 var
+R8590:8590 Top.Valid <> j:61 var
+R8628:8631 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8621:8623 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8596:8607 Top.Valid <> weak_valid_b def
+R8610:8613 Top.PolyDefs <> Poly constr
+R8615:8615 Top.Valid <> p:56 var
+R8617:8617 Top.Valid <> i:60 var
+R8619:8619 Top.Valid <> q:58 var
+R8624:8627 Coq.Init.Datatypes <> true constr
+R8666:8670 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8659:8661 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8632:8643 Top.Valid <> weak_valid_b def
+R8646:8649 Top.PolyDefs <> Poly constr
+R8651:8652 Top.Valid <> p':57 var
+R8654:8654 Top.Valid <> j:61 var
+R8656:8657 Top.Valid <> q':59 var
+R8662:8665 Coq.Init.Datatypes <> true constr
+R8708:8710 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8671:8682 Top.Valid <> weak_valid_b def
+R8685:8688 Top.PolyDefs <> Poly constr
+R8691:8694 Top.PolyDefs <> Poly constr
+R8696:8696 Top.Valid <> p:56 var
+R8698:8698 Top.Valid <> i:60 var
+R8700:8700 Top.Valid <> q:58 var
+R8703:8703 Top.Valid <> j:61 var
+R8705:8706 Top.Valid <> q':59 var
+R8711:8714 Coq.Init.Datatypes <> true constr
+prf 9200:9213 <> leq_weak_valid
+R9228:9231 Top.PolyDefs <> poly ind
+binder 9216:9216 <> p:62
+binder 9218:9219 <> p':63
+binder 9221:9221 <> q:64
+binder 9223:9224 <> q':65
+R9239:9241 Coq.Init.Datatypes <> nat ind
+binder 9235:9235 <> i:66
+binder 9237:9237 <> j:67
+R9252:9256 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R9249:9250 Coq.Init.Peano <> ::nat_scope:x_'<='_x not
+R9248:9248 Top.Valid <> i:66 var
+R9251:9251 Top.Valid <> j:67 var
+R9289:9292 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R9282:9284 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R9257:9268 Top.Valid <> weak_valid_b def
+R9271:9274 Top.PolyDefs <> Poly constr
+R9276:9276 Top.Valid <> p:62 var
+R9278:9278 Top.Valid <> i:66 var
+R9280:9280 Top.Valid <> q:64 var
+R9285:9288 Coq.Init.Datatypes <> true constr
+R9327:9331 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R9320:9322 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R9293:9304 Top.Valid <> weak_valid_b def
+R9307:9310 Top.PolyDefs <> Poly constr
+R9312:9313 Top.Valid <> p':63 var
+R9315:9315 Top.Valid <> j:67 var
+R9317:9318 Top.Valid <> q':65 var
+R9323:9326 Coq.Init.Datatypes <> true constr
+R9370:9372 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R9332:9343 Top.Valid <> weak_valid_b def
+R9346:9349 Top.PolyDefs <> Poly constr
+R9351:9351 Top.Valid <> p:62 var
+R9353:9353 Top.Valid <> i:66 var
+R9356:9359 Top.PolyDefs <> Poly constr
+R9361:9362 Top.Valid <> p':63 var
+R9364:9364 Top.Valid <> j:67 var
+R9366:9367 Top.Valid <> q':65 var
+R9373:9376 Coq.Init.Datatypes <> true constr
+prf 10004:10020 <> weak_valid_b_more
+R10029:10032 Top.PolyDefs <> poly ind
+binder 10023:10023 <> p:68
+binder 10025:10025 <> q:69
+R10038:10040 Coq.Init.Datatypes <> nat ind
+binder 10036:10036 <> i:70
+R10080:10083 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R10073:10075 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R10048:10059 Top.Valid <> weak_valid_b def
+R10062:10065 Top.PolyDefs <> Poly constr
+R10067:10067 Top.Valid <> p:68 var
+R10069:10069 Top.Valid <> i:70 var
+R10071:10071 Top.Valid <> q:69 var
+R10076:10079 Coq.Init.Datatypes <> true constr
+R10105:10108 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R10098:10100 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R10084:10095 Top.Valid <> weak_valid_b def
+R10097:10097 Top.Valid <> p:68 var
+R10101:10104 Coq.Init.Datatypes <> true constr
+R10123:10125 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R10109:10120 Top.Valid <> weak_valid_b def
+R10122:10122 Top.Valid <> q:69 var
+R10126:10129 Coq.Init.Datatypes <> true constr
+R10219:10226 Coq.ZArith.BinInt Z eq_dec def
+R10219:10226 Coq.ZArith.BinInt Z eq_dec def
+prf 10426:10444 <> weak_valid_b_more_r
+R10457:10460 Top.PolyDefs <> poly ind
+binder 10447:10447 <> p:71
+binder 10449:10450 <> q1:72
+binder 10452:10453 <> q2:73
+R10469:10471 Coq.Init.Datatypes <> nat ind
+binder 10464:10464 <> n:74
+binder 10466:10467 <> n0:75
+R10525:10528 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R10518:10520 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R10479:10490 Top.Valid <> weak_valid_b def
+R10493:10496 Top.PolyDefs <> Poly constr
+R10498:10498 Top.Valid <> p:71 var
+R10500:10500 Top.Valid <> n:74 var
+R10503:10506 Top.PolyDefs <> Poly constr
+R10508:10509 Top.Valid <> q1:72 var
+R10511:10512 Top.Valid <> n0:75 var
+R10514:10515 Top.Valid <> q2:73 var
+R10521:10524 Coq.Init.Datatypes <> true constr
+R10555:10557 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R10529:10540 Top.Valid <> weak_valid_b def
+R10543:10546 Top.PolyDefs <> Poly constr
+R10548:10548 Top.Valid <> p:71 var
+R10550:10550 Top.Valid <> n:74 var
+R10552:10553 Top.Valid <> q2:73 var
+R10558:10561 Coq.Init.Datatypes <> true constr
+R10753:10761 Top.BoolHelp <> leb_trans thm
+R10753:10761 Top.BoolHelp <> leb_trans thm
+R10753:10761 Top.BoolHelp <> leb_trans thm
+R10913:10921 Top.BoolHelp <> leb_trans thm
+R10913:10921 Top.BoolHelp <> leb_trans thm
+R10913:10921 Top.BoolHelp <> leb_trans thm
+prf 10967:10985 <> weak_valid_b_more_l
+R10998:11001 Top.PolyDefs <> poly ind
+binder 10988:10989 <> p1:76
+binder 10991:10992 <> p2:77
+binder 10994:10994 <> q:78
+R11010:11012 Coq.Init.Datatypes <> nat ind
+binder 11005:11005 <> n:79
+binder 11007:11008 <> n0:80
+R11066:11069 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R11059:11061 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R11020:11031 Top.Valid <> weak_valid_b def
+R11034:11037 Top.PolyDefs <> Poly constr
+R11040:11043 Top.PolyDefs <> Poly constr
+R11045:11046 Top.Valid <> p1:76 var
+R11048:11049 Top.Valid <> n0:80 var
+R11051:11052 Top.Valid <> p2:77 var
+R11055:11055 Top.Valid <> n:79 var
+R11057:11057 Top.Valid <> q:78 var
+R11062:11065 Coq.Init.Datatypes <> true constr
+R11103:11106 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R11096:11098 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R11070:11081 Top.Valid <> weak_valid_b def
+R11084:11087 Top.PolyDefs <> Poly constr
+R11089:11090 Top.Valid <> p1:76 var
+R11092:11092 Top.Valid <> n:79 var
+R11094:11094 Top.Valid <> q:78 var
+R11099:11102 Coq.Init.Datatypes <> true constr
+R11133:11135 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R11107:11118 Top.Valid <> weak_valid_b def
+R11121:11124 Top.PolyDefs <> Poly constr
+R11126:11127 Top.Valid <> p2:77 var
+R11129:11129 Top.Valid <> n:79 var
+R11131:11131 Top.Valid <> q:78 var
+R11136:11139 Coq.Init.Datatypes <> true constr
+R11300:11312 Top.BoolHelp <> ltb_leb_trans thm
+R11300:11312 Top.BoolHelp <> ltb_leb_trans thm
+R11300:11312 Top.BoolHelp <> ltb_leb_trans thm
+R11300:11312 Top.BoolHelp <> ltb_leb_trans thm
+R11410:11422 Top.BoolHelp <> ltb_leb_trans thm
+R11410:11422 Top.BoolHelp <> ltb_leb_trans thm
+R11521:11529 Top.BoolHelp <> ltb_trans thm
+R11521:11529 Top.BoolHelp <> ltb_trans thm
+R11581:11589 Top.BoolHelp <> ltb_trans thm
+R11581:11589 Top.BoolHelp <> ltb_trans thm
+R11707:11719 Top.BoolHelp <> ltb_leb_trans thm
+R11707:11719 Top.BoolHelp <> ltb_leb_trans thm
+R11869:11877 Top.BoolHelp <> ltb_trans thm
+R11869:11877 Top.BoolHelp <> ltb_trans thm
+R11923:11931 Top.BoolHelp <> ltb_trans thm
+R11923:11931 Top.BoolHelp <> ltb_trans thm
+R12048:12060 Top.BoolHelp <> ltb_leb_trans thm
+R12048:12060 Top.BoolHelp <> ltb_leb_trans thm
+prf 12255:12270 <> weak_valid_b_rem
+R12282:12285 Top.PolyDefs <> poly ind
+binder 12273:12273 <> p:81
+binder 12275:12276 <> q1:82
+binder 12278:12279 <> q2:83
+R12293:12295 Coq.Init.Datatypes <> nat ind
+binder 12289:12289 <> i:84
+binder 12291:12291 <> j:85
+R12345:12348 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R12338:12340 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R12300:12311 Top.Valid <> weak_valid_b def
+R12314:12317 Top.PolyDefs <> Poly constr
+R12319:12319 Top.Valid <> p:81 var
+R12321:12321 Top.Valid <> i:84 var
+R12324:12327 Top.PolyDefs <> Poly constr
+R12329:12330 Top.Valid <> q1:82 var
+R12332:12332 Top.Valid <> j:85 var
+R12334:12335 Top.Valid <> q2:83 var
+R12341:12344 Coq.Init.Datatypes <> true constr
+R12375:12377 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R12349:12360 Top.Valid <> weak_valid_b def
+R12363:12366 Top.PolyDefs <> Poly constr
+R12368:12368 Top.Valid <> p:81 var
+R12370:12370 Top.Valid <> i:84 var
+R12372:12373 Top.Valid <> q1:82 var
+R12378:12381 Coq.Init.Datatypes <> true constr
+R12534:12542 Top.BoolHelp <> leb_trans thm
+R12534:12542 Top.BoolHelp <> leb_trans thm
+R12534:12542 Top.BoolHelp <> leb_trans thm
+R12662:12678 Top.Valid <> weak_valid_b_more thm
+R12662:12678 Top.Valid <> weak_valid_b_more thm
+R12709:12727 Top.Valid <> weak_valid_b_more_l thm
+R12709:12727 Top.Valid <> weak_valid_b_more_l thm
+R12825:12837 Top.Valid <> weak_valid_le thm
+R12825:12837 Top.Valid <> weak_valid_le thm
+R12900:12913 Top.Valid <> weak_valid_leq thm
+R12900:12913 Top.Valid <> weak_valid_leq thm
+R12942:12954 Top.Valid <> weak_valid_le thm
+R12942:12954 Top.Valid <> weak_valid_le thm
+R12982:12994 Top.Valid <> weak_valid_le thm
+R12982:12994 Top.Valid <> weak_valid_le thm
+R13052:13060 Top.BoolHelp <> leb_trans thm
+R13052:13060 Top.BoolHelp <> leb_trans thm
+R13454:13456 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R13407:13418 Top.Valid <> weak_valid_b def
+R13421:13424 Top.PolyDefs <> Poly constr
+R13427:13430 Top.PolyDefs <> Poly constr
+R13442:13445 Top.PolyDefs <> Poly constr
+R13457:13460 Coq.Init.Datatypes <> true constr
+R13454:13456 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R13407:13418 Top.Valid <> weak_valid_b def
+R13421:13424 Top.PolyDefs <> Poly constr
+R13427:13430 Top.PolyDefs <> Poly constr
+R13442:13445 Top.PolyDefs <> Poly constr
+R13457:13460 Coq.Init.Datatypes <> true constr
+R13884:13886 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R13848:13859 Top.Valid <> weak_valid_b def
+R13862:13865 Top.PolyDefs <> Poly constr
+R13872:13875 Top.PolyDefs <> Poly constr
+R13887:13890 Coq.Init.Datatypes <> true constr
+R13884:13886 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R13848:13859 Top.Valid <> weak_valid_b def
+R13862:13865 Top.PolyDefs <> Poly constr
+R13872:13875 Top.PolyDefs <> Poly constr
+R13887:13890 Coq.Init.Datatypes <> true constr
+R14252:14254 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14216:14227 Top.Valid <> weak_valid_b def
+R14230:14233 Top.PolyDefs <> Poly constr
+R14236:14239 Top.PolyDefs <> Poly constr
+R14255:14258 Coq.Init.Datatypes <> true constr
+R14252:14254 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14216:14227 Top.Valid <> weak_valid_b def
+R14230:14233 Top.PolyDefs <> Poly constr
+R14236:14239 Top.PolyDefs <> Poly constr
+R14255:14258 Coq.Init.Datatypes <> true constr
+R14627:14629 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14602:14613 Top.Valid <> weak_valid_b def
+R14616:14619 Top.PolyDefs <> Poly constr
+R14630:14633 Coq.Init.Datatypes <> true constr
+R14627:14629 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14602:14613 Top.Valid <> weak_valid_b def
+R14616:14619 Top.PolyDefs <> Poly constr
+R14630:14633 Coq.Init.Datatypes <> true constr
+R14704:14720 Top.Valid <> weak_valid_b_more thm
+R14510:14526 Top.Valid <> weak_valid_b_more thm
+R14559:14577 Top.Valid <> weak_valid_b_more_l thm
+R14090:14105 Top.Valid <> weak_valid_b_rem thm
+R14124:14140 Top.Valid <> weak_valid_b_more thm
+R14173:14191 Top.Valid <> weak_valid_b_more_r thm
+R13712:13728 Top.Valid <> weak_valid_b_more thm
+R13761:13779 Top.Valid <> weak_valid_b_more_l thm
+R13811:13829 Top.Valid <> weak_valid_b_more_r thm
